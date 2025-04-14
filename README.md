@@ -56,8 +56,8 @@ http://localhost:3000/api/
 
 ```bash
 Get:
-http://localhost:3000/v1/encuestas/:id
+http://localhost:3000/api/v1/encuestas/:id
 
 Post:
-http://localhost:3000/v1/encuestas
+http://localhost:3000/api/v1/encuestas
 ```
