@@ -39,3 +39,9 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## Swagger
+
+```bash
+http://localhost:3000/api/
+```
