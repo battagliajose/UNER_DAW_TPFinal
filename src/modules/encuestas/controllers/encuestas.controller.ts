@@ -5,6 +5,12 @@ import { EncuestasService } from '../services/encuestas.service';
 export class EncuestasController {
   constructor(private encuestasService: EncuestasService) {}
 
+
+  @Get('/echo')
+  async echo(): Promise<string> {
+    return this.encuestasService.echo();
+  }
+
   @Get(':id')
   async getEncuestas(@Param('id') id: string): Promise<string> {
     return this.encuestasService.getEncuestaPorId(id);
