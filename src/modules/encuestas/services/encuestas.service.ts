@@ -24,9 +24,8 @@ export class EncuestasService {
       codigoResultados: v4(),
     });
 
-    console.log('inicio');
     const encuestaGuardada = await this.encuestasRepository.save(encuesta);
-    console.log('fin');
+
     return {
       id: encuestaGuardada.id,
       codigoRespuesta: encuestaGuardada.codigoRespuesta,
