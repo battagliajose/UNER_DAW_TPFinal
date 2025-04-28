@@ -13,19 +13,27 @@ export class EncuestasService {
     private encuestasRepository: Repository<Encuesta>,
   ) {}
 
+  /**
+   * Crea una nueva encuesta en la base de datos
+   * @param dto - DTO con los datos necesarios para crear la encuesta
+   * @returns Objeto con el id y códigos de la encuesta creada
+   */
   async crearEncuesta(dto: createEncuestaDto): Promise<{
     id: number;
-    codigoRespuesta: string;
-    codigoResultados: string;
+    codigoRespuesta: string; // Código único para responder la encuesta
+    codigoResultados: string; // Código único para ver resultados
   }> {
+    // Crear instancia de encuesta con los datos del DTO y códigos únicos
     const encuesta: Encuesta = this.encuestasRepository.create({
       ...dto,
-      codigoRespuesta: v4(),
+      codigoRespuesta: v4(), // Genera UUID para código de respuesta
       codigoResultados: v4(),
     });
 
+    // Guardar la encuesta en la base de datos
     const encuestaGuardada = await this.encuestasRepository.save(encuesta);
 
+    // Retornar los datos necesarios de la encuesta creada
     return {
       id: encuestaGuardada.id,
       codigoRespuesta: encuestaGuardada.codigoRespuesta,
