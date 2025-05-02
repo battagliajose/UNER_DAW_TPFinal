@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Query, HttpException, HttpStatus } from '@nestjs/common';
 import { EncuestasService } from '../services/encuestas.service';
 import { createEncuestaDto } from '../dtos/create-encuesta.dto';
 import { ObtenerEncuestaDto } from '../dtos/obtener-encuesta.dto';
@@ -14,7 +14,17 @@ export class EncuestasController {
     codigoRespuesta: string;
     codigoResultados: string;
   }> {
-    return await this.encuestasService.crearEncuesta(dto);
+    try {
+      return await this.encuestasService.crearEncuesta(dto);
+    } catch (exception) {
+      throw new HttpException (
+        "Error al crear la encuesta",
+         HttpStatus.INTERNAL_SERVER_ERROR,
+          { 
+            cause: exception 
+          }
+        );
+    }
   }
 
   @Get(':id')
@@ -22,10 +32,20 @@ export class EncuestasController {
     @Param('id') id: number,
     @Query() dto: ObtenerEncuestaDto,
   ): Promise<Encuesta> {
-    return await this.encuestasService.obtenerEncuesta(
-      id,
-      dto.codigo,
-      dto.tipo,
-    );
+    try {
+      return await this.encuestasService.obtenerEncuesta(
+        id,
+        dto.codigo,
+        dto.tipo,
+      );
+    } catch (exception) {
+      throw new HttpException (
+        "Error al obtener la encuesta",
+         HttpStatus.INTERNAL_SERVER_ERROR,
+          { 
+            cause: exception 
+          }
+        );
+    }
   }
 }
