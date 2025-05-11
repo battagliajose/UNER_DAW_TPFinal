@@ -57,7 +57,9 @@ http://localhost:3000/api/
 ```bash
 Get:
 http://localhost:3000/api/v1/encuestas/:id
+http://localhost:3000/api/v1/encuestas/8?codigo=308c1da8-7b58-42e9-b440-97626c7c4242&tipo=RESPUESTA
 
 Post:
 http://localhost:3000/api/v1/encuestas
++ JSON
 ```
