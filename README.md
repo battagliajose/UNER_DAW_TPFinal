@@ -4,13 +4,14 @@
 
 ## Trabajo Práctico de la materia "Desarrollo de Aplicaciones Web"
 
+### Grupo 'M'
+
 ### Integrantes:
 
 - Luis Sanchez
 - José Battaglia
 - Cristian Seltenreich
 - Leonardo Rosas
-- Dalila Forni
 
 ### Agregar dependencias
 
