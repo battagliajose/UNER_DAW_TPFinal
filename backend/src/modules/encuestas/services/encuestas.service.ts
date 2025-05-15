@@ -71,4 +71,8 @@ export class EncuestasService {
     }
     return encuesta;
   }
+
+  echo(): string {
+    return 'La aplicación está funcionando correctamente!!!';
+  }
 }
