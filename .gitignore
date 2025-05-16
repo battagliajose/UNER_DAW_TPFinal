@@ -3,6 +3,9 @@
 **/node_modules
 **/build
 
+# compodoc
+**/documentation/
+
 # Logs
 logs
 *.log
