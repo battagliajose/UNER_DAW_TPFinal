@@ -1,0 +1,72 @@
+<h1>Creá una encuesta</h1>
+<form [formGroup]="form" (ngSubmit)="confirmarCrearEncuesta()" class="extended">
+  <div class="contenedor-encuesta">
+    <section>
+      <p-floatlabel variant="on" id="float-label-nombre-encuesta">
+        <input
+          pInputText
+          id="input-nombre"
+          formControlName="nombre"
+          autocomplete="off"
+          class="extended"
+        />
+        <label for="input-nombre">Nombre de la encuesta</label>
+      </p-floatlabel>
+      @if (nombre.invalid && nombre.touched) {
+        <app-text-error>Requerido</app-text-error>
+      }
+    </section>
+    <hr />
+    <section class="section-preguntas">
+      <h2>Preguntas</h2>
+      <p-button
+        label="Agregar Pregunta"
+        (onClick)="abrirDialog()"
+        icon="pi pi-plus"
+      />
+    </section>
+    @for (pregunta of preguntas.value; track idx; let idx = $index) {
+      <section>
+        <div class="contenedor-pregunta">
+          <p class="texto-pregunta">
+            {{ pregunta.texto }} ({{
+              getTipoPreguntaPresentacion(pregunta.tipo)
+            }})
+          </p>
+          <ul>
+            @for (opcion of pregunta.opciones; track i; let i = $index) {
+              <li>
+                <p class="texto-opcion">{{ opcion.texto }}</p>
+              </li>
+            }
+          </ul>
+          <div class="botonera-pregunta">
+            <p-button
+              (onClick)="confirmarEliminarPregunta(idx)"
+              id="boton-eliminar-pregunta"
+              icon="pi pi-times"
+              label="Eliminar"
+              severity="danger"
+            ></p-button>
+          </div>
+        </div>
+      </section>
+    } @empty {
+      <p>Aún no agregaste preguntas.</p>
+      @if (preguntas.invalid && preguntas.touched) {
+        <app-text-error>Debés agregar al menos una pregunta</app-text-error>
+      }
+    }
+    <hr />
+    <button
+      id="boton-finalizar"
+      pButton
+      pRipple
+      type="submit"
+      icon="pi pi-check"
+      severity="contrast"
+    >
+      Finalizar
+    </button>
+  </div>
+</form>
