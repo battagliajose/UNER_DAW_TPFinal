@@ -4,9 +4,15 @@
 
 ::ng-deep .p-dialog {
   margin: 1rem;
-  max-width: 90vw;
+  max-width: 100%;
 }
 
 ::ng-deep .p-toast {
   max-width: 80%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  width: 100%;
 }
