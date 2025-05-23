@@ -35,12 +35,11 @@ export class RespuestasService {
         }),
       ) ?? [];
 
+    // Armar las respuestas de opción (si vienen)
     respuesta.respuestasOpciones =
       dto.opciones?.map((opcion) =>
         this.respuestaOpcionRepository.create({
           opcion: { id: opcion.opcionId },
-          // Si necesitás también relacionar con pregunta, solo si tu entidad lo tiene
-          // pregunta: { id: opcion.preguntaId },
         }),
       ) ?? [];
 
