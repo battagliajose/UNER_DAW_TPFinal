@@ -1,14 +1,21 @@
+
 <div class="container">
-  <p-card [header]="title" styleClass="shadow-3 mt-3">
-    <div class="card-content">
-      <p>
-        Cree su encuesta para saber la opinion de la sociedad en estos
-        turbulentos tiempos que corren.
-      </p>
-      <p>Confia en nosotros.....</p>
-      <div class="button-container">
-        <p-button label="Crear" routerLink="/crear"></p-button>
+    <div class="bienvenido">      
+      <div class="texto">
+        <div> 
+          <h1>Opina.Ar</h1>
+        </div>
+        <p>Cree su encuesta para saber la opinion de la sociedad en estos
+          turbulentos tiempos que corren.</p>
+        <p>Confia en nosotros.....</p>
+        <div>
+          <p-button label="Crear" [style]="{backgroundColor: '#4B67EF', width: '10rem', height: '2.4rem'}" routerLink="/crear"></p-button>
+        </div>
       </div>
     </div>
-  </p-card>
+    <div class="contenedor-imagen"> 
+      <div class="imagen">     
+        <img src="/assets/encuestas.png" alt="Imagen de encuestas">      
+      </div>     
+    </div>
 </div>

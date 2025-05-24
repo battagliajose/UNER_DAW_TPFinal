@@ -1,4 +1,55 @@
+.header {
+  background-color: #082041;
+}
+
 .text-xl {
-  font-family: var(--font-semibold);
-  font-size: 20px;
+  font-family: var(--font-extrabold);
+  font-size: 1rem;
+}
+
+/* Estilos para el menú */
+.p-menubar {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--font-semibold);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #082041;  
+}
+
+/* Estilos para los enlaces del menú */
+.p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
+  color: white;
+}
+
+.p-menubar .p-menuitem-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Estilos para los iconos de redes sociales */
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.social-icons a {
+  color: white;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.social-icons a:hover {
+  color: #4CAF50; /* Color verde al hacer hover */
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Asegurar que los iconos tengan el tamaño correcto */
+.social-icons i {
+  font-size: 1.25rem;
 }

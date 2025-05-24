@@ -1,5 +1,27 @@
-<p-menubar>
+
+
+<p-menubar [styleClass]="'p-0 border-none bg-primary'" [model]="items">
   <ng-template #start>
-    <a pRipple class="p-menubar-item-link text-xl">Opina.Ar</a>
+    <a pRipple class="p-menubar-item-link text-xl text-white">Opina.Ar</a>
+  </ng-template>
+  <ng-template #end>
+    <div class="social-icons">
+      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+        <i class="pi pi-facebook" style="color: #4B67EF"></i>
+      </a>
+      <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" >
+        <i class="pi pi-twitter" style="color: #4B67EF"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+        <i class="pi pi-instagram" style="color: #4B67EF"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+        <i class="pi pi-linkedin" style="color: #4B67EF"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+        <i class="pi pi-youtube" style="color: #4B67EF"></i>
+      </a>
+    </div>
   </ng-template>
 </p-menubar>
+
