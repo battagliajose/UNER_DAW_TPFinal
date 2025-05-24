@@ -1,0 +1,21 @@
+<p-menubar [model]="items" [style]="{'border-radius': '0', 'padding': '0 2rem'}">
+    <ng-template pTemplate="start">
+      <div class="flex align-items-center">
+        <span class="text-xl font-bold mr-4">Opina.AR</span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="end">
+      <div class="flex align-items-center gap-2">
+        <button pButton pRipple 
+                label="Iniciar Sesión" 
+                icon="pi pi-user" 
+                class="p-button-text p-button-plain"
+                routerLink="/login"></button>
+        <button pButton pRipple 
+                label="Registrarse" 
+                class="p-button-raised"
+                routerLink="/registro"></button>
+      </div>
+    </ng-template>
+  </p-menubar>
+  

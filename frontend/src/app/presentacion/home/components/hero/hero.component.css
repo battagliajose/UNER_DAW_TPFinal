@@ -1,0 +1,19 @@
+.hero-container {
+    /* background-image: url('assets/hero-bg.jpg'); */
+    background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+    background-size: cover;
+    background-position: center;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .welcome-card {
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+  }
+  :host ::ng-deep .p-card {
+    padding: 2.5rem;
+  }
