@@ -4,6 +4,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,8 @@ import { MenuItem } from 'primeng/api';
     CommonModule,
     Menubar, 
     TooltipModule,
-    RippleModule
+    RippleModule,
+    RouterLink
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',

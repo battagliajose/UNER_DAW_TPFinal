@@ -3,7 +3,7 @@
   flex-direction: row;
   align-items: center;  
   justify-content: space-between;
-  height: 70vh;  
+  height: 74vh;  
   color: #000;
   text-align: center;
   padding: 2rem;
@@ -11,7 +11,7 @@
 }
 .bienvenido { 
   min-width:50%;
-  min-height: 70vh;
+  min-height: 100vh;
   display: flex;  
   justify-content: center;
   align-items: center;

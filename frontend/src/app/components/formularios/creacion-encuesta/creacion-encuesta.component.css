@@ -9,6 +9,10 @@
   gap: 24px;
 }
 
+:host h1{
+  margin-top: 2rem;
+  color: #4B67EF;
+}
 .contenedor-encuesta {
   display: flex;
   flex-direction: column;
