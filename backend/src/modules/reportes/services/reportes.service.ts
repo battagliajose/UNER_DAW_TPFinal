@@ -1,78 +1,69 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Encuesta } from 'src/modules/encuestas/entities/encuesta.entity';
-import { Pregunta } from 'src/modules/encuestas/entities/pregunta.entity';
-import { tiposRespuestaEnum } from 'src/modules/encuestas/enums/tipos-respuesta.enum';
-import { RespuestaAbierta } from 'src/modules/respuestas/entities/respuesta-abierta.entity';
+import { Encuesta } from '../../encuestas/entities/encuesta.entity';
 import { RespuestaEncuesta } from 'src/modules/respuestas/entities/respuesta-encuesta.entity';
-import { RespuestaOpcion } from 'src/modules/respuestas/entities/respuesta-opcion.entity';
 
 @Injectable()
 export class ReportesService {
   constructor(
     @InjectRepository(Encuesta)
-    private readonly encuestasRepository: Repository<Encuesta>,
-
-    @InjectRepository(Pregunta)
-    private readonly preguntaRepository: Repository<Pregunta>,
+    private readonly encuestaRepo: Repository<Encuesta>,
 
     @InjectRepository(RespuestaEncuesta)
-    private readonly respuestaEncuestaRepository: Repository<RespuestaEncuesta>,
-
-    @InjectRepository(RespuestaAbierta)
-    private readonly respuestaAbiertaRepository: Repository<RespuestaAbierta>,
-
-    @InjectRepository(RespuestaOpcion)
-    private readonly respuestaOpcionRepository: Repository<RespuestaOpcion>,
+    private readonly respuestaEncuestaRepo: Repository<RespuestaEncuesta>,
   ) {}
 
-  async generarReporteResultados(
-    idEncuesta: number,
-    codigo: string,
-  ): Promise<any> {
-    //Obtener la encuesta con preguntas relacionadas
-    const encuesta = await this.encuestasRepository.findOne({
+  async generarReporteResultados(idEncuesta: number, codigo: string) {
+    const encuesta = await this.encuestaRepo.findOne({
       where: { id: idEncuesta, codigoResultados: codigo },
-      relations: ['preguntas'],
+      relations: ['preguntas', 'preguntas.opciones'],
     });
 
     if (!encuesta) {
-      throw new BadRequestException(
-        'La encuesta no existe o el código no es válido.',
-      );
+      throw new Error('Encuesta no encontrada.');
     }
 
-    //Obtener todas las respuestas abiertas
-    const respuestasAbiertas = await this.respuestaAbiertaRepository.find({
-      relations: ['pregunta'],
-      where: { pregunta: { encuesta: { id: idEncuesta } } },
+    const respuestasEncuesta = await this.respuestaEncuestaRepo.find({
+      where: { encuesta: { id: idEncuesta } },
+      relations: [
+        'respuestasAbiertas',
+        'respuestasOpciones',
+        'respuestasOpciones.opcion',
+      ],
     });
 
-    //Obtener todas las respuestas de opción múltiple
-    const respuestasOpciones = await this.respuestaOpcionRepository.find({
-      relations: ['opcion', 'respuestaEncuesta'],
-      where: { respuestaEncuesta: { encuesta: { id: idEncuesta } } },
+    const conteoOpciones = respuestasEncuesta
+      .flatMap((r) => r.respuestasOpciones)
+      .reduce((conteo, respuesta) => {
+        const textoOpcion = respuesta.opcion.texto;
+        conteo[textoOpcion] = (conteo[textoOpcion] || 0) + 1;
+        return conteo;
+      }, {});
+
+    const resultadosProcesados = encuesta.preguntas.map((pregunta) => {
+      if (pregunta.tipo === 'ABIERTA') {
+        return {
+          textoPregunta: pregunta.texto,
+          tipoPregunta: pregunta.tipo,
+          respuestas: respuestasEncuesta.flatMap((r) =>
+            r.respuestasAbiertas.map((ra) => ra.texto),
+          ),
+        };
+      } else {
+        return {
+          textoPregunta: pregunta.texto,
+          tipoPregunta: pregunta.tipo,
+          respuestas: Object.entries(conteoOpciones).map(
+            ([opcion, cantidad]) => `${opcion} ${cantidad} veces seleccionada`,
+          ),
+        };
+      }
     });
 
     return {
-      idEncuesta: encuesta.id,
       nombreEncuesta: encuesta.nombre,
-      resultadosProcesados: encuesta.preguntas.map((pregunta) => ({
-        idPregunta: pregunta.id,
-        textoPregunta: pregunta.texto,
-        tipoPregunta: pregunta.tipo,
-        respuestas:
-          pregunta.tipo === tiposRespuestaEnum.ABIERTA
-            ? respuestasAbiertas
-                .filter((respuesta) => respuesta.pregunta?.id === pregunta.id)
-                .map((respuesta) => respuesta.texto)
-            : respuestasOpciones
-                .filter(
-                  (respuesta) => respuesta.opcion?.pregunta?.id === pregunta.id,
-                )
-                .map((respuesta) => respuesta.opcion?.texto),
-      })),
+      resultadosProcesados,
     };
   }
 }

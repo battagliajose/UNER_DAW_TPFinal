@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as handlebars from 'handlebars';
 import { Response } from 'express';
 
 @Injectable()
@@ -11,25 +8,40 @@ export class PdfService {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
-    //Definimos la ruta correcta del template HTML
-    const templatePath = path.resolve(
-      __dirname.includes('dist')
-        ? path.join(__dirname, '../templates/reporte.html') // Producción (dist/)
-        : path.join(__dirname, '../../modules/reportes/templates/reporte.html'), // Desarrollo (src/)
-    );
+    //HTML embebido para generación de PDF
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8">
+        <title>Reporte de Encuesta</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          h1 { text-align: center; }
+          .pregunta { margin-bottom: 15px; }
+          .respuesta { margin-left: 10px; }
+        </style>
+      </head>
+      <body>
+        <h1>Resultados de la Encuesta: ${datosReporte.nombreEncuesta}</h1>
+        ${datosReporte.resultadosProcesados
+          .map(
+            (pregunta) => `
+          <div class="pregunta">
+            <h2>${pregunta.textoPregunta}</h2>
+            <p>Tipo: ${pregunta.tipoPregunta}</p>
+            <ul>
+              ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
+            </ul>
+          </div>
+        `,
+          )
+          .join('')}
+      </body>
+      </html>
+    `;
 
-    //Validación de que el template HTML existe
-    console.log('Ruta final del template:', templatePath);
-    if (!fs.existsSync(templatePath)) {
-      throw new Error(`No se encontró el template HTML en: ${templatePath}`);
-    }
-
-    //Lectura del archivo HTML y compilarlo con Handlebars
-    const htmlTemplate = fs.readFileSync(templatePath, 'utf8');
-    const template = handlebars.compile(htmlTemplate);
-    const htmlFinal = template(datosReporte); //Insertamos los datos en el template
-
-    await page.setContent(htmlFinal, { waitUntil: 'load' });
+    await page.setContent(htmlContent);
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
