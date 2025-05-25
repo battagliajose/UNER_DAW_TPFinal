@@ -23,7 +23,7 @@ export class PdfService {
         </style>
       </head>
       <body>
-        <h1>Resultados de la Encuesta: ${datosReporte.nombreEncuesta}</h1>
+        <h1>Reporte datos procesados de encuesta: ${datosReporte.nombreEncuesta} </h1>
         ${datosReporte.resultadosProcesados
           .map(
             (pregunta) => `
