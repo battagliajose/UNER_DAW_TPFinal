@@ -34,14 +34,13 @@ export class ReportesService {
       ],
     });
 
-    // Generar un conteo de opciones por pregunta
     const conteoOpcionesPorPregunta: {
       [preguntaId: number]: { [opcionTexto: string]: number };
     } = {};
 
     respuestasEncuesta.forEach((respuestaEncuesta) => {
       respuestaEncuesta.respuestasOpciones.forEach((respuestaOpcion) => {
-        if (!respuestaOpcion.opcion || !respuestaOpcion.opcion.pregunta) return; // Evitar errores con undefined
+        if (!respuestaOpcion.opcion || !respuestaOpcion.opcion.pregunta) return;
 
         const preguntaId = respuestaOpcion.opcion.pregunta.id;
         const textoOpcion = respuestaOpcion.opcion.texto;
@@ -54,21 +53,19 @@ export class ReportesService {
       });
     });
 
-    // Procesar respuestas por cada pregunta asegurando separación de opciones
     const resultadosProcesados = encuesta.preguntas.map((pregunta) => {
       if (pregunta.tipo === 'ABIERTA') {
-        const respuestasAbiertasParaPregunta = respuestasEncuesta.flatMap((r) =>
-          r.respuestasAbiertas
-            .filter((ra) => ra.pregunta && ra.pregunta.id === pregunta.id)
-            .map((ra) => ra.texto),
-        );
-
         return {
           textoPregunta: pregunta.texto,
           tipoPregunta: pregunta.tipo,
-          respuestas: respuestasAbiertasParaPregunta,
+          respuestas: respuestasEncuesta.flatMap((r) =>
+            r.respuestasAbiertas.map((ra) => ra.texto),
+          ),
         };
-      } else {
+      } else if (
+        pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_SIMPLE' ||
+        pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_MULTIPLE'
+      ) {
         const conteoParaEstaPregunta =
           conteoOpcionesPorPregunta[pregunta.id] || {};
         return {
@@ -79,6 +76,11 @@ export class ReportesService {
           ),
         };
       }
+      return {
+        textoPregunta: pregunta.texto,
+        tipoPregunta: pregunta.tipo,
+        respuestas: [],
+      };
     });
 
     return {
