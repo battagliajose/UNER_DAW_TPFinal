@@ -7,6 +7,7 @@ import { Pregunta } from '../encuestas/entities/pregunta.entity';
 import { RespuestaEncuesta } from '../respuestas/entities/respuesta-encuesta.entity';
 import { RespuestaAbierta } from '../respuestas/entities/respuesta-abierta.entity';
 import { RespuestaOpcion } from '../respuestas/entities/respuesta-opcion.entity';
+import { PdfService } from './services/pdf.service';
 
 @Module({
   imports: [
@@ -18,8 +19,8 @@ import { RespuestaOpcion } from '../respuestas/entities/respuesta-opcion.entity'
       RespuestaOpcion,
     ]),
   ],
-  providers: [ReportesService],
+  providers: [ReportesService, PdfService],
   controllers: [ReportesController],
-  exports: [ReportesService],
+  exports: [ReportesService, PdfService],
 })
 export class ReportesModule {}

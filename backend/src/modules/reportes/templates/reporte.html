@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reporte de Encuesta</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      h1 {
+        text-align: center;
+      }
+      .pregunta {
+        margin-bottom: 15px;
+      }
+      .respuesta {
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Resultados de la Encuesta: {{ nombreEncuesta }}</h1>
+    {{ preguntas }}
+  </body>
+</html>
