@@ -1,12 +1,12 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Encuesta } from 'src/modules/encuestas/entities/encuesta.entity';
 import { Pregunta } from 'src/modules/encuestas/entities/pregunta.entity';
 import { tiposRespuestaEnum } from 'src/modules/encuestas/enums/tipos-respuesta.enum';
 import { RespuestaAbierta } from 'src/modules/respuestas/entities/respuesta-abierta.entity';
 import { RespuestaEncuesta } from 'src/modules/respuestas/entities/respuesta-encuesta.entity';
 import { RespuestaOpcion } from 'src/modules/respuestas/entities/respuesta-opcion.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class ReportesService {
@@ -31,22 +31,25 @@ export class ReportesService {
     idEncuesta: number,
     codigo: string,
   ): Promise<any> {
+    //Obtener la encuesta con preguntas relacionadas
     const encuesta = await this.encuestasRepository.findOne({
       where: { id: idEncuesta, codigoResultados: codigo },
       relations: ['preguntas'],
     });
 
     if (!encuesta) {
-      throw new BadRequestException('Datos de encuesta no válidos.');
+      throw new BadRequestException(
+        'La encuesta no existe o el código no es válido.',
+      );
     }
 
-    //Obtenemos todas las respuestas abiertas
+    //Obtener todas las respuestas abiertas
     const respuestasAbiertas = await this.respuestaAbiertaRepository.find({
       relations: ['pregunta'],
       where: { pregunta: { encuesta: { id: idEncuesta } } },
     });
 
-    //Obtenemos todas las respuestas de opción múltiple
+    //Obtener todas las respuestas de opción múltiple
     const respuestasOpciones = await this.respuestaOpcionRepository.find({
       relations: ['opcion', 'respuestaEncuesta'],
       where: { respuestaEncuesta: { encuesta: { id: idEncuesta } } },
@@ -62,13 +65,13 @@ export class ReportesService {
         respuestas:
           pregunta.tipo === tiposRespuestaEnum.ABIERTA
             ? respuestasAbiertas
-                .filter((respuesta) => respuesta.pregunta.id === pregunta.id)
+                .filter((respuesta) => respuesta.pregunta?.id === pregunta.id)
                 .map((respuesta) => respuesta.texto)
             : respuestasOpciones
                 .filter(
-                  (respuesta) => respuesta.opcion.pregunta.id === pregunta.id,
+                  (respuesta) => respuesta.opcion?.pregunta?.id === pregunta.id,
                 )
-                .map((respuesta) => respuesta.opcion.texto),
+                .map((respuesta) => respuesta.opcion?.texto),
       })),
     };
   }

@@ -4,11 +4,13 @@ import configuration from './config/configuration';
 import { EncuestasModule } from './modules/encuestas/encuestas.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RespuestasModule } from './modules/respuestas/respuestas.module';
+import { ReportesModule } from './modules/reportes/reportes.module';
 
 @Module({
   imports: [
     EncuestasModule,
     RespuestasModule,
+    ReportesModule,
     ConfigModule.forRoot({
       load: [configuration], // Usa la función "configuration" para definir las variables
       isGlobal: true, // Hace que el módulo esté disponible sin necesidad de importarlo en cada módulo
