@@ -16,18 +16,18 @@
         <app-text-error>Requerido</app-text-error>
       }
     </section>
-    <hr />
+    <p-divider />
     <section class="section-preguntas">
       <h2>Preguntas</h2>
       <p-button
-        [style]="{backgroundColor: '#4B67EF'}"
+        [style]="{ backgroundColor: '#4B67EF' }"
         label="Agregar Pregunta"
         (onClick)="abrirDialog()"
         icon="pi pi-plus"
       />
     </section>
     @for (pregunta of preguntas.value; track idx; let idx = $index) {
-      <section>
+      <section class="fila-pregunta">
         <div class="contenedor-pregunta">
           <p class="texto-pregunta">
             {{ pregunta.texto }} ({{
@@ -41,15 +41,15 @@
               </li>
             }
           </ul>
-          <div class="botonera-pregunta">
-            <p-button
-              (onClick)="confirmarEliminarPregunta(idx)"
-              id="boton-eliminar-pregunta"
-              icon="pi pi-times"
-              label="Eliminar"
-              severity="danger"
-            ></p-button>
-          </div>
+        </div>
+        <div class="botonera-pregunta">
+          <p-button
+            (onClick)="confirmarEliminarPregunta(idx)"
+            id="boton-eliminar-pregunta"
+            icon="pi pi-times"
+            label="Eliminar"
+            severity="danger"
+          ></p-button>
         </div>
       </section>
     } @empty {
@@ -58,7 +58,7 @@
         <app-text-error>Debés agregar al menos una pregunta</app-text-error>
       }
     }
-    <hr />
+    <p-divider />
     <button
       id="boton-finalizar"
       pButton
@@ -66,9 +66,13 @@
       type="submit"
       icon="pi pi-check"
       severity="contrast"
-      [style]="{backgroundColor: '#4B67EF'}"
+      [style]="{ backgroundColor: '#4B67EF' }"
     >
       Finalizar
     </button>
   </div>
 </form>
+<app-dialog-pregunta
+  (agregarPregunta)="agregarPregunta($event)"
+  [(visible)]="dialogGestionPreguntaVisible"
+></app-dialog-pregunta>

@@ -9,9 +9,9 @@
   gap: 24px;
 }
 
-:host h1{
+:host h1 {
   margin-top: 2rem;
-  color: #4B67EF;
+  color: #4b67ef;
 }
 .contenedor-encuesta {
   display: flex;
@@ -23,4 +23,11 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
+}
+
+.fila-pregunta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }

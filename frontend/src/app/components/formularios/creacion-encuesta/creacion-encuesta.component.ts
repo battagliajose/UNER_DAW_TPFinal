@@ -22,6 +22,8 @@ import {
 } from '../../../enums/tipo-pregunta.enum';
 import { CardModule } from 'primeng/card';
 import { TextErrorComponent } from '../../text-error/text-error.component';
+import { DividerModule } from 'primeng/divider';
+import { DialogPreguntaComponent } from '../dialog-pregunta/dialog-pregunta.component';
 
 @Component({
   selector: 'app-creacion-encuesta',
@@ -33,6 +35,8 @@ import { TextErrorComponent } from '../../text-error/text-error.component';
     ReactiveFormsModule,
     CardModule,
     TextErrorComponent,
+    DividerModule,
+    DialogPreguntaComponent,
   ],
   templateUrl: './creacion-encuesta.component.html',
   styleUrl: './creacion-encuesta.component.css',
