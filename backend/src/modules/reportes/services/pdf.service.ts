@@ -18,7 +18,7 @@ export class PdfService {
         <style>
           body { font-family: Arial, sans-serif; padding: 20px; }
           h1, h2 { text-align: center; }
-          .pregunta { margin-bottom: 15px; }
+          .pregunta, h3 { margin-bottom: 15px; }
           .respuesta { margin-left: 10px; }
         </style>
       </head>
@@ -27,18 +27,36 @@ export class PdfService {
         <h2>Cantidad de encuestados: ${datosReporte.cantidadEncuestados}</h2>
 
         <div class="seccion-preguntas">
-          <h2>Recuento de resultados por preguntas:</h2>
+          <h2>Recuento de resultados por preguntas opción múltiple:</h2>
           ${datosReporte.resultadosProcesados
+            .filter((pregunta) => pregunta.tipoPregunta !== 'ABIERTA')
             .map(
               (pregunta) => `
-            <div class="pregunta">
-              <h3>${pregunta.textoPregunta}</h3>
-              <p>Tipo: ${pregunta.tipoPregunta}</p>
-              <ul>
-                ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
-              </ul>
-            </div>
-          `,
+              <div class="pregunta">
+                <h3>${pregunta.textoPregunta}</h3>
+                <p>Tipo: ${pregunta.tipoPregunta}</p>
+                <ul>
+                  ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
+                </ul>
+              </div>
+            `,
+            )
+            .join('')}
+        </div>
+
+        <div class="seccion-abiertas">
+          <h2>Respuestas abiertas ingresadas por los encuestados:</h2>
+          ${datosReporte.resultadosProcesados
+            .filter((pregunta) => pregunta.tipoPregunta === 'ABIERTA')
+            .map(
+              (pregunta) => `
+              <div class="pregunta">
+                <h3>${pregunta.textoPregunta}</h3>
+                <ul>
+                  ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
+                </ul>
+              </div>
+            `,
             )
             .join('')}
         </div>
