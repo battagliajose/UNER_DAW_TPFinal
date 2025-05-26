@@ -1,79 +1,86 @@
 import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
 import { Response } from 'express';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class PdfService {
   async generarPDF(datosReporte: any, res: Response) {
+    const templatePath = path.join(
+      process.cwd(),
+      'dist',
+      'modules',
+      'reportes',
+      'templates',
+      'reporte.html',
+    );
+    // Ruta al archivo HTML del template debe estar disponible en el directorio de distribución
+    // Asegúrate de que el archivo reporte.html esté en la ruta correcta
+    //backend/src/modules/reportes/templates/reporte.html
+
+    let htmlTemplate = fs.readFileSync(templatePath, 'utf8');
+
+    // Generar los bloques dinámicos
+    const preguntasMultiples = datosReporte.resultadosProcesados
+      .filter((pregunta) => pregunta.tipoPregunta !== 'ABIERTA')
+      .map(
+        (pregunta) => `
+        <div class="pregunta">
+          <h3>${pregunta.textoPregunta}</h3>
+          <p>Tipo: ${pregunta.tipoPregunta}</p>
+          <ul>
+            ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
+          </ul>
+        </div>
+      `,
+      )
+      .join('');
+
+    const preguntasAbiertas = datosReporte.resultadosProcesados
+      .filter((pregunta) => pregunta.tipoPregunta === 'ABIERTA')
+      .map(
+        (pregunta) => `
+        <div class="pregunta">
+          <h3>${pregunta.textoPregunta}</h3>
+          <ul>
+            ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
+          </ul>
+        </div>
+      `,
+      )
+      .join('');
+
+    // Reemplazar los placeholders
+    const htmlContent = htmlTemplate
+      .replace('{{ nombreEncuesta }}', datosReporte.nombreEncuesta)
+      .replace('{{ cantidadEncuestados }}', datosReporte.cantidadEncuestados)
+      .replace('{{ preguntasMultiples }}', preguntasMultiples)
+      .replace('{{ preguntasAbiertas }}', preguntasAbiertas);
+
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-
-    // HTML embebido para generación de PDF
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html lang="es">
-      <head>
-        <meta charset="UTF-8">
-        <title>Reporte de Encuesta</title>
-        <style>
-          body { font-family: Arial, sans-serif; padding: 20px; }
-          h1, h2 { text-align: center; }
-          .pregunta, h3 { margin-bottom: 15px; }
-          .respuesta { margin-left: 10px; }
-        </style>
-      </head>
-      <body>
-        <h1>Resultados de la Encuesta: ${datosReporte.nombreEncuesta}</h1>
-        <h2>Cantidad de encuestados: ${datosReporte.cantidadEncuestados}</h2>
-
-        <div class="seccion-preguntas">
-          <h2>Recuento de resultados por preguntas opción múltiple:</h2>
-          ${datosReporte.resultadosProcesados
-            .filter((pregunta) => pregunta.tipoPregunta !== 'ABIERTA')
-            .map(
-              (pregunta) => `
-              <div class="pregunta">
-                <h3>${pregunta.textoPregunta}</h3>
-                <p>Tipo: ${pregunta.tipoPregunta}</p>
-                <ul>
-                  ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
-                </ul>
-              </div>
-            `,
-            )
-            .join('')}
-        </div>
-
-        <div class="seccion-abiertas">
-          <h2>Respuestas abiertas ingresadas por los encuestados:</h2>
-          ${datosReporte.resultadosProcesados
-            .filter((pregunta) => pregunta.tipoPregunta === 'ABIERTA')
-            .map(
-              (pregunta) => `
-              <div class="pregunta">
-                <h3>${pregunta.textoPregunta}</h3>
-                <ul>
-                  ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
-                </ul>
-              </div>
-            `,
-            )
-            .join('')}
-        </div>
-      </body>
-      </html>
-    `;
-
     await page.setContent(htmlContent);
+
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: { top: '10px', bottom: '10px' },
+      margin: { top: '40px', bottom: '40px' }, //márgenes para paginación
+      displayHeaderFooter: true, //activa paginación
+      footerTemplate: `
+    <div style="width: 100%; text-align: center; font-size: 12px; padding: 5px;">
+      Página <span class="pageNumber"></span> de <span class="totalPages"></span>
+    </div>
+  `,
+      headerTemplate: `
+    <div style="width: 100%; text-align: center; font-size: 12px; padding: 5px;">
+      Reporte de Encuesta - ${datosReporte.nombreEncuesta}
+    </div>
+  `,
     });
 
     await browser.close();
 
-    // Enviar el PDF como respuesta
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="reporte.pdf"');
     res.send(pdfBuffer);

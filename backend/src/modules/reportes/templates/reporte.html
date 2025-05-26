@@ -7,21 +7,61 @@
     <style>
       body {
         font-family: Arial, sans-serif;
-        padding: 20px;
+        padding: 15px;
+        background-color: #f0f0f0;
+        color: #333;
+      }
+      h1,
+      h2 {
+        text-align: center;
+        padding: 8px;
+        color: white;
       }
       h1 {
-        text-align: center;
-      }
+        background-color: #0096d6;
+      } /* Cyan */
+      h2 {
+        background-color: #d60087;
+      } /* Magenta */
+      h3 {
+        background-color: #ffd600;
+        padding: 4px;
+        color: black;
+      } /* Amarillo */
       .pregunta {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
+        padding: 8px;
+        border-radius: 5px;
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       }
       .respuesta {
-        margin-left: 10px;
+        margin-left: 12px;
       }
+      .seccion-preguntas {
+        background-color: #c0e4f5;
+        padding: 8px;
+        border-radius: 5px;
+      } /* Azul claro */
+      .seccion-abiertas {
+        background-color: #fde8b2;
+        padding: 8px;
+        border-radius: 5px;
+      } /* Amarillo claro */
     </style>
   </head>
   <body>
     <h1>Resultados de la Encuesta: {{ nombreEncuesta }}</h1>
-    {{ preguntas }}
+    <h2>Cantidad de encuestados: {{ cantidadEncuestados }}</h2>
+
+    <div class="seccion-preguntas">
+      <h2>Recuento de resultados por preguntas opción múltiple:</h2>
+      {{ preguntasMultiples }}
+    </div>
+
+    <div class="seccion-abiertas">
+      <h2>Respuestas abiertas ingresadas por los encuestados:</h2>
+      {{ preguntasAbiertas }}
+    </div>
   </body>
 </html>
