@@ -23,7 +23,7 @@ export class ReportesController {
     return this.pdfService.generarPDF(datosReporte, res);
   }
 
-  @Get('/prueba/:id/:codigo')
+  @Get(':id/:codigo')
   async probarReporte(
     @Param('id') id: number,
     @Param('codigo') codigo: string,
