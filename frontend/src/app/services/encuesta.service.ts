@@ -17,7 +17,7 @@ export class EncuestaService {
     tipo: CodigoTipoEnum,
   ): Observable<EncuestaDTO> {
     return this._requestService.get<EncuestaDTO>(
-      `/encuesta/${idEncuesta}?codigo=${codigo}&tipo=${tipo}`,
+      `/encuestas/${idEncuesta}?codigo=${codigo}&tipo=${tipo}`,
     );
   }
 
@@ -30,6 +30,6 @@ export class EncuestaService {
       id: number;
       codigoRespuesta: string;
       codigoResultados: string;
-    }>(`/encuesta`, encuestaDto);
+    }>(`/encuestas`, encuestaDto);
   }
 }

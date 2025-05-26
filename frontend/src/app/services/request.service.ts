@@ -18,7 +18,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 })
 export class RequestService {
   private readonly httpClient = inject(HttpClient);
-  private readonly BASE_URL = environment.baseUrl;
+  private readonly BASE_URL = environment.baseUrl + '/api/v1';
 
   private request<T>(options: RequestOptions): Observable<T> {
     options.headers = options.headers || new HttpHeaders();
