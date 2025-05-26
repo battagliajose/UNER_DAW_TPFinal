@@ -8,7 +8,7 @@ export class PdfService {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
-    //HTML embebido para generación de PDF
+    // HTML embebido para generación de PDF
     const htmlContent = `
       <!DOCTYPE html>
       <html lang="es">
@@ -17,26 +17,31 @@ export class PdfService {
         <title>Reporte de Encuesta</title>
         <style>
           body { font-family: Arial, sans-serif; padding: 20px; }
-          h1 { text-align: center; }
+          h1, h2 { text-align: center; }
           .pregunta { margin-bottom: 15px; }
           .respuesta { margin-left: 10px; }
         </style>
       </head>
       <body>
-        <h1>Reporte datos procesados de encuesta: ${datosReporte.nombreEncuesta} </h1>
-        ${datosReporte.resultadosProcesados
-          .map(
-            (pregunta) => `
-          <div class="pregunta">
-            <h2>${pregunta.textoPregunta}</h2>
-            <p>Tipo: ${pregunta.tipoPregunta}</p>
-            <ul>
-              ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
-            </ul>
-          </div>
-        `,
-          )
-          .join('')}
+        <h1>Resultados de la Encuesta: ${datosReporte.nombreEncuesta}</h1>
+        <h2>Cantidad de encuestados: ${datosReporte.cantidadEncuestados}</h2>
+
+        <div class="seccion-preguntas">
+          <h2>Recuento de resultados por preguntas:</h2>
+          ${datosReporte.resultadosProcesados
+            .map(
+              (pregunta) => `
+            <div class="pregunta">
+              <h3>${pregunta.textoPregunta}</h3>
+              <p>Tipo: ${pregunta.tipoPregunta}</p>
+              <ul>
+                ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
+              </ul>
+            </div>
+          `,
+            )
+            .join('')}
+        </div>
       </body>
       </html>
     `;
@@ -50,7 +55,7 @@ export class PdfService {
 
     await browser.close();
 
-    //Enviar el PDF como respuesta
+    // Enviar el PDF como respuesta
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="reporte.pdf"');
     res.send(pdfBuffer);
