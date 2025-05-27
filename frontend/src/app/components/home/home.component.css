@@ -7,15 +7,19 @@
   flex-direction: row;
   align-items: center;  
   justify-content: space-between;
-  height: 74vh;  
+  height: 65vh;  
   color: #000;
   text-align: center;
   padding: 2rem;
   background-color: #B6D2F9;
   width: 80%;
   margin: 2rem;
-  border-radius: 20px;
-  
+  border-radius: 20px;  
+}
+.botones{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;  
 }
 .bienvenido { 
   min-width:50%;
