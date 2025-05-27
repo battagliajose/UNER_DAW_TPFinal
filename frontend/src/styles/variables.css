@@ -5,4 +5,8 @@
   --font-regular: 'Poppins Regular', sans-serif;
   --font-semibold: 'Poppins SemiBold', sans-serif;
   --font-extrabold: 'Poppins ExtraBold', sans-serif;
+  --color-primary: var(--p-indigo-800);
+  --color-light: var(--p-indigo-500);
+  --color-strong:var(--p-indigo-900);
+  --color-background:var(--p-gray-800);
 }

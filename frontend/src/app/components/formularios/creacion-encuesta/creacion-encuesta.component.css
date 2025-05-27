@@ -11,7 +11,7 @@
 
 :host h1 {
   margin-top: 2rem;
-  color: #4b67ef;
+  color: var(--color-background);
 }
 .contenedor-encuesta {
   display: flex;
@@ -30,4 +30,9 @@
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+}
+
+.errores-toast{
+  font-size: 5rem;
+  color: var(--color-strong);
 }

@@ -105,6 +105,7 @@ export class CreacionEncuestaComponent {
       },
       acceptButtonProps: {
         label: 'Confirmar',
+        severity: 'contrast',
       },
       accept: () => {
         this.crearEncuesta();
@@ -126,6 +127,7 @@ export class CreacionEncuestaComponent {
       },
       acceptButtonProps: {
         label: 'Confirmar',
+        severity: 'contrast',
       },
       accept: () => {
         this.eliminarPregunta(index);
@@ -176,6 +178,7 @@ export class CreacionEncuestaComponent {
         this.messageService.add({
           severity: 'error',
           summary: 'Ha ocurrido un error al crear la encuesta',
+          
         });
       },
     });

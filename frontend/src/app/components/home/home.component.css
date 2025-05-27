@@ -1,3 +1,7 @@
+:host{
+  display: flex;  
+  justify-content: center;
+}
 .container {
   display: flex;
   flex-direction: row;
@@ -8,6 +12,10 @@
   text-align: center;
   padding: 2rem;
   background-color: #B6D2F9;
+  width: 80%;
+  margin: 2rem;
+  border-radius: 20px;
+  
 }
 .bienvenido { 
   min-width:50%;
@@ -22,6 +30,7 @@
 }
 .bienvenido .texto h1{
   font-size:4rem;
+  color: var(--color-background);
 }
 .bienvenido .texto p{
   font-size:1.6rem;

@@ -2,7 +2,7 @@
   header="Agregar nueva pregunta"
   [modal]="true"
   [(visible)]="visible"
-  [style]="{ width: 'clamp(300px, 90vw, 700px)' }"
+  [style]="{ width: 'clamp(300px, 90vw, 700px)',  color: 'var(--color-background)' }"
   resizable="false"
   (onHide)="cerrar()"
 >
@@ -79,11 +79,12 @@
         <button
           pButton
           pRipple
-          type="button"
-          severity="danger"
+          type="button"         
+          severity="contrast"
+          [outlined]="true"
           icon="pi pi-times"
           (click)="cerrar()"
-          class="extended"
+          class="extended"         
         >
           Cancelar
         </button>
@@ -91,7 +92,7 @@
           pButton
           pRipple
           type="submit"
-          severity="contrast"
+          severity="contrast"          
           icon="pi pi-check"
           class="extended"
         >
