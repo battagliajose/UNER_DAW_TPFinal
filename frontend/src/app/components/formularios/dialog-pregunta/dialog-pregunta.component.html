@@ -1,0 +1,104 @@
+<p-dialog
+  header="Agregar nueva pregunta"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: 'clamp(300px, 90vw, 700px)',  color: 'var(--color-background)' }"
+  resizable="false"
+  (onHide)="cerrar()"
+>
+  <form [formGroup]="form" (ngSubmit)="agregar()">
+    <div class="contenedor-creacion-pregunta">
+      <p-dropdown
+        [options]="getTiposPreguntaPresentacion()"
+        id="dropdown-tipos-pregunta"
+        formControlName="tipo"
+        appendTo="body"
+        placeholder="Tipo de Pregunta"
+        optionLabel="presentacion"
+        optionValue="tipo"
+        class="extended"
+      />
+      @if (tipo.invalid && tipo.touched) {
+        <app-text-error>Requerido</app-text-error>
+      }
+      <p-floatlabel variant="on" id="input-texto">
+        <input
+          pInputText
+          id="input-texto"
+          formControlName="texto"
+          class="extended"
+        />
+        <label for="input-nombre">Texto de la pregunta</label>
+      </p-floatlabel>
+      @if (texto.invalid && texto.touched) {
+        <app-text-error>Requerido</app-text-error>
+      }
+      @if (tipo.value && esMultipleChoice(tipo.value)) {
+        <section>
+          <div class="opciones-section-header">
+            <h4 id="heading-opciones">Opciones</h4>
+            <p-button
+              (onClick)="agregarOpcion()"
+              label="Agregar Opción"
+              icon="pi pi-plus"
+            />
+          </div>
+          <div class="contenedor-opcion extended" formArrayName="opciones">
+            @for (opcion of opciones.controls; track $index; let idx = $index) {
+              <div
+                [formGroupName]="idx"
+                class="grupo-contenedor-opcion extended"
+              >
+                <input
+                  pInputText
+                  class="texto-opcion extended"
+                  formControlName="texto"
+                  [placeholder]="'Opción ' + (idx + 1)"
+                  type="text"
+                />
+                <div id="botonera-opciones">
+                  <p-button
+                    (onClick)="confirmarEliminarOpcion(idx)"
+                    [disabled]="opciones.length <= 2"
+                    id="boton-eliminar-opcion"
+                    icon="pi pi-trash"
+                    severity="danger"
+                  />
+                </div>
+              </div>
+            } @empty {
+              <p id="opciones-vacio">Aún no hay opciones cargadas</p>
+            }
+          </div>
+        </section>
+        @if (opciones.touched && opciones.invalid) {
+          <app-text-error>Debés ingresar opciones</app-text-error>
+        }
+      }
+      <div class="actions-container">
+        <button
+          pButton
+          pRipple
+          type="button"         
+          severity="contrast"
+          [outlined]="true"
+          icon="pi pi-times"
+          (click)="cerrar()"
+          class="extended"         
+        >
+          Cancelar
+        </button>
+        <button
+          pButton
+          pRipple
+          type="submit"
+          severity="contrast"          
+          icon="pi pi-check"
+          class="extended"
+        >
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </form>
+</p-dialog>

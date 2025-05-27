@@ -1,0 +1,34 @@
+:host {
+  width: clamp(300px, 90vw, 700px);
+}
+
+.grupo-contenedor-opcion {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.actions-container {
+  display: flex;
+  gap: 12px;
+}
+
+.contenedor-creacion-pregunta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.opciones-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.contenedor-opcion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-block: 12px;
+}

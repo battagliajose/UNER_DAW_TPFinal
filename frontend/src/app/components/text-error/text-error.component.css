@@ -1,0 +1,6 @@
+.error {
+  /*color: var(--p-red-500);*/
+  color: var(--color-strong);
+  font-weight: bold;
+  margin: 0.2rem;
+}
