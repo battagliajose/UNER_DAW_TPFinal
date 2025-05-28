@@ -1,18 +1,35 @@
-version: '3.8'
+version: '3.8' # It's good practice to specify a version
 
 services:
   postgres:
-    image: postgres:15
-    container_name: mi_postgres
-    restart: always
+    image: postgres:17-alpine
     environment:
       POSTGRES_USER: luis
-      POSTGRES_PASSWORD: contraseña
-      POSTGRES_DB: midb
+      POSTGRES_PASSWORD: luisfelipe782006
+      POSTGRES_DB: encuestas
     ports:
       - "5432:5432"
+    networks:
+      - mynetwork
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d # Ensure you have a 'postgres-init' directory in the same location as your docker-compose.yml
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "m"
+      PGADMIN_DEFAULT_PASSWORD: "luisfelipe782006"
+    ports:
+      - "5050:80"
+    networks:
+      - mynetwork
+    depends_on: # Add this to ensure postgres starts before pgadmin
+      - postgres
+
+networks:
+  mynetwork:
+    # You can specify a driver if needed, e.g., driver: bridge
 
 volumes:
-  pgdata:
+  postgres_data:
