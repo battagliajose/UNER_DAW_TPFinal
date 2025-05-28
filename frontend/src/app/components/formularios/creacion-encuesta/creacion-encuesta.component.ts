@@ -7,7 +7,6 @@ import {
   FormControl,
   FormGroup,
   FormsModule,
-  NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -49,7 +48,6 @@ export class CreacionEncuestaComponent {
   private confirmationService: ConfirmationService =
     inject(ConfirmationService);
   private encuestaService: EncuestaService = inject(EncuestaService);
-  private readonly _formBuilder = inject(NonNullableFormBuilder);
 
   dialogGestionPreguntaVisible = signal<boolean>(false);
 
@@ -93,8 +91,9 @@ export class CreacionEncuestaComponent {
 
   confirmarCrearEncuesta() {
     this.confirmationService.confirm({
-      message: 'Confirmar creación de encuesta?',
-      header: 'Confirmación',
+      message:
+        'Vas a crear una encuesta, una vez creada no se puede editar. ¿Estás seguro?',
+      header: 'Confirmar creación',
       closable: true,
       closeOnEscape: true,
       icon: 'pi pi-exclamation-triangle',
@@ -115,8 +114,8 @@ export class CreacionEncuestaComponent {
 
   confirmarEliminarPregunta(index: number) {
     this.confirmationService.confirm({
-      message: 'Confirmar eliminación?',
-      header: 'Confirmación',
+      message: 'Vas a eliminar un registro, ¿estás seguro?',
+      header: 'Confirmar eliminación',
       closable: true,
       closeOnEscape: true,
       icon: 'pi pi-exclamation-triangle',
@@ -178,7 +177,6 @@ export class CreacionEncuestaComponent {
         this.messageService.add({
           severity: 'error',
           summary: 'Ha ocurrido un error al crear la encuesta',
-          
         });
       },
     });
