@@ -16,6 +16,7 @@ import {
 } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { TipoRespuestaEnum } from '../../enums/tipo-pregunta.enum';
+import { RespuestasService } from '../../services/respuestas.service';
 
 @Component({
   selector: 'app-responder-encuesta',
@@ -35,6 +36,7 @@ export class ResponderEncuestaComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private encuestaService: EncuestaService,
+    private respuestasService: RespuestasService, // Assuming the same service is used for responses
   ) {}
 
   id: number = 0;
@@ -104,6 +106,72 @@ export class ResponderEncuestaComponent implements OnInit {
   }
 
   enviarFormulario() {
-    console.log('Formulario enviado');
+    const dto: any = {
+      encuestaId: this.encuesta!.id,
+      abiertas: [],
+      opciones: [],
+    };
+
+    const respuestasArray = this.formularioRespuestas.get(
+      'respuestas',
+    ) as FormArray;
+
+    this.encuesta!.preguntas.forEach((pregunta, i) => {
+      const grupo = respuestasArray.at(i) as FormGroup;
+      const controlKey = 'respuesta_' + i;
+
+      // Pregunta ABIERTA
+      if (pregunta.tipo === TipoRespuestaEnum.ABIERTA) {
+        const texto = grupo.get(controlKey)?.value?.trim();
+        if (texto) {
+          dto.abiertas.push({
+            preguntaId: pregunta.id,
+            texto: texto,
+          });
+        }
+      }
+
+      // Selección SIMPLE (radio)
+      else if (
+        pregunta.tipo === TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_SIMPLE
+      ) {
+        const opcionId = grupo.get(controlKey)?.value;
+        if (opcionId !== null && opcionId !== undefined) {
+          dto.opciones.push({
+            preguntaId: pregunta.id,
+            opcionId: opcionId,
+          });
+        }
+      }
+
+      // Selección MÚLTIPLE (checkboxes)
+      else if (
+        pregunta.tipo === TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_MULTIPLE
+      ) {
+        const array = grupo.get(controlKey) as FormArray;
+        array.controls.forEach((control, j) => {
+          if (control.value === true && pregunta.opciones?.[j]) {
+            const opcionId = pregunta.opciones[j].id;
+            dto.opciones.push({
+              preguntaId: pregunta.id,
+              opcionId: opcionId,
+            });
+          }
+        });
+      }
+    });
+
+    console.log('DTO a enviar:', dto);
+
+    // Llamada al backend
+    this.respuestasService.postRespuestas(dto).subscribe({
+      next: () => {
+        console.log('Formulario enviado con éxito');
+        // podés redirigir, limpiar, mostrar mensaje, etc.
+      },
+      error: (err) => {
+        console.error('Error al enviar el formulario:', err);
+      },
+    });
   }
 }
