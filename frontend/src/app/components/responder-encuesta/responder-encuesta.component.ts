@@ -63,7 +63,6 @@ export class ResponderEncuestaComponent implements OnInit {
           .subscribe({
             next: (data) => {
               this.encuesta = data;
-              console.log('Encuesta recibida:', this.encuesta);
 
               this.encuesta.preguntas.forEach((pregunta, i) => {
                 if (
@@ -93,11 +92,6 @@ export class ResponderEncuestaComponent implements OnInit {
                   });
 
                   respuestasFormArray.push(preguntaGroup);
-                  console.log(
-                    pregunta.texto,
-                    pregunta.opciones,
-                    preguntaGroup.value,
-                  );
                 }
               });
             },
