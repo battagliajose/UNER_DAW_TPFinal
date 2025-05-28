@@ -11,6 +11,7 @@ import {
 import { EncuestasService } from '../services/encuestas.service';
 import { createEncuestaDto } from '../dtos/create-encuesta.dto';
 import { ObtenerEncuestaDto } from '../dtos/obtener-encuesta.dto';
+import { ObtenerTodasEncuestasDto } from '../dtos/obtener-todas-encuestas.dto';
 import { Encuesta } from '../entities/encuesta.entity';
 
 @Controller('/encuestas')
@@ -28,6 +29,26 @@ export class EncuestasController {
     } catch (exception) {
       throw new HttpException(
         'Error al crear la encuesta',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: exception,
+        },
+      );
+    }
+  }
+
+  @Get('/obtener-todas')
+  async obtenerTodasLasEncuestas(
+    @Query() dto: ObtenerTodasEncuestasDto,
+  ): Promise<[Encuesta[], number]> {
+    try {
+      return await this.encuestasService.obtenerTodasLasEncuestas(
+        dto.skip,
+        dto.take,
+      );
+    } catch (exception) {
+      throw new HttpException(
+        'Error al obtener las encuestas',
         HttpStatus.INTERNAL_SERVER_ERROR,
         {
           cause: exception,

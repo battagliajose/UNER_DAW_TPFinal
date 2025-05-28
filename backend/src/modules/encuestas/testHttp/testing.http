@@ -1,0 +1,22 @@
+@baseUrl = http://localhost:3000/api
+
+### Obtener todas las encuestas (con paginación)
+GET {{baseUrl}}/encuestas/obtener-todas?skip=0&take=10
+Content-Type: application/json
+
+### Obtener una encuesta específica
+GET {{baseUrl}}/encuestas/1
+Content-Type: application/json
+
+### Crear una nueva encuesta
+POST {{baseUrl}}/encuestas
+Content-Type: application/json
+
+{
+  "nombre": "Encuesta de Satisfacción",
+  "descripcion": "Encuesta para medir el nivel de satisfacción de los usuarios"
+}
+
+### Obtener encuesta con código de acceso
+GET {{baseUrl}}/encuestas/1?codigo=CODIGO_DE_PRUEBA&tipo=RESPUESTA
+Content-Type: application/json
