@@ -171,6 +171,15 @@ export class DialogPreguntaComponent implements OnDestroy {
         icon: 'pi pi-exclamation-triangle',
         acceptLabel: 'Sí',
         rejectLabel: 'No',
+        rejectButtonProps: {
+          label: 'Cancelar',
+          severity: 'secondary',
+          outlined: true,
+        },
+        acceptButtonProps: {
+          label: 'Confirmar',
+          severity: 'contrast',
+        },
         accept: () => {
           this.visible.set(false);
           this.reset();
@@ -210,6 +219,7 @@ export class DialogPreguntaComponent implements OnDestroy {
       },
       acceptButtonProps: {
         label: 'Confirmar',
+        severity: 'contrast',
       },
       accept: () => {
         this.eliminarOpcion(index);

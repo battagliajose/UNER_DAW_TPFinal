@@ -9,6 +9,9 @@
           formControlName="nombre"
           autocomplete="off"
           class="extended"
+          [ngClass]="{
+            'ng-invalid ng-dirty': nombre.touched && nombre.invalid,
+          }"
         />
         <label for="input-nombre">Nombre de la encuesta</label>
       </p-floatlabel>

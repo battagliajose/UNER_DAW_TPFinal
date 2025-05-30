@@ -23,6 +23,7 @@ import { CardModule } from 'primeng/card';
 import { TextErrorComponent } from '../../text-error/text-error.component';
 import { DividerModule } from 'primeng/divider';
 import { DialogPreguntaComponent } from '../dialog-pregunta/dialog-pregunta.component';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-creacion-encuesta',
@@ -36,6 +37,7 @@ import { DialogPreguntaComponent } from '../dialog-pregunta/dialog-pregunta.comp
     TextErrorComponent,
     DividerModule,
     DialogPreguntaComponent,
+    NgClass,
   ],
   templateUrl: './creacion-encuesta.component.html',
   styleUrl: './creacion-encuesta.component.css',

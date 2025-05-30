@@ -31,6 +31,9 @@
         optionLabel="presentacion"
         optionValue="tipo"
         class="extended"
+        [ngClass]="{
+          'ng-invalid ng-dirty': tipo.touched && tipo.invalid,
+        }"
       />
       @if (tipo.invalid && tipo.touched) {
         <app-text-error>Requerido</app-text-error>
