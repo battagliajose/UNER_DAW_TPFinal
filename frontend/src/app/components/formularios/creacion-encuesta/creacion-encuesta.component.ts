@@ -50,6 +50,7 @@ export class CreacionEncuestaComponent {
   private encuestaService: EncuestaService = inject(EncuestaService);
 
   dialogGestionPreguntaVisible = signal<boolean>(false);
+  isLoading: boolean = false;
 
   constructor() {
     this.form = new FormGroup({
@@ -156,29 +157,35 @@ export class CreacionEncuestaComponent {
         }
       }
     }
-
-    this.encuestaService.post(encuesta).subscribe({
-      next: (res) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'La encuesta se creó con éxito',
-        });
-
-        this.router.navigateByUrl(
-          '/presentacion-enlaces?id-encuesta=' +
-            res.id +
-            '&codigo-respuesta=' +
-            res.codigoRespuesta +
-            '&codigo-resultados=' +
-            res.codigoResultados,
-        );
-      },
-      error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Ha ocurrido un error al crear la encuesta',
-        });
-      },
-    });
+    this.isLoading = true;
+    this.form.disable();
+    setTimeout(() => {
+      this.encuestaService.post(encuesta).subscribe({
+        next: (res) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'La encuesta se creó con éxito',
+          });
+          this.isLoading = false;
+          this.form.enable();
+          this.router.navigateByUrl(
+            '/presentacion-enlaces?id-encuesta=' +
+              res.id +
+              '&codigo-respuesta=' +
+              res.codigoRespuesta +
+              '&codigo-resultados=' +
+              res.codigoResultados,
+          );
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.form.enable();
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Ha ocurrido un error al crear la encuesta',
+          });
+        },
+      });
+    }, 1500);
   }
 }
