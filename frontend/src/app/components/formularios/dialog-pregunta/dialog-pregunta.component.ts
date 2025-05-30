@@ -185,8 +185,7 @@ export class DialogPreguntaComponent implements OnDestroy {
   }
 
   agregarOpcion(): void {
-    const opcionesControl = this.form.get('opciones') as FormArray;
-    opcionesControl.push(
+    this.opciones.push(
       new FormGroup({
         texto: new FormControl('', [Validators.required]),
       }),
@@ -194,13 +193,12 @@ export class DialogPreguntaComponent implements OnDestroy {
   }
 
   eliminarOpcion(index: number): void {
-    const opcionesControl = this.form.get('opciones') as FormArray;
-    opcionesControl.removeAt(index);
+    this.opciones.removeAt(index);
   }
 
   confirmarEliminarOpcion(index: number): void {
     this.confirmationService.confirm({
-      message: 'Vas a eliminar un registro, ¿estás seguro?',
+      message: 'Vas a eliminar una opción, ¿estás seguro?',
       header: 'Confirmar eliminación',
       closable: true,
       closeOnEscape: true,

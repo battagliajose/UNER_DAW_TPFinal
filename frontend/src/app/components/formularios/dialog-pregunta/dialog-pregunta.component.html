@@ -104,7 +104,7 @@
           </div>
 
           <!-- Error general del FormArray -->
-          @if (form.get('opciones')?.invalid && form.get('opciones')?.touched) {
+          @if (opciones.invalid && opciones.touched) {
             <app-text-error>Debés completar todas las opciones.</app-text-error>
           }
         </section>
@@ -131,6 +131,7 @@
           severity="contrast"
           icon="pi pi-check"
           class="extended"
+          [disabled]="form.invalid"
         >
           Aceptar
         </button>
