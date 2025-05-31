@@ -74,4 +74,25 @@ export class RequestService {
     });
     return this.request<T>(options);
   }
+
+  put<T>(
+    url: string,
+    body: T,
+    params?: HttpParams,
+    headers?: HttpHeaders,
+  ): Observable<T> {
+    const options = new RequestOptions({
+      method: 'PUT',
+      url,
+      body,
+      params,
+      headers,
+    });
+    return this.request<T>(options);
+  }
+
+  delete<T>(url: string, headers?: HttpHeaders): Observable<T> {
+    const options = new RequestOptions({ method: 'DELETE', url, headers });
+    return this.request<T>(options);
+  }
 }

@@ -34,14 +34,12 @@ export class ReportesService {
       ],
     });
 
-    //Calculamos la cantidad total de encuestados
     const totalEncuestados = respuestasEncuesta.length;
-
+    let totalRespuestasAnalizadas = 0;
     const conteoOpcionesPorPregunta: {
       [preguntaId: number]: { [opcionTexto: string]: number };
     } = {};
 
-    //Procesamos las respuestas con opciones para contar las opciones seleccionadas
     respuestasEncuesta.forEach((respuestaEncuesta) => {
       respuestaEncuesta.respuestasOpciones.forEach((respuestaOpcion) => {
         if (!respuestaOpcion.opcion || !respuestaOpcion.opcion.pregunta) return;
@@ -54,15 +52,21 @@ export class ReportesService {
         }
         conteoOpcionesPorPregunta[preguntaId][textoOpcion] =
           (conteoOpcionesPorPregunta[preguntaId][textoOpcion] || 0) + 1;
+
+        totalRespuestasAnalizadas += 1; //Sumamos cada respuesta seleccionada
       });
+
+      totalRespuestasAnalizadas += respuestaEncuesta.respuestasAbiertas.length; //Sumamos todas las respuestas abiertas
     });
 
-    //Procesamos las respuestas abiertas y las opciones seleccionadas
     const resultadosProcesados = encuesta.preguntas.map((pregunta) => {
       if (pregunta.tipo === 'ABIERTA') {
         return {
           textoPregunta: pregunta.texto,
           tipoPregunta: pregunta.tipo,
+          totalRespuestas: respuestasEncuesta.flatMap(
+            (r) => r.respuestasAbiertas,
+          ).length,
           respuestas: respuestasEncuesta.flatMap((r) =>
             r.respuestasAbiertas.map((ra) => ra.texto),
           ),
@@ -73,25 +77,39 @@ export class ReportesService {
       ) {
         const conteoParaEstaPregunta =
           conteoOpcionesPorPregunta[pregunta.id] || {};
+        const totalRespuestas = Object.values(conteoParaEstaPregunta).reduce(
+          (sum, count) => sum + count,
+          0,
+        );
+
         return {
           textoPregunta: pregunta.texto,
           tipoPregunta: pregunta.tipo,
-          respuestas: Object.entries(conteoParaEstaPregunta).map(
-            ([opcion, cantidad]) => `${opcion} ${cantidad} veces seleccionada`,
+          opciones: Object.entries(conteoParaEstaPregunta).map(
+            ([opcion, cantidad]) => ({
+              textoOpcion: opcion,
+              cantidadVecesSeleccionada: cantidad,
+              porcentajeSeleccion:
+                ((cantidad / totalRespuestas) * 100).toFixed(2) + '%',
+            }),
           ),
         };
       }
+
       return {
         textoPregunta: pregunta.texto,
         tipoPregunta: pregunta.tipo,
-        respuestas: [],
       };
     });
 
     return {
       nombreEncuesta: encuesta.nombre,
-      cantidadEncuestados: totalEncuestados,
-      resultadosProcesados,
+      resumenEstadistico: {
+        cantidadEncuestasProcesadas: totalEncuestados,
+        totalPreguntas: encuesta.preguntas.length,
+        totalRespuestasAnalizadas,
+        resultadosProcesados,
+      },
     };
   }
 }

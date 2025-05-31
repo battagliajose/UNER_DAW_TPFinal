@@ -7,7 +7,6 @@ import {
   FormControl,
   FormGroup,
   FormsModule,
-  NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -24,6 +23,7 @@ import { CardModule } from 'primeng/card';
 import { TextErrorComponent } from '../../text-error/text-error.component';
 import { DividerModule } from 'primeng/divider';
 import { DialogPreguntaComponent } from '../dialog-pregunta/dialog-pregunta.component';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-creacion-encuesta',
@@ -37,6 +37,7 @@ import { DialogPreguntaComponent } from '../dialog-pregunta/dialog-pregunta.comp
     TextErrorComponent,
     DividerModule,
     DialogPreguntaComponent,
+    NgClass,
   ],
   templateUrl: './creacion-encuesta.component.html',
   styleUrl: './creacion-encuesta.component.css',
@@ -49,9 +50,9 @@ export class CreacionEncuestaComponent {
   private confirmationService: ConfirmationService =
     inject(ConfirmationService);
   private encuestaService: EncuestaService = inject(EncuestaService);
-  private readonly _formBuilder = inject(NonNullableFormBuilder);
 
   dialogGestionPreguntaVisible = signal<boolean>(false);
+  isLoading: boolean = false;
 
   constructor() {
     this.form = new FormGroup({
@@ -93,8 +94,9 @@ export class CreacionEncuestaComponent {
 
   confirmarCrearEncuesta() {
     this.confirmationService.confirm({
-      message: 'Confirmar creación de encuesta?',
-      header: 'Confirmación',
+      message:
+        'Vas a crear una encuesta, una vez creada no se puede editar. ¿Estás seguro?',
+      header: 'Confirmar creación',
       closable: true,
       closeOnEscape: true,
       icon: 'pi pi-exclamation-triangle',
@@ -115,8 +117,8 @@ export class CreacionEncuestaComponent {
 
   confirmarEliminarPregunta(index: number) {
     this.confirmationService.confirm({
-      message: 'Confirmar eliminación?',
-      header: 'Confirmación',
+      message: 'Vas a eliminar un registro, ¿estás seguro?',
+      header: 'Confirmar eliminación',
       closable: true,
       closeOnEscape: true,
       icon: 'pi pi-exclamation-triangle',
@@ -157,14 +159,16 @@ export class CreacionEncuestaComponent {
         }
       }
     }
-
+    this.isLoading = true;
+    this.form.disable();
     this.encuestaService.post(encuesta).subscribe({
       next: (res) => {
         this.messageService.add({
           severity: 'success',
           summary: 'La encuesta se creó con éxito',
         });
-
+        this.isLoading = false;
+        this.form.enable();
         this.router.navigateByUrl(
           '/presentacion-enlaces?id-encuesta=' +
             res.id +
@@ -175,10 +179,11 @@ export class CreacionEncuestaComponent {
         );
       },
       error: (err) => {
+        this.isLoading = false;
+        this.form.enable();
         this.messageService.add({
           severity: 'error',
           summary: 'Ha ocurrido un error al crear la encuesta',
-          
         });
       },
     });

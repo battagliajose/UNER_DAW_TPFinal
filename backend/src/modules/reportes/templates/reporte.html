@@ -18,16 +18,16 @@
         color: white;
       }
       h1 {
-        background-color: #0096d6;
-      } /* Cyan */
+        background-color: #394d5a;
+      } /* Lucario pokemonpalette */
       h2 {
-        background-color: #d60087;
-      } /* Magenta */
+        background-color: #56a0ea;
+      } /* Lucario pokemonpalette */
       h3 {
-        background-color: #ffd600;
+        background-color: #cccc80;
         padding: 4px;
         color: black;
-      } /* Amarillo */
+      } /* Lucario pokemonpalette */
       .pregunta {
         margin-bottom: 12px;
         padding: 8px;
@@ -39,20 +39,22 @@
         margin-left: 12px;
       }
       .seccion-preguntas {
-        background-color: #c0e4f5;
+        background-color: #f4f6ea;
         padding: 8px;
         border-radius: 5px;
-      } /* Azul claro */
+      } /* avalugg pokemonpallete */
       .seccion-abiertas {
-        background-color: #fde8b2;
+        background-color: #f4f6ea;
         padding: 8px;
         border-radius: 5px;
-      } /* Amarillo claro */
+      } /* avalugg pokemonpallete */
     </style>
   </head>
   <body>
     <h1>Resultados de la Encuesta: {{ nombreEncuesta }}</h1>
-    <h2>Cantidad de encuestados: {{ cantidadEncuestados }}</h2>
+    <h2>Cantidad de encuestas procesadas: {{ cantidadEncuestasProcesadas }}</h2>
+    <h2>Total de preguntas: {{ totalPreguntas }}</h2>
+    <h2>Total de respuestas analizadas: {{ totalRespuestasAnalizadas }}</h2>
 
     <div class="seccion-preguntas">
       <h2>Recuento de resultados por preguntas opción múltiple:</h2>

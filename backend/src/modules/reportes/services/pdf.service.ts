@@ -9,20 +9,23 @@ export class PdfService {
   async generarPDF(datosReporte: any, res: Response) {
     const templatePath = path.join(
       process.cwd(),
+      'backend',
       'dist',
       'modules',
       'reportes',
       'templates',
       'reporte.html',
     );
-    // Ruta al archivo HTML del template debe estar disponible en el directorio de distribución
-    // Asegúrate de que el archivo reporte.html esté en la ruta correcta
-    //backend/src/modules/reportes/templates/reporte.html
+    //dist/modules/reportes/templates/reporte.html
+    //asegurarse de copiar el archivo html al directorio dist antes de ejecutar el servidor
+    //copiarlo desde reportes/templates/reporte.html
 
     let htmlTemplate = fs.readFileSync(templatePath, 'utf8');
 
-    // Generar los bloques dinámicos
-    const preguntasMultiples = datosReporte.resultadosProcesados
+    const resultados =
+      datosReporte.resumenEstadistico?.resultadosProcesados || [];
+
+    const preguntasMultiples = resultados
       .filter((pregunta) => pregunta.tipoPregunta !== 'ABIERTA')
       .map(
         (pregunta) => `
@@ -30,14 +33,21 @@ export class PdfService {
           <h3>${pregunta.textoPregunta}</h3>
           <p>Tipo: ${pregunta.tipoPregunta}</p>
           <ul>
-            ${pregunta.respuestas.map((respuesta) => `<li class="respuesta">${respuesta}</li>`).join('')}
+            ${
+              pregunta.opciones
+                ?.map(
+                  (op) =>
+                    `<li class="respuesta">${op.textoOpcion}: ${op.cantidadVecesSeleccionada} veces (${op.porcentajeSeleccion})</li>`,
+                )
+                .join('') || ''
+            }
           </ul>
         </div>
       `,
       )
       .join('');
 
-    const preguntasAbiertas = datosReporte.resultadosProcesados
+    const preguntasAbiertas = resultados
       .filter((pregunta) => pregunta.tipoPregunta === 'ABIERTA')
       .map(
         (pregunta) => `
@@ -51,10 +61,20 @@ export class PdfService {
       )
       .join('');
 
-    // Reemplazar los placeholders
     const htmlContent = htmlTemplate
       .replace('{{ nombreEncuesta }}', datosReporte.nombreEncuesta)
-      .replace('{{ cantidadEncuestados }}', datosReporte.cantidadEncuestados)
+      .replace(
+        '{{ cantidadEncuestasProcesadas }}',
+        datosReporte.resumenEstadistico.cantidadEncuestasProcesadas,
+      )
+      .replace(
+        '{{ totalPreguntas }}',
+        datosReporte.resumenEstadistico.totalPreguntas,
+      )
+      .replace(
+        '{{ totalRespuestasAnalizadas }}',
+        datosReporte.resumenEstadistico.totalRespuestasAnalizadas,
+      )
       .replace('{{ preguntasMultiples }}', preguntasMultiples)
       .replace('{{ preguntasAbiertas }}', preguntasAbiertas);
 
@@ -65,18 +85,18 @@ export class PdfService {
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: { top: '40px', bottom: '40px' }, //márgenes para paginación
-      displayHeaderFooter: true, //activa paginación
+      margin: { top: '40px', bottom: '40px' },
+      displayHeaderFooter: true,
       footerTemplate: `
-    <div style="width: 100%; text-align: center; font-size: 12px; padding: 5px;">
-      Página <span class="pageNumber"></span> de <span class="totalPages"></span>
-    </div>
-  `,
+        <div style="width: 100%; text-align: center; font-size: 12px; padding: 5px;">
+          Página <span class="pageNumber"></span> de <span class="totalPages"></span>
+        </div>
+      `,
       headerTemplate: `
-    <div style="width: 100%; text-align: center; font-size: 12px; padding: 5px;">
-      Reporte de Encuesta - ${datosReporte.nombreEncuesta}
-    </div>
-  `,
+        <div style="width: 100%; text-align: center; font-size: 12px; padding: 5px;">
+          Reporte de Encuesta - ${datosReporte.nombreEncuesta}
+        </div>
+      `,
     });
 
     await browser.close();

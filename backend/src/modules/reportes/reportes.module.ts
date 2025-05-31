@@ -8,6 +8,7 @@ import { RespuestaEncuesta } from '../respuestas/entities/respuesta-encuesta.ent
 import { RespuestaAbierta } from '../respuestas/entities/respuesta-abierta.entity';
 import { RespuestaOpcion } from '../respuestas/entities/respuesta-opcion.entity';
 import { PdfService } from './services/pdf.service';
+import { CsvReportesService } from './services/csv-reportes.service';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { PdfService } from './services/pdf.service';
       RespuestaOpcion,
     ]),
   ],
-  providers: [ReportesService, PdfService],
+  providers: [ReportesService, PdfService, CsvReportesService],
   controllers: [ReportesController],
   exports: [ReportesService, PdfService],
 })
