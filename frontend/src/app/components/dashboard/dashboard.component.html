@@ -1,39 +1,9 @@
 <div class="dashboard-container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <h2>Menú</h2>
-      </div>
-      <ul class="sidebar-menu">
-        <li *ngFor="let item of sidebarItems" class="sidebar-item" pRipple>
-          <i [class]="item.icon"></i>
-          <span>{{ item.label }}</span>
-        </li>
-      </ul>
-    </div>
+  <app-sidebar (menuClick)="onMenuClick($event)"></app-sidebar>
   
-    <!-- Contenido principal -->    
-    <div class="main-content">
-      <h1>Dashboard</h1>
-      <div class="cards-container">
-        <p-card >            
-            <ng-template #title> Total de encuestas
-                <span style="color: var(--color-background);font-weight: bold;float: right;"> 10</span>
-            </ng-template>
-            <ng-template #subtitle> <i class="pi pi-receipt" style="font-size: 2.5rem"></i> </ng-template> 
-        </p-card>
-        <p-card >            
-            <ng-template #title> Estados de encuestas
-                <span style="color: var(--color-background);font-weight: bold;float: right;"> 10</span>
-            </ng-template>
-            <ng-template #subtitle> <i class="pi pi-wave-pulse" style="font-size: 2.5rem"></i> </ng-template> 
-        </p-card>
-        <p-card >            
-            <ng-template #title> Encuestas enviadas
-                <span style="color: var(--color-background);font-weight: bold;float: right;"> 10</span>
-            </ng-template>
-            <ng-template #subtitle> <i class="pi pi-megaphone" style="font-size: 2.5rem"></i> </ng-template> 
-        </p-card>
-      </div>
-    </div>
+  <div class="content">
+    <app-dashboard-content *ngIf="activeView === 'inicio'"></app-dashboard-content>
+    <app-dashboard-list *ngIf="activeView === 'listado'"></app-dashboard-list>
+    <app-dashboard-enviadas *ngIf="activeView === 'enviadas'"></app-dashboard-enviadas>
   </div>
+</div>
