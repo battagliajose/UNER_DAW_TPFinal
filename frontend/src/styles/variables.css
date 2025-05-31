@@ -9,4 +9,5 @@
   --color-light: var(--p-indigo-500);
   --color-strong:var(--p-indigo-900);
   --color-background:var(--p-gray-800);
+  --color-background-dashboard:var(--p-gray-100);
 }

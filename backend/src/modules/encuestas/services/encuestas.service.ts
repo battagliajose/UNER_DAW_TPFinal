@@ -134,6 +134,28 @@ export class EncuestasService {
     return encuesta;
   }
 
+  async obtenerTodasLasEncuestas(
+    skip: number = 0,
+    take: number = 10
+  ): Promise<[Encuesta[], number]> {
+    return this.encuestasRepository.findAndCount({
+      relations: {
+        preguntas: {
+          opciones: true
+        }
+      },
+      order: {
+        id: 'ASC',
+        preguntas: {
+          numero: 'ASC'
+        }
+      },
+      skip,
+      take
+    });
+  }
+
+
   echo(): string {
     return 'La aplicación está funcionando correctamente!!!';
   }

@@ -11,6 +11,10 @@ import { CodigoTipoEnum } from '../enums/codigo-tipo.enum';
 export class EncuestaService {
   private readonly _requestService = inject(RequestService);
 
+  getAll(): Observable<EncuestaDTO[]> {
+    return this._requestService.get<EncuestaDTO[]>('/encuestas/obtener-todas');
+  }
+
   getOne(
     idEncuesta: number,
     codigo: string,

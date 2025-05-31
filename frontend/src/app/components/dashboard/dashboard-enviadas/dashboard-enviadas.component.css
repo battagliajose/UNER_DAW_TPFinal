@@ -1,0 +1,8 @@
+:host{
+    padding:2rem;
+    background-color: var(--color-background-dashboard);  
+    width: 100%; 
+    box-sizing: border-box;
+    border-radius: 0 20px 20px 0;
+    }
+    
