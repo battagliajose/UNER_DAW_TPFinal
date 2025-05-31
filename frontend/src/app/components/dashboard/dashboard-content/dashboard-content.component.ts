@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -20,9 +20,15 @@ interface DashboardCard {
   styleUrls: ['./dashboard-content.component.css']
 })
 export class DashboardContentComponent {
+  //variable para pasar al padre
+  @Output() datosCargados = new EventEmitter<EncuestaDTO[]>();
 
+  //variable para poblar el dashboard-content
   encuestas: EncuestaDTO[] = [];
+
+  //variable para mostrar el loading
   loading: boolean = true;
+ 
   error: string | null = null;
 
   constructor(private encuestaService: EncuestaService) {}
@@ -39,13 +45,14 @@ export class DashboardContentComponent {
     //al metodo se le agrega delay para simular un tiempo de carga
     this.encuestaService.getAll().pipe(delay(2000)).subscribe({      
       next: (data) => {
-        this.encuestas = data;        
+        this.encuestas = data; 
+        this.datosCargados.emit(data);       
         this.updateDashboardCards();
         this.loading = false;
       },
       error: (err) => {
         console.error('Revisar el server del backend, Posible caida:', err);
-        this.error = 'No se pudieron cargar las encuestas. Intente nuevamente más tarde.';
+        this.error = 'No se pudieron cargar las encuestas. Intente nuevamente o avise al administrador.';
         this.loading = false;
       }
     });
@@ -56,10 +63,12 @@ export class DashboardContentComponent {
     this.cards[0].value = this.encuestas.length;        
   }
   
+  //Tarjetas del dashboard por defecto con valores pero no se renderizan hasta que se cargue el objeto
+  //en el .html se renderizan las tarjetas con los valores del objeto cargado
   cards: DashboardCard[] = [
     { 
       title: 'Total de encuestas', 
-      value: 10, 
+      value: 0, 
       icon: 'pi pi-receipt',  
       color: 'var(--color-primary)'    
     },

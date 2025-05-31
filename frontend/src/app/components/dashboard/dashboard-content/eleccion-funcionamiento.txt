@@ -1,0 +1,3 @@
+Siendo el dashboard-content el componente que se renderiza primero por defecto y siendo el quien hace la peticion.
+Lo que se hizo es pasar la respuesta(data) del dashboard-content al componente padre. Y asi dejar al padre 
+el reparto de la informacion a los componentes hijos dashboard-list y dashboard-enviadas.
