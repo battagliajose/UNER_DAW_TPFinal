@@ -24,7 +24,7 @@ export class ReportesController {
   }
 
   @Get(':id/:codigo')
-  async probarReporte(
+  async generarReporteResultados(
     @Param('id') id: number,
     @Param('codigo') codigo: string,
   ) {
