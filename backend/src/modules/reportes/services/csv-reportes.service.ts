@@ -31,11 +31,19 @@ export class CsvReportesService {
       }
     });
 
-    const filePath = path.join(process.cwd(), 'reporte.csv');
+    const filePath = path.join(
+      process.cwd(),
+      'exports',
+      'reporte-estadistica-encuesta.csv',
+    );
+    //el csv se guardará en el archivo exports,csv dentro de exports/
     fs.writeFileSync(filePath, contenidoCSV);
 
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="reporte.csv"');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename="reporte-estadistica.encuestas.csv"',
+    );
     res.send(contenidoCSV);
   }
 }
