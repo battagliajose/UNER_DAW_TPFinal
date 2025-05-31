@@ -4,9 +4,7 @@ import {
   inject,
   model,
   OnDestroy,
-  OnInit,
   output,
-  signal,
 } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
@@ -16,7 +14,6 @@ import {
 } from '../../../enums/tipo-pregunta.enum';
 import {
   FormArray,
-  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -26,12 +23,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { CreateOpcionDTO } from '../../../models/create-opcion.dto';
 import { PreguntaDTO } from '../../../models/pregunta.dto';
-import { opcionesNoVacias } from '../../../validators/opciones-no-vacias.validator';
 import { TextErrorComponent } from '../../text-error/text-error.component';
 import { RippleModule } from 'primeng/ripple';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dialog-pregunta',
@@ -44,47 +40,41 @@ import { Subscription } from 'rxjs';
     ButtonModule,
     TextErrorComponent,
     RippleModule,
+    CommonModule,
   ],
   templateUrl: './dialog-pregunta.component.html',
   styleUrl: './dialog-pregunta.component.css',
 })
-export class DialogPreguntaComponent implements OnInit, OnDestroy {
-  form!: FormGroup;
-
+export class DialogPreguntaComponent implements OnDestroy {
+  // Inputs y Outputs
   visible = model.required<boolean>();
-
-  dialogGestionOpcionVisible = signal<boolean>(false);
-
   agregarPregunta = output<PreguntaDTO>();
 
+  // Servicios
   private messageService: MessageService = inject(MessageService);
-
   private confirmationService: ConfirmationService =
     inject(ConfirmationService);
 
-  private readonly _formBuilder = inject(FormBuilder);
-
-  private subscription!: Subscription | undefined;
-
-  ngOnInit(): void {
-    this.form = this._formBuilder.group(
-      {
-        texto: ['', Validators.required],
-        tipo: [TipoRespuestaEnum.ABIERTA, Validators.required],
-        opciones: this._formBuilder.array([
-          this._formBuilder.group({ texto: [''] }),
-        ]) as FormArray<FormGroup<{ texto: FormControl<string | null> }>>,
-      },
-      {
-        validators: opcionesNoVacias,
-      },
-    );
-    this.subscription = this.form.get('tipo')?.valueChanges.subscribe((val) => {
-      this.actualizarValidacionOpciones(val);
-    });
-  }
+  // Internal
+  form!: FormGroup;
+  private subscription: Subscription | undefined;
 
   constructor() {
+    this.form = new FormGroup({
+      texto: new FormControl('', [Validators.required]),
+      tipo: new FormControl(TipoRespuestaEnum.ABIERTA, [Validators.required]),
+      opciones: new FormArray([
+        new FormGroup({
+          texto: new FormControl('', [Validators.required]),
+        }),
+      ]),
+    });
+
+    this.subscription = this.tipo.valueChanges.subscribe((val) => {
+      this.actualizarValidacionOpciones(val);
+    });
+
+    this.actualizarValidacionOpciones(this.tipo.value);
     effect(() => {
       if (this.visible()) {
         this.reset();
@@ -93,44 +83,43 @@ export class DialogPreguntaComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    this.form.reset();
+    // Esto es para cancelar la suscripción al destruir el componente
+    this.subscription?.unsubscribe();
+    // Resetear y limpiar form
+    this.reset();
   }
 
-  reset() {
+  reset(): void {
     this.form.reset();
     this.opciones.clear();
   }
 
-  actualizarValidacionOpciones(tipo: TipoRespuestaEnum) {
-    const opcionesControl = this.form.get('opciones');
-
+  actualizarValidacionOpciones(tipo: TipoRespuestaEnum): void {
     if (
       tipo === TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_SIMPLE ||
       tipo === TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_MULTIPLE
     ) {
-      // Se requieren al menos dos opciones
-      opcionesControl?.setValidators([Validators.required]);
+      this.opciones.setValidators([Validators.required]);
       this.agregarOpcionesVaciasSiEsNecesario();
     } else {
-      opcionesControl?.clearValidators();
+      this.opciones.clearValidators();
       this.opciones.clear();
     }
 
-    opcionesControl?.updateValueAndValidity();
+    this.opciones.updateValueAndValidity();
   }
 
-  agregarOpcionesVaciasSiEsNecesario() {
+  agregarOpcionesVaciasSiEsNecesario(): void {
     while (this.opciones.length < 2) {
       this.opciones.push(
-        this._formBuilder.group({ texto: ['', Validators.required] }),
+        new FormGroup({
+          texto: new FormControl('', [Validators.required]),
+        }),
       );
     }
   }
 
-  esMultipleChoice(tipo: TipoRespuestaEnum) {
+  esMultipleChoice(tipo: TipoRespuestaEnum): boolean {
     return [
       TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_MULTIPLE,
       TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_SIMPLE,
@@ -144,19 +133,20 @@ export class DialogPreguntaComponent implements OnInit, OnDestroy {
     return tipoPreguntaPresentacion;
   }
 
-  get texto(): FormControl<string | null> {
-    return this.form.controls['texto'] as FormControl;
+  // Getters
+  get texto(): FormControl {
+    return this.form.get('texto') as FormControl;
   }
 
-  get tipo(): FormControl<TipoRespuestaEnum | null> {
-    return this.form.controls['tipo'] as FormControl;
+  get tipo(): FormControl {
+    return this.form.get('tipo') as FormControl;
   }
 
-  get opciones() {
-    return this.form.controls['opciones'] as FormArray;
+  get opciones(): FormArray {
+    return this.form.get('opciones') as FormArray;
   }
 
-  agregar() {
+  agregar(): void {
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       this.messageService.add({
@@ -168,27 +158,57 @@ export class DialogPreguntaComponent implements OnInit, OnDestroy {
 
     const pregunta: PreguntaDTO = this.form.value;
     this.agregarPregunta.emit(pregunta);
-    this.cerrar();
-  }
-
-  cerrar() {
+    this.reset();
     this.visible.set(false);
   }
 
-  agregarOpcion() {
+  cerrar(): void {
+    // Acá preguntamos si realmente quiere salir en caso de que hayan datos en el form
+    if (this.form.dirty) {
+      this.confirmationService.confirm({
+        message: 'Tenés cambios no guardados, ¿seguro que querés salir?',
+        header: 'Confirmar salida',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Sí',
+        rejectLabel: 'No',
+        rejectButtonProps: {
+          label: 'Cancelar',
+          severity: 'secondary',
+          outlined: true,
+        },
+        acceptButtonProps: {
+          label: 'Confirmar',
+          severity: 'contrast',
+        },
+        accept: () => {
+          this.visible.set(false);
+          this.reset();
+        },
+        reject: () => {
+          // No hacer nada, dejar el form abierto
+        },
+      });
+    } else {
+      this.visible.set(false);
+    }
+  }
+
+  agregarOpcion(): void {
     this.opciones.push(
-      this._formBuilder.group({ texto: ['', Validators.required] }),
+      new FormGroup({
+        texto: new FormControl('', [Validators.required]),
+      }),
     );
   }
 
-  eliminarOpcion(index: number) {
+  eliminarOpcion(index: number): void {
     this.opciones.removeAt(index);
   }
 
-  confirmarEliminarOpcion(index: number) {
+  confirmarEliminarOpcion(index: number): void {
     this.confirmationService.confirm({
-      message: 'Confirmar eliminación?',
-      header: 'Confirmación',
+      message: 'Vas a eliminar una opción, ¿estás seguro?',
+      header: 'Confirmar eliminación',
       closable: true,
       closeOnEscape: true,
       icon: 'pi pi-exclamation-triangle',
@@ -199,6 +219,7 @@ export class DialogPreguntaComponent implements OnInit, OnDestroy {
       },
       acceptButtonProps: {
         label: 'Confirmar',
+        severity: 'contrast',
       },
       accept: () => {
         this.eliminarOpcion(index);

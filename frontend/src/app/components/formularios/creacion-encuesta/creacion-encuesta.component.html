@@ -9,6 +9,9 @@
           formControlName="nombre"
           autocomplete="off"
           class="extended"
+          [ngClass]="{
+            'ng-invalid ng-dirty': nombre.touched && nombre.invalid,
+          }"
         />
         <label for="input-nombre">Nombre de la encuesta</label>
       </p-floatlabel>
@@ -24,6 +27,7 @@
         label="Agregar Pregunta"
         (onClick)="abrirDialog()"
         icon="pi pi-plus"
+        [disabled]="isLoading"
       />
     </section>
     @for (pregunta of preguntas.value; track idx; let idx = $index) {
@@ -49,6 +53,7 @@
             icon="pi pi-times"
             label="Eliminar"
             severity="danger"
+            [disabled]="isLoading"
           ></p-button>
         </div>
       </section>
@@ -66,7 +71,8 @@
       type="submit"
       icon="pi pi-check"
       severity="contrast"
-      [style]="{ backgroundColor:  'var(--color-light)' }"
+      [style]="{ backgroundColor: 'var(--color-light)' }"
+      [disabled]="form.invalid || isLoading"
     >
       Finalizar
     </button>
