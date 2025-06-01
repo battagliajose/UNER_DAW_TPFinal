@@ -12,6 +12,9 @@
     overflow-y: auto;
     max-height: 100%;
 }
+.cards-container h2{
+    margin-bottom: 1rem;
+}
 
 .dashboard-card {
     background: white;
@@ -26,6 +29,7 @@
     flex-direction: column;    
     margin-bottom: 1rem;
 }
+
 .dashboard-card h4{
     margin-bottom: 0;
     color:var(--color-primary);
