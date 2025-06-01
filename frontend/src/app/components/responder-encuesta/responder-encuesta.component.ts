@@ -50,6 +50,7 @@ export class ResponderEncuestaComponent implements OnInit {
   id: number = 0;
   codigo: string = '';
   encuesta?: EncuestaDTO;
+  enviando: boolean = false;
 
   formularioRespuestas = new FormGroup({
     respuestas: new FormArray([]),
@@ -111,6 +112,7 @@ export class ResponderEncuestaComponent implements OnInit {
             },
             error: (err) => {
               console.error('Error al obtener la encuesta:', err);
+              this.router.navigate(['/responder/enlace-invalido']);
             },
           });
       }
@@ -138,6 +140,8 @@ export class ResponderEncuestaComponent implements OnInit {
 
       return;
     }
+
+    this.enviando = true;
 
     const dto: any = {
       encuestaId: this.encuesta!.id,
@@ -212,6 +216,7 @@ export class ResponderEncuestaComponent implements OnInit {
         }, 3200);
       },
       error: (err) => {
+        this.enviando = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

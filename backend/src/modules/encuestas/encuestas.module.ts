@@ -6,19 +6,12 @@ import { Encuesta } from './entities/encuesta.entity';
 import { Pregunta } from './entities/pregunta.entity';
 import { Opcion } from './entities/opcion.entity';
 import { RespuestaEncuesta } from '../respuestas/entities/respuesta-encuesta.entity';
-import { PdfRespuestasEncuestasService } from './services/pdf-respuestas-encuestas.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Encuesta,
-      Pregunta,
-      Opcion,
-      RespuestaEncuesta,
-      PdfRespuestasEncuestasService,
-    ]),
+    TypeOrmModule.forFeature([Encuesta, Pregunta, Opcion, RespuestaEncuesta]),
   ],
   controllers: [EncuestasController],
-  providers: [EncuestasService, PdfRespuestasEncuestasService],
+  providers: [EncuestasService],
 })
 export class EncuestasModule {}

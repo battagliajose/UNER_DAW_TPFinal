@@ -16,9 +16,6 @@ export class PdfService {
       'templates',
       'reporte.html',
     );
-    //dist/modules/reportes/templates/reporte.html
-    //asegurarse de copiar el archivo html al directorio dist antes de ejecutar el servidor
-    //copiarlo desde reportes/templates/reporte.html
 
     let htmlTemplate = fs.readFileSync(templatePath, 'utf8');
 
