@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Respuestas de Encuesta</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 15px;
+        background-color: #f0f0f0;
+        color: #333;
+      }
+      h1,
+      h2 {
+        text-align: center;
+        padding: 8px;
+        color: white;
+      }
+      h1 {
+        background-color: #394d5a;
+      }
+      h2 {
+        background-color: #56a0ea;
+      }
+      .seccion-encuestado {
+        background-color: #cccc80;
+        padding: 8px;
+        color: black;
+      }
+      .seccion-preguntas {
+        background-color: #f4f6ea;
+        padding: 8px;
+        border-radius: 5px;
+      }
+      .pregunta {
+        padding: 8px;
+        background-color: #ffffff;
+        border-left: 5px solid #394d5a;
+        margin-bottom: 10px;
+      }
+      footer {
+        text-align: center;
+        padding: 10px;
+        background-color: #394d5a;
+        color: white;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Respuestas de la Encuesta: {{ nombreEncuesta }}</h1>
+
+    {{#each respuestas}}
+    <div class="seccion-encuestado">
+      <h2>Encuestado {{ encuestado }}</h2>
+    </div>
+
+    <div class="seccion-preguntas">
+      <h2>Respuestas</h2>
+
+      {{#each respuestasOpciones}}
+      <div class="pregunta">
+        <strong>{{ textoPregunta }}</strong>
+        <p>Opción seleccionada: {{ opcionSeleccionada }}</p>
+      </div>
+      {{/each}}
+
+      {{#each respuestasAbiertas}}
+      <div class="pregunta">
+        <strong>{{ textoPregunta }}</strong>
+        <p>Respuesta: {{ textoRespuesta }}</p>
+      </div>
+      {{/each}}
+    </div>
+    {{/each}}
+
+    <footer>
+      <p>Listado de respuestas impreso el {{ fechaActual }}</p>
+    </footer>
+  </body>
+</html>
