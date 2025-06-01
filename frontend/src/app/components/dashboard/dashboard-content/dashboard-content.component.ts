@@ -45,8 +45,9 @@ export class DashboardContentComponent {
     //al metodo se le agrega delay para simular un tiempo de carga
     this.encuestaService.getAll().pipe(delay(2000)).subscribe({      
       next: (data) => {
-        this.encuestas = data; 
-        this.datosCargados.emit(data);       
+        this.encuestas = data[0]; 
+        console.log("Encuesta",this.encuestas);
+        this.datosCargados.emit(data[0]);       
         this.updateDashboardCards();
         this.loading = false;
       },
@@ -60,7 +61,8 @@ export class DashboardContentComponent {
 
   private updateDashboardCards(): void {
     // Actualizar el total de encuestas
-    this.cards[0].value = this.encuestas.length;        
+    this.cards[0].value =this.encuestas.length;
+    //this.cards[1].value = this.encuestas.filter(encuesta => encuesta.estado === 'Enviada').length;    
   }
   
   //Tarjetas del dashboard por defecto con valores pero no se renderizan hasta que se cargue el objeto
@@ -79,10 +81,10 @@ export class DashboardContentComponent {
       color: 'var(--color-primary)'
     },
     { 
-      title: 'Encuestas enviadas', 
+      title: 'Encuestas Enviadas', 
       value: 0, 
-      icon: 'pi pi-megaphone',
+      icon: 'pi pi-send',
       color: 'var(--color-primary)'
-    }
+    },
   ];
 }

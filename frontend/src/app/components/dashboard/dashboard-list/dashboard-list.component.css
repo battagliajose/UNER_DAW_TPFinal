@@ -5,4 +5,36 @@
     box-sizing: border-box;
     border-radius: 0 20px 20px 0;
     }
-    
+
+.cards-container {
+    display: flex;
+    flex-direction: column;    
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    padding: 1.5rem;
+    cursor: pointer;
+    max-width: 100%;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;    
+    margin-bottom: 1rem;
+}
+.dashboard-card h4{
+    margin-bottom: 0;
+    color:var(--color-primary);
+}
+
+.dashboard-card:hover{
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transform: translateY(-4px);
+    transition: all 0.5s ease;
+
+}
