@@ -59,7 +59,10 @@ export class CsvEncuestasService {
 
     // **Enviar CSV como respuesta**
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="reporte.csv"');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename="listado_respuestas_encuesta.csv"',
+    );
     res.send(contenidoCSV);
   }
 }
