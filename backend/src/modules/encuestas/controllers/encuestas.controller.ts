@@ -8,7 +8,6 @@ import {
   Res,
   HttpException,
   HttpStatus,
-  Res,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { EncuestasService } from '../services/encuestas.service';
@@ -16,14 +15,15 @@ import { createEncuestaDto } from '../dtos/create-encuesta.dto';
 import { ObtenerEncuestaDto } from '../dtos/obtener-encuesta.dto';
 import { ObtenerTodasEncuestasDto } from '../dtos/obtener-todas-encuestas.dto';
 import { Encuesta } from '../entities/encuesta.entity';
-import { Response } from 'express';
+import { CsvEncuestasService } from '../services/csv-respuestas-encuestas.service';
 import { PdfRespuestasEncuestasService } from '../services/pdf-respuestas-encuestas.service';
 
 @Controller('/encuestas')
 export class EncuestasController {
   constructor(
-    private encuestasService: EncuestasService,
-    private pdfRespuestasEncuestasService: PdfRespuestasEncuestasService,
+    private readonly encuestasService: EncuestasService,
+    private readonly csvEncuestasService: CsvEncuestasService,
+    private readonly pdfRespuestasEncuestasService: PdfRespuestasEncuestasService,
   ) {}
 
   @Post('')
@@ -76,19 +76,27 @@ export class EncuestasController {
       throw new HttpException(
         'Error al obtener la encuesta',
         HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: exception,
-        },
+        { cause: exception },
       );
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="respuestas_encuesta_${id}.pdf"`,
-    );
-    res.sendFile(pdfPath);
+    }
   }
 
+  @Get('/echo')
+  async echo(): Promise<string> {
+    return this.encuestasService.echo();
+  }
+
+  // Endpoint para exportar respuestas de encuesta a CSV
+  @Get('/csv/:id/:codigo')
+  async exportarCsvRespuestas(
+    @Param('id') id: number,
+    @Param('codigo') codigo: string,
+    @Res() res: Response,
+  ) {
+    await this.csvEncuestasService.exportCsvRespuestasEncuesta(id, codigo, res);
+  }
+
+  // Endpoint para exportar respuestas de encuesta a PDF
   @Get('/pdf/:id/:codigo')
   async exportarPdfRespuestas(
     @Param('id') id: number,
@@ -104,23 +112,8 @@ export class EncuestasController {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename="respuestas_encuesta_${id}.pdf"`,
+      `attachment; filename="respuestas_encuesta_.pdf"`,
     );
     res.sendFile(pdfPath);
-  }
-
-  @Get('/echo')
-  async echo(): Promise<string> {
-    return this.encuestasService.echo();
-  }
-
-  // ✅ Método dentro de la clase
-  @Get('/csv/:id/:codigo')
-  async exportarCsvRespuestas(
-    @Param('id') id: number,
-    @Param('codigo') codigo: string,
-    @Res() res: Response,
-  ) {
-    await this.csvEncuestasService.exportCsvRespuestasEncuesta(id, codigo, res);
   }
 }
