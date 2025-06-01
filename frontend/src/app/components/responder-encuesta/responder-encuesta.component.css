@@ -60,3 +60,10 @@ hr {
   font-size: large;
   margin: 10px 0;
 }
+
+.pregunta-error {
+  color: white;
+  background-color: red;
+  font-size: small;
+  margin-top: 5px;
+}

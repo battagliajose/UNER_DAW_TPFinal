@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <form
   class="form-encuesta"
   *ngIf="encuesta?.preguntas"
@@ -12,7 +13,11 @@
       [formGroupName]="i"
     >
       <!-- ABIERTA -->
-      <div class="pregunta-container" *ngIf="pregunta.tipo === 'ABIERTA'">
+      <div
+        class="pregunta-container"
+        *ngIf="pregunta.tipo === 'ABIERTA'"
+        [attr.id]="'pregunta_' + i"
+      >
         <p class="pregunta-texto">{{ pregunta.texto }}</p>
         <textarea
           rows="5"
@@ -20,12 +25,21 @@
           pTextarea
           [formControlName]="'respuesta_' + i"
         ></textarea>
+        <small
+          class="pregunta-error"
+          *ngIf="
+            getRespuestaControl(i)?.invalid && getRespuestaControl(i)?.touched
+          "
+        >
+          Debe responder esta pregunta.
+        </small>
       </div>
 
       <!-- SELECCIÓN SIMPLE -->
       <div
         class="pregunta-container"
         *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_SIMPLE'"
+        [attr.id]="'pregunta_' + i"
       >
         <p class="pregunta-texto">{{ pregunta.texto }}</p>
         <div class="pregunta-opciones">
@@ -41,11 +55,22 @@
               {{ opcion.texto }}
             </label>
           </div>
+          <small
+            class="pregunta-error"
+            *ngIf="
+              getRespuestaControl(i)?.invalid && getRespuestaControl(i)?.touched
+            "
+          >
+            Seleccione una opción.
+          </small>
         </div>
       </div>
 
       <!-- SELECCIÓN MÚLTIPLE -->
-      <div *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_MULTIPLE'">
+      <div
+        *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_MULTIPLE'"
+        [attr.id]="'pregunta_' + i"
+      >
         <p>{{ pregunta.texto }}</p>
 
         <!-- Entrás al FormArray con nombre dinámico -->
@@ -63,6 +88,12 @@
               {{ opcion.texto }}
             </label>
           </div>
+          <small
+            class="pregunta-error"
+            *ngIf="getCheckboxArray(i)?.invalid && getCheckboxArray(i)?.touched"
+          >
+            Seleccioná al menos una opción.
+          </small>
         </div>
       </div>
 
