@@ -60,7 +60,22 @@ export class PdfRespuestasEncuestasService {
     await page.setContent(htmlFinal, { waitUntil: 'load' });
 
     //Generar el PDF en memoria
-    const pdfBuffer = await page.pdf({ format: 'A4' });
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '40px', bottom: '40px' },
+      displayHeaderFooter: true,
+      footerTemplate: `
+        <div style="width: 100%; text-align: center; font-size: 12px; padding: 5px;">
+          Página <span class="pageNumber"></span> de <span class="totalPages"></span>
+        </div>
+      `,
+      headerTemplate: `
+        <div style="width: 100%; text-align: center; font-size: 12px; padding: 5px;">
+          Listado respuestas enncuesta - ${encuesta.nombre}
+        </div>
+      `,
+    });
 
     await browser.close();
 
