@@ -1,11 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, Injectable, Input } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TooltipModule } from 'primeng/tooltip';
 import { MessageModule } from 'primeng/message';
 import { ChipModule } from 'primeng/chip';
+import { EncuestaModService } from '../../../services/encuesta-mod.service';
+import { EncuestaDTO } from '../../../models/encuesta.dto';
 
+
+interface NuevaEncuestaDTO extends EncuestaDTO {
+  esActivo: boolean;
+  esEnviada: boolean;
+}
 
 @Component({
   selector: 'app-dashboard-list',
@@ -14,12 +21,38 @@ import { ChipModule } from 'primeng/chip';
   styleUrl: './dashboard-list.component.css',
   standalone: true
 })
-export class DashboardListComponent {
-  @Input() encuestas: any; // uso any porque modifique encuestas.
-  error: string = 'No hay encuestas disponibles. Por favor, verifique que existan encuestas en el sistema o cree una nueva encuesta.';
 
+
+@Injectable({
+  providedIn: 'root',
+})
+
+export class DashboardListComponent {
+
+  encuestas: NuevaEncuestaDTO[] = [];
+  constructor(private encuestaModService: EncuestaModService) {
+        
+  }
+ 
+  error: string = "";
+  loading: boolean = true;
   ngOnInit() {    
-    console.log('Encuestas recibidas en el componente:', this.encuestas);
+   this.cargarEncuestas();      
+  }
+
+  cargarEncuestas(){
+    this.encuestaModService.loadEncuestas().subscribe({
+      next: (data) => {
+        this.encuestas = data;                
+        this.loading = false;
+        this.error = "";
+        },
+      error: (error) => {
+        console.error("Error al cargar y modificar encuestas:", error);
+        this.loading = false;        
+        this.error = 'No se pudieron cargar las encuestas. Intente nuevamente o avise al administrador.';
+      }
+    });
   }
 
   editarEncuesta(encuesta: any) {

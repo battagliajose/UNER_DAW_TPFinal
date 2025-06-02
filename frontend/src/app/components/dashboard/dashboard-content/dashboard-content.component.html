@@ -14,7 +14,7 @@
     <button pButton pRipple 
             icon="pi pi-refresh" 
             label="Reintentar" 
-            (click)="loadEncuestas()"
+            (click)="cargarEncuestas()"
             [style]="{ backgroundColor: 'var(--color-light)' }">
     </button>
   </div>
@@ -33,8 +33,6 @@
       </ng-template> 
     </p-card>
  
-
-
  <!-- Mostrar tarjetas de estados -->
   <div *ngIf="!loading && !error" class="cards-container">
     <p-card class="dashboard-card">            
