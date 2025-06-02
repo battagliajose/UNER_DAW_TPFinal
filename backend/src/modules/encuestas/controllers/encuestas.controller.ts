@@ -96,24 +96,16 @@ export class EncuestasController {
     await this.csvEncuestasService.exportCsvRespuestasEncuesta(id, codigo, res);
   }
 
-  // Endpoint para exportar respuestas de encuesta a PDF
   @Get('/pdf/:id/:codigo')
   async exportarPdfRespuestas(
     @Param('id') id: number,
     @Param('codigo') codigo: string,
     @Res() res: Response,
   ) {
-    const pdfPath =
-      await this.pdfRespuestasEncuestasService.generarPdfRespuestasEncuesta(
-        id,
-        codigo,
-      );
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="respuestas_encuesta_.pdf"`,
+    await this.pdfRespuestasEncuestasService.generarPdfRespuestasEncuesta(
+      id,
+      codigo,
+      res,
     );
-    res.sendFile(pdfPath);
   }
 }
