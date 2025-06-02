@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
@@ -24,6 +24,8 @@ import { TextErrorComponent } from '../../text-error/text-error.component';
 import { DividerModule } from 'primeng/divider';
 import { DialogPreguntaComponent } from '../dialog-pregunta/dialog-pregunta.component';
 import { NgClass } from '@angular/common';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import { CreatePreguntaDTO } from '../../../models/create-pregunta.dto';
 
 @Component({
   selector: 'app-creacion-encuesta',
@@ -42,7 +44,7 @@ import { NgClass } from '@angular/common';
   templateUrl: './creacion-encuesta.component.html',
   styleUrl: './creacion-encuesta.component.css',
 })
-export class CreacionEncuestaComponent {
+export class CreacionEncuestaComponent implements OnInit {
   form: FormGroup;
 
   private messageService: MessageService = inject(MessageService);
@@ -51,8 +53,12 @@ export class CreacionEncuestaComponent {
     inject(ConfirmationService);
   private encuestaService: EncuestaService = inject(EncuestaService);
 
+  private localStorageService: LocalStorageService =
+    inject(LocalStorageService);
+
   dialogGestionPreguntaVisible = signal<boolean>(false);
   isLoading: boolean = false;
+  encuestaPrevia: CreateEncuestaDTO | null = null;
 
   constructor() {
     this.form = new FormGroup({
@@ -62,6 +68,13 @@ export class CreacionEncuestaComponent {
         [Validators.required, Validators.minLength(1)],
       ),
     });
+  }
+
+  ngOnInit(): void {
+    this.encuestaPrevia = this.localStorageService.getEncuestaData();
+    if (this.encuestaPrevia) {
+      this.confirmarRestaurarSesion();
+    }
   }
 
   get preguntas(): FormArray<FormControl<PreguntaDTO>> {
@@ -80,10 +93,12 @@ export class CreacionEncuestaComponent {
     this.preguntas.push(
       new FormControl<PreguntaDTO>(pregunta) as FormControl<PreguntaDTO>,
     );
+    this.localStorageService.updateEncuestaData(this.form.value);
   }
 
   eliminarPregunta(index: number) {
     this.preguntas.removeAt(index);
+    this.localStorageService.updateEncuestaData(this.form.value);
   }
 
   getTipoPreguntaPresentacion(tipo: TipoRespuestaEnum): string {
@@ -117,7 +132,7 @@ export class CreacionEncuestaComponent {
 
   confirmarEliminarPregunta(index: number) {
     this.confirmationService.confirm({
-      message: 'Vas a eliminar un registro, ¿estás seguro?',
+      message: 'Vas a eliminar una pregunta, ¿estás seguro?',
       header: 'Confirmar eliminación',
       closable: true,
       closeOnEscape: true,
@@ -169,6 +184,7 @@ export class CreacionEncuestaComponent {
         });
         this.isLoading = false;
         this.form.enable();
+        this.localStorageService.removeEncuestaData();
         this.router.navigateByUrl(
           '/presentacion-enlaces?id-encuesta=' +
             res.id +
@@ -188,4 +204,47 @@ export class CreacionEncuestaComponent {
       },
     });
   }
+
+  confirmarRestaurarSesion() {
+    this.confirmationService.confirm({
+      message: 'Detectamos una sesión previa. ¿Deseas restaurarla?',
+      header: 'Sesión guardada',
+      closable: true,
+      closeOnEscape: true,
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'No (Eliminar)',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Si',
+        severity: 'contrast',
+      },
+      accept: () => {
+        this.restaurarSesionPrevia();
+      },
+      reject: () => {
+        this.localStorageService.removeEncuestaData();
+      },
+    });
+  }
+
+  restaurarSesionPrevia() {
+    this.form.patchValue({ nombre: this.encuestaPrevia?.nombre });
+
+    // Si preguntas es un array dinámico, debes llenar el FormArray correctamente
+    const preguntasArray = this.form.get('preguntas') as FormArray;
+    preguntasArray.clear(); // Limpia cualquier dato previo
+
+    this.encuestaPrevia?.preguntas.forEach((pregunta) => {
+      preguntasArray.push(new FormControl<CreatePreguntaDTO>(pregunta));
+    });
+  }
+
+  getClase: { [key: string]: string } = {
+    'Selección simple': 'opcion-simple',
+    'Selección múltiple': 'opcion-multiple',
+    Abierta: 'opcion-libre',
+  };
 }
