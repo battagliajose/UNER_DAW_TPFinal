@@ -12,5 +12,6 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
+  // Landing page
   title = 'Bienvenido';
 }

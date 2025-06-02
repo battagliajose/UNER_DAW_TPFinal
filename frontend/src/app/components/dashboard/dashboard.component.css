@@ -1,0 +1,41 @@
+/* Estilos del contenedor principal del dashboard */
+:host {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;  
+  min-height: 75vh;
+  width: 100%;
+}
+
+.dashboard-container{
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  height: 70vh;
+}
+.content{
+  width: 100%;
+  height: 100%;
+  display: flex;  
+  justify-content: center;
+}
+
+/* Estilos responsivos */
+@media (max-width: 992px) {
+  .dashboard-container {
+    flex-direction: column;
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-container {
+    margin: 0.5rem;
+    border-radius: 0;
+  }
+  
+  :host {
+    min-height: 100vh;
+  }
+}

@@ -1,0 +1,36 @@
+<div class="main-content">
+  <h1>Dashboard</h1>
+  
+  <!-- Mostrar mensaje de carga -->
+  <div *ngIf="loading" class="loading-message">
+    <i class="pi pi-spin pi-cog" style="font-size: 2rem"></i>
+    <p>Cargando datos del dashboard...</p>
+  </div>
+
+  <!-- Mostrar mensaje de error -->
+  <div *ngIf="error" class="error-message">
+    <i class="pi pi-exclamation-triangle" style="font-size: 2rem"></i>
+    <p>{{ error }}</p>
+    <button pButton pRipple 
+            icon="pi pi-refresh" 
+            label="Reintentar" 
+            (click)="loadEncuestas()"
+            [style]="{ backgroundColor: 'var(--color-light)' }">
+    </button>
+  </div>
+
+  <!-- Mostrar tarjetas cuando hay datos -->
+  <div *ngIf="!loading && !error" class="cards-container">
+    <p-card *ngFor="let card of cards" class="dashboard-card">            
+      <ng-template #title>
+        {{ card.title }}
+        <span [style.color]="card.color" style="font-weight: bold; margin-left: 1rem;">
+          {{ card.value }}
+        </span>
+      </ng-template>
+      <ng-template #subtitle>
+        <i [class]="card.icon" [style.color]="card.color" style="font-size: 2.5rem"></i>
+      </ng-template> 
+    </p-card>
+  </div>
+</div>

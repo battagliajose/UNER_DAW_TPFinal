@@ -1,0 +1,69 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: clamp(250px, 90vw, 800px);
+  overflow: auto;
+  margin: 0 auto;
+  gap: 24px;
+  color: black;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  background-color: #ccc;
+  margin: 20px 0;
+}
+
+.encuesta-titulo {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.form-encuesta {
+  width: 60vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+  background-color: #b6d2f9;
+  padding: 20px;
+}
+
+.pregunta-container {
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  background-color: #b6d2f9;
+}
+
+.pregunta-texto {
+  margin: 10px 0;
+}
+
+.pregunta-opciones {
+  display: flex;
+  flex-direction: column;
+}
+
+.pregunta-opcion {
+  margin: 5px 5px;
+}
+
+.pregunta-container Textarea {
+  background-color: gainsboro;
+  color: black;
+  font-size: large;
+  margin: 10px 0;
+}
+
+.pregunta-error {
+  color: white;
+  background-color: red;
+  font-size: small;
+  margin-top: 5px;
+}

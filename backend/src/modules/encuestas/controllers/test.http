@@ -1,0 +1,106 @@
+@baseUrl = http://localhost:3000
+
+### 1. Probar endpoint echo (sin autenticación)
+GET {{baseUrl}}/api/v1/encuestas/echo
+Content-Type: application/json
+
+### 2. Obtener todas las encuestas (paginación opcional)
+# Parámetros opcionales:
+# - skip: Número de registros a saltar (por defecto: 0)
+# - take: Cantidad de registros a devolver (por defecto: 10, máximo: 100)
+GET {{baseUrl}}/api/v1/encuestas/obtener-todas
+Content-Type: application/json
+
+### 3. Obtener encuesta por ID (requiere autenticación)
+# Necesitas reemplazar 'uuid-encuesta' con un UUID válido y 'tipo' con 'RESULTADOS' o 'RESPUESTA'
+# Primero crea una encuesta para obtener su ID y códigos
+GET {{baseUrl}}/api/v1/encuestas/1?codigo=uuid-encuesta&tipo=RESULTADOS
+Content-Type: application/json
+
+### 4. Crear una nueva encuesta
+POST {{baseUrl}}/api/v1/encuestas
+Content-Type: application/json
+
+{
+  "nombre": "Encuesta de experiencia de usuario",
+  "preguntas": [
+    {
+      "numero": 1,
+      "texto": "¿Con qué frecuencia utilizas nuestra aplicación?",
+      "tipo": "OPCION_MULTIPLE_SELECCION_SIMPLE",
+      "opciones": [
+        {
+          "texto": "Varias veces al día",
+          "numero": 1
+        },
+        {
+          "texto": "Una vez al día",
+          "numero": 2
+        },
+        {
+          "texto": "Varias veces a la semana",
+          "numero": 3
+        },
+        {
+          "texto": "Una vez a la semana o menos",
+          "numero": 4
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "texto": "¿Qué características te gustaría ver en futuras actualizaciones?",
+      "tipo": "ABIERTA"
+    },
+    {
+      "numero": 3,
+      "texto": "Selecciona las plataformas donde nos has usado:",
+      "tipo": "OPCION_MULTIPLE_SELECCION_MULTIPLE",
+      "opciones": [
+        {
+          "texto": "Navegador web",
+          "numero": 1
+        },
+        {
+          "texto": "Aplicación móvil Android",
+          "numero": 2
+        },
+        {
+          "texto": "Aplicación móvil iOS",
+          "numero": 3
+        },
+        {
+          "texto": "Tablet",
+          "numero": 4
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "texto": "Del 1 al 5, ¿qué tan intuitiva encuentras la interfaz?",
+      "tipo": "OPCION_MULTIPLE_SELECCION_SIMPLE",
+      "opciones": [
+        {
+          "texto": "1 - Nada intuitiva",
+          "numero": 1
+        },
+        {
+          "texto": "2",
+          "numero": 2
+        },
+        {
+          "texto": "3",
+          "numero": 3
+        },
+        {
+          "texto": "4",
+          "numero": 4
+        },
+        {
+          "texto": "5 - Muy intuitiva",
+          "numero": 5
+        }
+      ]
+    }
+  ]
+}

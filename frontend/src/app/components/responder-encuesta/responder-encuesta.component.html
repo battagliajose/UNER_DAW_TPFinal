@@ -1,0 +1,111 @@
+<p-toast></p-toast>
+<form
+  class="form-encuesta"
+  *ngIf="encuesta?.preguntas"
+  [formGroup]="formularioRespuestas"
+  (ngSubmit)="enviarFormulario()"
+>
+  <h2 class="encuesta-titulo">{{ encuesta?.nombre }}</h2>
+  <div formArrayName="respuestas">
+    <!-- Entrás al grupo de la pregunta (índice i) -->
+    <div
+      *ngFor="let pregunta of encuesta?.preguntas; let i = index"
+      [formGroupName]="i"
+    >
+      <!-- ABIERTA -->
+      <div
+        class="pregunta-container"
+        *ngIf="pregunta.tipo === 'ABIERTA'"
+        [attr.id]="'pregunta_' + i"
+      >
+        <p class="pregunta-texto">{{ pregunta.texto }}</p>
+        <textarea
+          rows="5"
+          cols="30"
+          pTextarea
+          [formControlName]="'respuesta_' + i"
+        ></textarea>
+        <small
+          class="pregunta-error"
+          *ngIf="
+            getRespuestaControl(i)?.invalid && getRespuestaControl(i)?.touched
+          "
+        >
+          Debe responder esta pregunta.
+        </small>
+      </div>
+
+      <!-- SELECCIÓN SIMPLE -->
+      <div
+        class="pregunta-container"
+        *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_SIMPLE'"
+        [attr.id]="'pregunta_' + i"
+      >
+        <p class="pregunta-texto">{{ pregunta.texto }}</p>
+        <div class="pregunta-opciones">
+          <div class="pregunta-opcion" *ngFor="let opcion of pregunta.opciones">
+            <p-radioButton
+              [inputId]="'opcion_' + i + '_' + opcion.id"
+              [value]="opcion.id"
+              [formControlName]="'respuesta_' + i"
+              [name]="'respuesta_' + i"
+            >
+            </p-radioButton>
+            <label [for]="'opcion_' + i + '_' + opcion.id">
+              {{ opcion.texto }}
+            </label>
+          </div>
+          <small
+            class="pregunta-error"
+            *ngIf="
+              getRespuestaControl(i)?.invalid && getRespuestaControl(i)?.touched
+            "
+          >
+            Seleccione una opción.
+          </small>
+        </div>
+      </div>
+
+      <!-- SELECCIÓN MÚLTIPLE -->
+      <div
+        *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_MULTIPLE'"
+        [attr.id]="'pregunta_' + i"
+      >
+        <p>{{ pregunta.texto }}</p>
+
+        <!-- Entrás al FormArray con nombre dinámico -->
+        <div class="pregunta-opciones" [formArrayName]="'respuesta_' + i">
+          <div
+            class="pregunta-opcion"
+            *ngFor="let opcion of pregunta.opciones; let j = index"
+          >
+            <p-checkbox
+              [formControlName]="j"
+              [inputId]="'opcion_' + i + '_' + opcion.id"
+              [binary]="true"
+            ></p-checkbox>
+            <label [for]="'opcion_' + i + '_' + opcion.id">
+              {{ opcion.texto }}
+            </label>
+          </div>
+          <small
+            class="pregunta-error"
+            *ngIf="getCheckboxArray(i)?.invalid && getCheckboxArray(i)?.touched"
+          >
+            Seleccioná al menos una opción.
+          </small>
+        </div>
+      </div>
+
+      <hr />
+    </div>
+  </div>
+
+  <p-button
+    [style]="{ backgroundColor: 'var(--color-light)' }"
+    label="Enviar"
+    (onClick)="enviarFormulario()"
+    icon="pi pi-check"
+    [disabled]="enviando"
+  />
+</form>

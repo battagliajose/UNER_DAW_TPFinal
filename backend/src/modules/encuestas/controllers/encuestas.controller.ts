@@ -5,17 +5,24 @@ import {
   Param,
   Body,
   Query,
+  Res,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { EncuestasService } from '../services/encuestas.service';
 import { createEncuestaDto } from '../dtos/create-encuesta.dto';
 import { ObtenerEncuestaDto } from '../dtos/obtener-encuesta.dto';
+import { ObtenerTodasEncuestasDto } from '../dtos/obtener-todas-encuestas.dto';
 import { Encuesta } from '../entities/encuesta.entity';
+import { CsvEncuestasService } from '../services/csv-respuestas-encuestas.service';
 
 @Controller('/encuestas')
 export class EncuestasController {
-  constructor(private encuestasService: EncuestasService) {}
+  constructor(
+    private readonly encuestasService: EncuestasService,
+    private readonly csvEncuestasService: CsvEncuestasService, // ✅ Inyectando el servicio
+  ) {}
 
   @Post('')
   async crearEncuesta(@Body() dto: createEncuestaDto): Promise<{
@@ -29,9 +36,25 @@ export class EncuestasController {
       throw new HttpException(
         'Error al crear la encuesta',
         HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: exception,
-        },
+        { cause: exception },
+      );
+    }
+  }
+
+  @Get('/obtener-todas')
+  async obtenerTodasLasEncuestas(
+    @Query() dto: ObtenerTodasEncuestasDto,
+  ): Promise<[Encuesta[], number]> {
+    try {
+      return await this.encuestasService.obtenerTodasLasEncuestas(
+        dto.skip,
+        dto.take,
+      );
+    } catch (exception) {
+      throw new HttpException(
+        'Error al obtener las encuestas',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: exception },
       );
     }
   }
@@ -51,9 +74,7 @@ export class EncuestasController {
       throw new HttpException(
         'Error al obtener la encuesta',
         HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: exception,
-        },
+        { cause: exception },
       );
     }
   }
@@ -61,5 +82,15 @@ export class EncuestasController {
   @Get('/echo')
   async echo(): Promise<string> {
     return this.encuestasService.echo();
+  }
+
+  // ✅ Método dentro de la clase
+  @Get('/csv/:id/:codigo')
+  async exportarCsvRespuestas(
+    @Param('id') id: number,
+    @Param('codigo') codigo: string,
+    @Res() res: Response,
+  ) {
+    await this.csvEncuestasService.exportCsvRespuestasEncuesta(id, codigo, res);
   }
 }

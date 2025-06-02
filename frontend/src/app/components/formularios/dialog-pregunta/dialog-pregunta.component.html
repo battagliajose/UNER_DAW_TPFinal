@@ -1,0 +1,144 @@
+<p-dialog
+  header="Agregar nueva pregunta"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{
+    width: 'clamp(300px, 90vw, 700px)',
+    color: 'var(--color-background)',
+  }"
+  resizable="false"
+  closable="false"
+  (onHide)="cerrar()"
+>
+  <p-button
+    type="button"
+    pButton
+    icon="pi pi-times"
+    (click)="cerrar()"
+    [rounded]="true"
+    class="close-button"
+    severity="secondary"
+    [text]="true"
+  ></p-button>
+  <form [formGroup]="form" (ngSubmit)="agregar()">
+    <div class="contenedor-creacion-pregunta">
+      <!-- Tipo -->
+      <p-dropdown
+        [options]="getTiposPreguntaPresentacion()"
+        formControlName="tipo"
+        appendTo="body"
+        placeholder="Tipo de Pregunta"
+        optionLabel="presentacion"
+        optionValue="tipo"
+        class="extended"
+        [ngClass]="{
+          'ng-invalid ng-dirty': tipo.touched && tipo.invalid,
+        }"
+      />
+      @if (tipo.invalid && tipo.touched) {
+        <app-text-error>Requerido</app-text-error>
+      }
+
+      <!-- Texto -->
+      <p-floatlabel variant="on">
+        <input
+          pInputText
+          id="input-texto-pregunta"
+          formControlName="texto"
+          class="extended"
+          [ngClass]="{ 'ng-invalid ng-dirty': texto.touched && texto.invalid }"
+        />
+        <label for="input-texto-pregunta">Texto de la pregunta</label>
+      </p-floatlabel>
+      @if (texto.invalid && texto.touched) {
+        <app-text-error>Requerido</app-text-error>
+      }
+
+      <!-- Opciones (solo si es múltiple choice) -->
+      @if (tipo.value && esMultipleChoice(tipo.value)) {
+        <section>
+          <div class="opciones-section-header">
+            <h4 id="heading-opciones">Opciones</h4>
+            <p-button
+              type="button"
+              (onClick)="agregarOpcion()"
+              label="Agregar Opción"
+              icon="pi pi-plus"
+            />
+          </div>
+
+          <div class="contenedor-opcion extended" formArrayName="opciones">
+            @for (opcion of opciones.controls; track opcion; let idx = $index) {
+              <div
+                [formGroupName]="idx"
+                class="grupo-contenedor-opcion extended"
+                [attr.aria-label]="'Opción número ' + (idx + 1)"
+              >
+                <input
+                  pInputText
+                  class="texto-opcion extended"
+                  formControlName="texto"
+                  [placeholder]="'Opción ' + (idx + 1)"
+                  type="text"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      opcion.get('texto')?.touched &&
+                      opcion.get('texto')?.invalid,
+                  }"
+                />
+
+                <div id="botonera-opciones">
+                  <p-button
+                    type="button"
+                    (onClick)="confirmarEliminarOpcion(idx)"
+                    [disabled]="opciones.length <= 2"
+                    icon="pi pi-trash"
+                    severity="danger"
+                  />
+                </div>
+              </div>
+              @if (
+                opcion.get('texto')?.touched &&
+                opcion.get('texto')?.hasError('required')
+              ) {
+                <app-text-error> Campo requerido. </app-text-error>
+              }
+            }
+          </div>
+
+          <!-- Error general del FormArray -->
+          @if (opciones.invalid && opciones.touched) {
+            <app-text-error>Debés completar todas las opciones.</app-text-error>
+          }
+        </section>
+      }
+
+      <!-- Acciones -->
+      <div class="actions-container">
+        <button
+          pButton
+          pRipple
+          type="button"
+          severity="contrast"
+          [outlined]="true"
+          icon="pi pi-times"
+          (click)="cerrar()"
+          class="extended"
+        >
+          Cancelar
+        </button>
+        <button
+          pButton
+          pRipple
+          type="submit"
+          severity="contrast"
+          icon="pi pi-check"
+          class="extended"
+          [disabled]="form.invalid"
+        >
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
