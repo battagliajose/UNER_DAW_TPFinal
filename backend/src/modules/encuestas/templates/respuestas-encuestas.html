@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Respuestas de Encuesta</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 15px;
+        background-color: #f0f0f0;
+        color: #333;
+      }
+      h1 {
+        text-align: center;
+        padding: 7px;
+        background-color: #394d5a;
+        color: white;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        margin-top: 15px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #56a0ea;
+        color: white;
+      }
+      footer {
+        text-align: center;
+        padding: 10px;
+        background-color: #394d5a;
+        color: white;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Listado de respuestas de la encuesta: {{ nombreEncuesta }}</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Encuestado</th>
+          <th>Pregunta</th>
+          <th>Respuesta</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each respuestas}}
+        {{#each respuestasOpciones}}
+        <tr>
+          <td>{{../encuestado}}</td>
+          <td>{{ textoPregunta }}</td>
+          <td>{{ opcionSeleccionada }}</td>
+        </tr>
+        {{/each}}
+
+        {{#each respuestasAbiertas}}
+        <tr>
+          <td>{{../encuestado}}</td>
+          <td>{{ textoPregunta }}</td>
+          <td>{{ textoRespuesta }}</td>
+        </tr>
+        {{/each}}
+        {{/each}}
+      </tbody>
+    </table>
+
+    <footer>
+      <p>Listado de respuestas impreso el {{ fechaActual }}</p>
+    </footer>
+  </body>
+</html>
