@@ -28,25 +28,21 @@ interface NuevaEncuestaDTO extends EncuestaDTO {
   templateUrl: './dashboard-content.component.html',
   styleUrls: ['./dashboard-content.component.css']
 })
-export class DashboardContentComponent {
-  //variable para pasar al padre
-  @Output() datosCargados = new EventEmitter<EncuestaDTO[]>();
-
+export class DashboardContentComponent {    
+ 
   //variable para poblar el dashboard-content
- 
-  nuevaEncuesta: NuevaEncuestaDTO[] = [];
+   nuevaEncuesta: NuevaEncuestaDTO[] = [];
+
   //variable para mostrar el loading
-  loading: boolean = true;
- 
+  loading: boolean = true; 
   error: string | null = null;
 
-  constructor(private encuestaService: EncuestaService, private encuestaModService: EncuestaModService) {}
+  constructor(private encuestaModService: EncuestaModService) {}
 
   //Al cargar el componente ejecuto el método loadEncuestas para cargar el objeto
   ngOnInit(): void {
     this.loading = true;
     this.error = null;
-
     this.cargarEncuestas();
     
   }

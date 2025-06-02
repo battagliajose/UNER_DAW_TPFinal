@@ -4,7 +4,6 @@ import { EncuestaDTO } from '../models/encuesta.dto';
 import { EncuestaService } from './encuesta.service';
 
 
-
 interface NuevaEncuestaDTO extends EncuestaDTO {
     esActivo: boolean;
     esEnviada: boolean;
@@ -32,7 +31,7 @@ constructor(private encuestaModService: EncuestaService) {}
 }
 /**
  * Agrega atributos booleanas a un array de encuestas.
- * @param encuestas - Array de objetos EncuestaDTO a modificar
+ * @param encuestas - Array de objetos NuevaEncuestaDTO a modificar
  * @returns Nuevo array con las propiedades adicionales con sus propiedades
  * @example codigoRespuesta:"xxxx-xxxx-xxxx-xxxx-xxx"
  * esActivo:1
