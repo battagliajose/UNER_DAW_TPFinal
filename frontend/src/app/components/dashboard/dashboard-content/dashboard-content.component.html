@@ -14,23 +14,51 @@
     <button pButton pRipple 
             icon="pi pi-refresh" 
             label="Reintentar" 
-            (click)="loadEncuestas()"
+            (click)="cargarEncuestas()"
             [style]="{ backgroundColor: 'var(--color-light)' }">
     </button>
   </div>
 
-  <!-- Mostrar tarjetas cuando hay datos -->
+  <!-- Mostrar tarjetas de totales -->
   <div *ngIf="!loading && !error" class="cards-container">
-    <p-card *ngFor="let card of cards" class="dashboard-card">            
+    <p-card class="dashboard-card">            
       <ng-template #title>
-        {{ card.title }}
-        <span [style.color]="card.color" style="font-weight: bold; margin-left: 1rem;">
-          {{ card.value }}
+        {{ cardsTotales.title }}
+        <span [style.color]="cardsTotales.color" style="font-weight: bold; margin-left: 1rem;">
+          {{ cardsTotales.value }}
         </span>
       </ng-template>
       <ng-template #subtitle>
-        <i [class]="card.icon" [style.color]="card.color" style="font-size: 2.5rem"></i>
+        <i [class]="cardsTotales.icon" [style.color]="cardsTotales.color" style="font-size: 2.5rem"></i>
+      </ng-template> 
+    </p-card>
+ 
+ <!-- Mostrar tarjetas de estados -->
+  <div *ngIf="!loading && !error" class="cards-container">
+    <p-card class="dashboard-card">            
+      <ng-template #title>
+        {{ cardsEstados.title }}
+        <span [style.color]="cardsEstados.color" style="font-weight: bold; margin-left: 1rem;">
+          {{ cardsEstados.value }}
+        </span>
+      </ng-template>
+      <ng-template #subtitle>
+        <i [class]="cardsEstados.icon" [style.color]="cardsEstados.color" style="font-size: 2.5rem"></i>
+      </ng-template> 
+    </p-card>
+  
+
+  <!-- Mostrar tarjetas de encuestas enviadas -->
+  <div *ngIf="!loading && !error" class="cards-container">
+    <p-card class="dashboard-card">            
+      <ng-template #title>
+        {{ cardsEnviadas.title }}
+        <span [style.color]="cardsEnviadas.color" style="font-weight: bold; margin-left: 1rem;">
+          {{ cardsEnviadas.value }}
+        </span>
+      </ng-template>
+      <ng-template #subtitle>
+        <i [class]="cardsEnviadas.icon" [style.color]="cardsEnviadas.color" style="font-size: 2.5rem"></i>
       </ng-template> 
     </p-card>
   </div>
-</div>
