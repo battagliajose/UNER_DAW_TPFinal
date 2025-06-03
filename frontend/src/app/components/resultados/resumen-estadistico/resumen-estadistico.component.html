@@ -1,45 +1,86 @@
+<p-toast></p-toast>
 <div class="contenedor-resumen">
-  <h2 class="titulo">Resumen Estadístico</h2>
+  <p-card>
+    <ng-template pTemplate="header">
+      <h2 class="titulo">Resumen Estadístico</h2>
+    </ng-template>
 
-  <p *ngIf="!resumen || resumen.resultadosProcesados?.length === 0">
-    Cargando datos...
-  </p>
+    <p *ngIf="!resumen || resumen.resultadosProcesados?.length === 0">
+      Cargando datos...
+    </p>
 
-  <div
-    *ngIf="(resumen?.resultadosProcesados?.length ?? 0) > 0"
-    class="bloque-estadisticas"
-  >
-    <h3>Cantidad de encuestados: {{ resumen.cantidadEncuestasProcesadas }}</h3>
-    <h3>Total de preguntas analizadas: {{ resumen.totalPreguntas }}</h3>
-    <h3>
-      Total de respuestas analizadas: {{ resumen.totalRespuestasAnalizadas }}
-    </h3>
-
-    <h4>Resultados por pregunta:</h4>
-    <div *ngFor="let resultado of resumen.resultadosProcesados ?? []">
-      <h3>{{ resultado.textoPregunta }}</h3>
-      <p>Tipo: {{ resultado.tipoPregunta }}</p>
-
-      <div *ngIf="(resultado.opciones?.length ?? 0) > 0">
-        <h4>Opciones seleccionadas:</h4>
-        <ul>
-          <li *ngFor="let opcion of resultado.opciones ?? []">
-            <strong>{{ opcion.textoOpcion }}</strong
-            >: {{ opcion.cantidadVecesSeleccionada }} veces ({{
-              opcion.porcentajeSeleccion
-            }})
-          </li>
-        </ul>
+    <div
+      *ngIf="(resumen?.resultadosProcesados?.length ?? 0) > 0"
+      class="bloque-estadisticas"
+    >
+      <!-- Botonera de navegación -->
+      <div
+        class="p-d-flex p-ai-center p-jc-center"
+        style="gap: 1rem; margin-bottom: 1.5rem"
+      >
+        <button
+          pButton
+          icon="pi pi-angle-left"
+          label="Anterior"
+          (click)="anterior()"
+          [disabled]="currentIndex() === 0"
+          class="p-button-rounded p-button-secondary"
+        ></button>
+        <span>
+          Pregunta {{ currentIndex() + 1 }} de
+          {{ resumen.resultadosProcesados.length }}
+        </span>
+        <button
+          pButton
+          icon="pi pi-angle-right"
+          label="Siguiente"
+          (click)="siguiente()"
+          [disabled]="
+            currentIndex() === resumen.resultadosProcesados.length - 1
+          "
+          class="p-button-rounded p-button-secondary"
+        ></button>
       </div>
 
-      <div *ngIf="(resultado.respuestas?.length ?? 0) > 0">
-        <h4>Respuestas abiertas:</h4>
-        <ul>
-          <li *ngFor="let respuesta of resultado.respuestas ?? []">
-            {{ respuesta }}
-          </li>
-        </ul>
-      </div>
+      <ng-container
+        *ngIf="resumen.resultadosProcesados[currentIndex()] as resultado"
+      >
+        <p-card class="p-mb-3">
+          <ng-template pTemplate="header">
+            <h3>{{ resultado.textoPregunta }}</h3>
+          </ng-template>
+          <p>
+            Tipo:
+            <span pTag severity="warning">{{ resultado.tipoPregunta }}</span>
+          </p>
+
+          <div *ngIf="(resultado.opciones?.length ?? 0) > 0">
+            <h4>Opciones seleccionadas:</h4>
+            <p-chart
+              type="pie"
+              [data]="getPieChartData(resultado)"
+              [style]="{ width: '350px', height: '350px', margin: '0 auto' }"
+            ></p-chart>
+            <ul>
+              <li *ngFor="let opcion of resultado.opciones ?? []">
+                <span pTag severity="info">{{ opcion.textoOpcion }}</span>
+                : {{ opcion.cantidadVecesSeleccionada }} veces ({{
+                  opcion.porcentajeSeleccion
+                }})
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="(resultado.respuestas?.length ?? 0) > 0">
+            <h4>Respuestas abiertas:</h4>
+            <ul>
+              <li *ngFor="let respuesta of resultado.respuestas ?? []">
+                <span pTag severity="success">{{ respuesta }}</span>
+              </li>
+            </ul>
+          </div>
+        </p-card>
+      </ng-container>
     </div>
-  </div>
+  </p-card>
 </div>

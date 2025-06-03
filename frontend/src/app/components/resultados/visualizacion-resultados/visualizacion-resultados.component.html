@@ -4,34 +4,38 @@
   <h1 class="encuesta-titulo">Resultados de la Encuesta</h1>
 
   <div class="botonera">
-    <p-button
+    <button
+      pButton
       label="Ver Respuestas"
       icon="pi pi-list"
-      severity="primary"
-      (click)="mostrarRespuestas()"
       [style]="{ width: '12rem', height: '3rem' }"
-    ></p-button>
+      (click)="mostrarRespuestas()"
+      [class.p-button-outlined]="mostrarVista !== 'respuestas'"
+      [class.p-button-info]="mostrarVista === 'respuestas'"
+    ></button>
 
-    <p-button
+    <button
+      pButton
       label="Ver Estadísticas"
       icon="pi pi-chart-bar"
-      severity="success"
-      (click)="mostrarEstadisticas()"
       [style]="{ width: '12rem', height: '3rem' }"
-    ></p-button>
+      (click)="mostrarEstadisticas()"
+      [class.p-button-outlined]="mostrarVista !== 'estadisticas'"
+      [class.p-button-success]="mostrarVista === 'estadisticas'"
+    ></button>
   </div>
 
   <div *ngIf="mostrarVista === 'respuestas'">
     <app-resultados-encuesta
-      [id]="id"
       [codigo]="codigo"
+      [id]="id"
     ></app-resultados-encuesta>
   </div>
 
   <div *ngIf="mostrarVista === 'estadisticas'">
     <app-resumen-estadistico
-      [id]="id"
       [codigo]="codigo"
+      [id]="id"
     ></app-resumen-estadistico>
   </div>
 </div>

@@ -22,7 +22,7 @@ import { ResumenEstadisticoComponent } from '../resumen-estadistico/resumen-esta
   providers: [MessageService],
 })
 export class VisualizacionResultadosComponent implements OnInit {
-  mostrarVista: 'respuestas' | 'estadisticas' | null = 'respuestas';
+  mostrarVista: 'respuestas' | 'estadisticas' = 'respuestas';
   id!: number;
   codigo!: string;
 
@@ -35,9 +35,6 @@ export class VisualizacionResultadosComponent implements OnInit {
   obtenerParametros() {
     this.id = Number(this.route.snapshot.paramMap.get('id')) || 0;
     this.codigo = this.route.snapshot.queryParamMap.get('codigo') ?? '';
-
-    console.log('ID:', this.id);
-    console.log('Código:', this.codigo);
   }
 
   mostrarRespuestas() {

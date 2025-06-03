@@ -1,65 +1,70 @@
+<p-toast></p-toast>
 <div class="contenedor-resultados">
   <h2>Respuestas de la Encuesta</h2>
 
   <p *ngIf="!respuestas.length">Cargando datos...</p>
 
   <div *ngIf="respuestas.length > 0">
-    <div style="display: flex; align-items: center; gap: 1rem">
-      <button (click)="anterior()" [disabled]="currentIndex() === 0">
-        &lt;
-      </button>
-      <span
-        >Encuestado {{ currentIndex() + 1 }} de {{ respuestas.length }}</span
-      >
+    <div class="p-d-flex p-ai-center p-jc-center" style="gap: 1rem">
       <button
+        pButton
+        icon="pi pi-angle-left"
+        label="Anterior"
+        (click)="anterior()"
+        [disabled]="currentIndex() === 0"
+        class="p-button-rounded p-button-secondary"
+      ></button>
+      <span>
+        Encuestado {{ currentIndex() + 1 }} de {{ respuestas.length }}
+      </span>
+      <button
+        pButton
+        icon="pi pi-angle-right"
+        label="Siguiente"
         (click)="siguiente()"
         [disabled]="currentIndex() === respuestas.length - 1"
-      >
-        &gt;
-      </button>
+        class="p-button-rounded p-button-secondary"
+      ></button>
     </div>
-    <ul>
-      <li>
-        <strong>Encuestado:</strong>
-        {{ respuestas[currentIndex()]?.encuestado }}
 
-        <div *ngIf="respuestas[currentIndex()]?.respuestasOpciones?.length > 0">
+    <p-card styleClass="p-mt-3">
+      <ng-container *ngIf="respuestas[currentIndex()] as encuestado">
+        <div>
+          <strong>Encuestado:</strong>
+          <span pTag>{{ encuestado.encuestado }}</span>
+        </div>
+
+        <div *ngIf="encuestado.respuestasOpciones?.length > 0" class="p-mt-3">
           <h4>Respuestas con opción:</h4>
           <ul>
             <li
               *ngFor="
                 let pregunta of agruparRespuestasOpciones(
-                  respuestas[currentIndex()]?.respuestasOpciones
+                  encuestado.respuestasOpciones
                 )
               "
             >
               <strong>Pregunta:</strong> {{ pregunta.textoPregunta }}
-              <br />
-              <strong>Opciones seleccionadas:</strong>
               <ul>
                 <li *ngFor="let opcion of pregunta.opcionesSeleccionadas">
-                  {{ opcion }}
+                  <span pTag severity="info">{{ opcion }}</span>
                 </li>
               </ul>
             </li>
           </ul>
         </div>
 
-        <div *ngIf="respuestas[currentIndex()]?.respuestasAbiertas?.length > 0">
+        <div *ngIf="encuestado.respuestasAbiertas?.length > 0" class="p-mt-3">
           <h4>Respuestas abiertas:</h4>
           <ul>
-            <li
-              *ngFor="
-                let abierta of respuestas[currentIndex()]?.respuestasAbiertas
-              "
-            >
-              <strong>Pregunta:</strong> {{ abierta.textoPregunta }}
-              <br />
-              <strong>Respuesta:</strong> {{ abierta.textoRespuesta }}
+            <li *ngFor="let abierta of encuestado.respuestasAbiertas">
+              <strong>Pregunta:</strong> {{ abierta.textoPregunta }}<br />
+              <strong>Respuesta:</strong>
+              <span pTag severity="success">{{ abierta.textoRespuesta }}</span>
             </li>
           </ul>
         </div>
-      </li>
-    </ul>
+      </ng-container>
+    </p-card>
   </div>
 </div>

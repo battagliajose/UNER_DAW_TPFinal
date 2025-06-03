@@ -14,7 +14,7 @@
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
-  margin: 20px 0;
+  margin: 20px 0 10px 0;
 }
 
 .botonera {
@@ -27,16 +27,18 @@
 .contenedor-visualizacion {
   width: clamp(300px, 80vw, 800px);
   padding: 2rem;
-  background-color: var(--color-background-light);
+  background-color: var(--color-background-light, #f4f8fb);
   border-radius: 12px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-p-button {
+p-button,
+button[pButton] {
   transition: transform 0.2s ease-in-out;
 }
 
-p-button:hover {
+p-button:hover,
+button[pButton]:hover {
   transform: scale(1.05);
 }
 
@@ -45,4 +47,19 @@ hr {
   height: 1px;
   background-color: #ccc;
   margin: 20px 0;
+}
+
+@media (max-width: 600px) {
+  .botonera {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .contenedor-visualizacion {
+    padding: 1rem;
+  }
+}
+
+.contenedor-visualizacion > * {
+  max-width: 100%;
+  box-sizing: border-box;
 }

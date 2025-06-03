@@ -2,11 +2,15 @@ import { Component, Input, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResultadosService } from '../../../services/resultados.service';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-resultados-encuesta',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonModule, CardModule, TagModule, ToastModule],
   templateUrl: './resultados-encuesta.component.html',
   styleUrl: './resultados-encuesta.component.css',
   providers: [MessageService],
@@ -15,7 +19,7 @@ export class ResultadosEncuestaComponent implements OnInit {
   @Input() id!: number;
   @Input() codigo!: string;
   respuestas: any[] = [];
-  currentIndex = signal(0); // Signal para el índice actual
+  currentIndex = signal(0);
   private resultadosService = inject(ResultadosService);
   private messageService = inject(MessageService);
 
@@ -27,7 +31,7 @@ export class ResultadosEncuestaComponent implements OnInit {
     this.resultadosService.getResultados(this.id, this.codigo).subscribe({
       next: (data: any) => {
         this.respuestas = Array.isArray(data.respuestas) ? data.respuestas : [];
-        this.currentIndex.set(0); // Reinicia al primer encuestado
+        this.currentIndex.set(0);
       },
       error: () => {
         this.messageService.add({
