@@ -10,6 +10,7 @@
         pButton
         icon="pi pi-angle-left"
         label="Anterior"
+        title="Anterior"
         (click)="anterior()"
         [disabled]="currentIndex() === 0"
         class="p-button-rounded p-button-secondary"
@@ -21,6 +22,7 @@
         pButton
         icon="pi pi-angle-right"
         label="Siguiente"
+        title="Siguiente"
         (click)="siguiente()"
         [disabled]="currentIndex() === respuestas.length - 1"
         class="p-button-rounded p-button-secondary"

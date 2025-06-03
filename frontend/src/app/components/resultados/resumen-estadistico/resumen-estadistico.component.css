@@ -26,11 +26,19 @@
   padding: 1.5rem;
   background-color: #f0f0f0;
   border-radius: 8px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 
 ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 li {
@@ -39,6 +47,9 @@ li {
   border-radius: 6px;
   margin: 5px 0;
   word-break: break-word;
+  white-space: normal;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .p-card {
@@ -46,9 +57,64 @@ li {
   max-width: 100%;
   box-sizing: border-box;
   margin-bottom: 1.5rem;
+  overflow-x: auto;
 }
 
-.p-chart {
+/* Wrapper para gráfico y leyenda en línea */
+.opciones-grafico-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Estilos específicos para el gráfico de torta con clase personalizada */
+:host ::ng-deep .grafico-torta {
   display: block;
   margin: 0 auto 1rem auto;
+  width: 234px !important; /* 30% más grande que 180px */
+  height: 234px !important;
+  max-width: 280px;
+  min-width: 140px;
+}
+
+:host ::ng-deep .grafico-torta canvas {
+  width: 100% !important;
+  height: 100% !important;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Mejora la visualización en mobile */
+@media (max-width: 600px) {
+  .contenedor-resumen,
+  .bloque-estadisticas,
+  .p-card {
+    padding: 0.5rem !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box;
+    overflow-x: auto;
+  }
+  ul,
+  li {
+    word-break: break-word;
+    white-space: normal;
+  }
+  .opciones-grafico-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  :host ::ng-deep .grafico-torta,
+  :host ::ng-deep .grafico-torta canvas {
+    max-width: 100vw;
+    min-width: 80px;
+    max-height: 150px;
+    height: 150px !important;
+  }
 }

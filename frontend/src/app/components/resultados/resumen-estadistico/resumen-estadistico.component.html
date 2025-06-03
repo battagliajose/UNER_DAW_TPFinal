@@ -56,9 +56,9 @@
           <div *ngIf="(resultado.opciones?.length ?? 0) > 0">
             <h4>Opciones seleccionadas:</h4>
             <p-chart
+              class="grafico-torta"
               type="pie"
               [data]="getPieChartData(resultado)"
-              [style]="{ width: '350px', height: '350px', margin: '0 auto' }"
             ></p-chart>
             <ul>
               <li *ngFor="let opcion of resultado.opciones ?? []">
