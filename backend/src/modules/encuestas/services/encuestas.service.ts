@@ -134,11 +134,9 @@ export class EncuestasService {
     return encuesta;
   }
 
-  async obtenerTodasLasEncuestas(
-    skip: number = 0,
-    take: number = 10
-  ): Promise<[Encuesta[], number]> {
-    return this.encuestasRepository.findAndCount({
+  async obtenerTodasLasEncuestas(   
+  ): Promise<Encuesta[]> {
+    return this.encuestasRepository.find({
       relations: {
         preguntas: {
           opciones: true
@@ -149,9 +147,7 @@ export class EncuestasService {
         preguntas: {
           numero: 'ASC'
         }
-      },
-      skip,
-      take
+      },   
     });
   }
 
