@@ -23,7 +23,7 @@ constructor(private encuestaModService: EncuestaService) {}
     return this.encuestaModService.getAll().pipe(
         delay(1000),
         map(data => {
-            this.encuestas = data[0];
+            this.encuestas = data;
             this.encuestaMod = this.agregarAtributos(this.encuestas);
             return this.agregarValoresAleatorias(this.encuestaMod);
         })
