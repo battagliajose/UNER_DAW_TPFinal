@@ -5,6 +5,9 @@ import { CreacionEncuestaComponent } from './components/formularios/creacion-enc
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ResponderEncuestaComponent } from './components/responder-encuesta/responder-encuesta.component';
 import { EnlaceInvalidoComponent } from './components/enlace-invalido/enlace-invalido.component';
+import { VisualizacionResultadosComponent } from './components/resultados/visualizacion-resultados/visualizacion-resultados.component';
+import { ResultadosEncuestaComponent } from './components/resultados/resultados-encuesta/resultados-encuesta.component';
+import { ResumenEstadisticoComponent } from './components/resultados/resumen-estadistico/resumen-estadistico.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +38,16 @@ export const routes: Routes = [
     path: 'responder/enlace-invalido',
     component: EnlaceInvalidoComponent,
   },
+
+  {
+    path: 'visualizacion-resultados/:id',
+    component: VisualizacionResultadosComponent,
+    children: [
+      { path: 'resultados-encuesta', component: ResultadosEncuestaComponent },
+      { path: 'resumen-estadistico', component: ResumenEstadisticoComponent },
+    ],
+  },
+
   {
     path: '**',
     redirectTo: '',

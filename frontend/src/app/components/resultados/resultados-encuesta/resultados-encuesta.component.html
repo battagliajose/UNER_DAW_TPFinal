@@ -1,0 +1,65 @@
+<div class="contenedor-resultados">
+  <h2>Respuestas de la Encuesta</h2>
+
+  <p *ngIf="!respuestas.length">Cargando datos...</p>
+
+  <div *ngIf="respuestas.length > 0">
+    <div style="display: flex; align-items: center; gap: 1rem">
+      <button (click)="anterior()" [disabled]="currentIndex() === 0">
+        &lt;
+      </button>
+      <span
+        >Encuestado {{ currentIndex() + 1 }} de {{ respuestas.length }}</span
+      >
+      <button
+        (click)="siguiente()"
+        [disabled]="currentIndex() === respuestas.length - 1"
+      >
+        &gt;
+      </button>
+    </div>
+    <ul>
+      <li>
+        <strong>Encuestado:</strong>
+        {{ respuestas[currentIndex()]?.encuestado }}
+
+        <div *ngIf="respuestas[currentIndex()]?.respuestasOpciones?.length > 0">
+          <h4>Respuestas con opción:</h4>
+          <ul>
+            <li
+              *ngFor="
+                let pregunta of agruparRespuestasOpciones(
+                  respuestas[currentIndex()]?.respuestasOpciones
+                )
+              "
+            >
+              <strong>Pregunta:</strong> {{ pregunta.textoPregunta }}
+              <br />
+              <strong>Opciones seleccionadas:</strong>
+              <ul>
+                <li *ngFor="let opcion of pregunta.opcionesSeleccionadas">
+                  {{ opcion }}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div *ngIf="respuestas[currentIndex()]?.respuestasAbiertas?.length > 0">
+          <h4>Respuestas abiertas:</h4>
+          <ul>
+            <li
+              *ngFor="
+                let abierta of respuestas[currentIndex()]?.respuestasAbiertas
+              "
+            >
+              <strong>Pregunta:</strong> {{ abierta.textoPregunta }}
+              <br />
+              <strong>Respuesta:</strong> {{ abierta.textoRespuesta }}
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

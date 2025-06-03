@@ -1,0 +1,40 @@
+.contenedor-resultados {
+  width: clamp(300px, 80vw, 800px);
+  padding: 2rem;
+  background-color: var(--color-background-light);
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.titulo {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.encuestado {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.bloque-opciones,
+.bloque-abiertas {
+  margin-top: 20px;
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 8px;
+  background-color: #e3e3e3;
+  border-radius: 6px;
+  margin: 5px 0;
+}

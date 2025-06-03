@@ -1,0 +1,45 @@
+<div class="contenedor-resumen">
+  <h2 class="titulo">Resumen Estadístico</h2>
+
+  <p *ngIf="!resumen || resumen.resultadosProcesados?.length === 0">
+    Cargando datos...
+  </p>
+
+  <div
+    *ngIf="(resumen?.resultadosProcesados?.length ?? 0) > 0"
+    class="bloque-estadisticas"
+  >
+    <h3>Cantidad de encuestados: {{ resumen.cantidadEncuestasProcesadas }}</h3>
+    <h3>Total de preguntas analizadas: {{ resumen.totalPreguntas }}</h3>
+    <h3>
+      Total de respuestas analizadas: {{ resumen.totalRespuestasAnalizadas }}
+    </h3>
+
+    <h4>Resultados por pregunta:</h4>
+    <div *ngFor="let resultado of resumen.resultadosProcesados ?? []">
+      <h3>{{ resultado.textoPregunta }}</h3>
+      <p>Tipo: {{ resultado.tipoPregunta }}</p>
+
+      <div *ngIf="(resultado.opciones?.length ?? 0) > 0">
+        <h4>Opciones seleccionadas:</h4>
+        <ul>
+          <li *ngFor="let opcion of resultado.opciones ?? []">
+            <strong>{{ opcion.textoOpcion }}</strong
+            >: {{ opcion.cantidadVecesSeleccionada }} veces ({{
+              opcion.porcentajeSeleccion
+            }})
+          </li>
+        </ul>
+      </div>
+
+      <div *ngIf="(resultado.respuestas?.length ?? 0) > 0">
+        <h4>Respuestas abiertas:</h4>
+        <ul>
+          <li *ngFor="let respuesta of resultado.respuestas ?? []">
+            {{ respuesta }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

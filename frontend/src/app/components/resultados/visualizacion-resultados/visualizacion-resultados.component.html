@@ -1,1 +1,37 @@
-<p>visualizacion-resultados works!</p>
+<p-toast></p-toast>
+
+<div class="contenedor-visualizacion">
+  <h1 class="encuesta-titulo">Resultados de la Encuesta</h1>
+
+  <div class="botonera">
+    <p-button
+      label="Ver Respuestas"
+      icon="pi pi-list"
+      severity="primary"
+      (click)="mostrarRespuestas()"
+      [style]="{ width: '12rem', height: '3rem' }"
+    ></p-button>
+
+    <p-button
+      label="Ver Estadísticas"
+      icon="pi pi-chart-bar"
+      severity="success"
+      (click)="mostrarEstadisticas()"
+      [style]="{ width: '12rem', height: '3rem' }"
+    ></p-button>
+  </div>
+
+  <div *ngIf="mostrarVista === 'respuestas'">
+    <app-resultados-encuesta
+      [id]="id"
+      [codigo]="codigo"
+    ></app-resultados-encuesta>
+  </div>
+
+  <div *ngIf="mostrarVista === 'estadisticas'">
+    <app-resumen-estadistico
+      [id]="id"
+      [codigo]="codigo"
+    ></app-resumen-estadistico>
+  </div>
+</div>
