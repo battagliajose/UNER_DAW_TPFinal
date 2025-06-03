@@ -14,14 +14,12 @@
       class="bloque-estadisticas"
     >
       <!-- Botonera de navegación -->
-      <div
-        class="p-d-flex p-ai-center p-jc-center"
-        style="gap: 1rem; margin-bottom: 1.5rem"
-      >
+      <div class="p-d-flex p-ai-center p-jc-center botonera-navegacion">
         <button
           pButton
           icon="pi pi-angle-left"
           label="Anterior"
+          title="Anterior"
           (click)="anterior()"
           [disabled]="currentIndex() === 0"
           class="p-button-rounded p-button-secondary"
@@ -34,6 +32,7 @@
           pButton
           icon="pi pi-angle-right"
           label="Siguiente"
+          title="Siguiente"
           (click)="siguiente()"
           [disabled]="
             currentIndex() === resumen.resultadosProcesados.length - 1
