@@ -7,7 +7,13 @@ import { NgForOf, NgIf } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CheckboxModule } from 'primeng/checkbox';
-
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  switchMap,
+} from 'rxjs/operators';
+import { AiService } from '../../services/ai.service';
 import {
   FormGroup,
   FormArray,
@@ -39,12 +45,14 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class ResponderEncuestaComponent implements OnInit {
+  sugerenciasIA: { [key: string]: string } = {}; // clave: 'respuesta_0', valor: sugerencia
   constructor(
     private route: ActivatedRoute,
     private encuestaService: EncuestaService,
     private respuestasService: RespuestasService,
     private messageService: MessageService,
     private router: Router,
+    private aiService: AiService,
   ) {}
 
   id: number = 0;
@@ -76,23 +84,46 @@ export class ResponderEncuestaComponent implements OnInit {
               this.encuesta = data;
 
               this.encuesta.preguntas.forEach((pregunta, i) => {
+                const respuestasFormArray = this.formularioRespuestas.get(
+                  'respuestas',
+                ) as FormArray;
+
                 if (
                   pregunta.tipo === TipoRespuestaEnum.ABIERTA ||
                   pregunta.tipo ===
                     TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_SIMPLE
                 ) {
-                  const preguntaGroup = new FormGroup({
-                    respuesta: new FormControl(''),
+                  const controlKey = 'respuesta_' + i;
+                  const control = new FormControl('', Validators.required);
+
+                  const grupo = new FormGroup({
+                    [controlKey]: control,
                   });
 
-                  respuestasFormArray.push(
-                    new FormGroup({
-                      ['respuesta_' + i]: new FormControl(
-                        '',
-                        Validators.required,
-                      ),
-                    }),
-                  );
+                  respuestasFormArray.push(grupo);
+
+                  // Solo activar autocompletado IA si es pregunta ABIERTA
+                  if (pregunta.tipo === TipoRespuestaEnum.ABIERTA) {
+                    control.valueChanges
+                      .pipe(
+                        debounceTime(500),
+                        distinctUntilChanged(),
+                        filter(
+                          (textoParcial): textoParcial is string =>
+                            textoParcial !== null &&
+                            textoParcial.trim().length > 0,
+                        ),
+                        switchMap((textoParcial) =>
+                          this.aiService.autocompletarRespuesta(
+                            pregunta.texto,
+                            textoParcial,
+                          ),
+                        ),
+                      )
+                      .subscribe((sugerencia) => {
+                        this.sugerenciasIA[controlKey] = sugerencia;
+                      });
+                  }
                 } else if (
                   pregunta.tipo ===
                   TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_MULTIPLE

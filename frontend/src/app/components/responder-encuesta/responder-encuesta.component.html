@@ -25,6 +25,10 @@
           pTextarea
           [formControlName]="'respuesta_' + i"
         ></textarea>
+        <!-- Mostrar sugerencia si existe -->
+        <div *ngIf="sugerenciasIA['respuesta_' + i]" class="sugerencia">
+          💡 <i>Sugerencia:</i> "{{ sugerenciasIA['respuesta_' + i] }}"
+        </div>
         <small
           class="pregunta-error"
           *ngIf="
