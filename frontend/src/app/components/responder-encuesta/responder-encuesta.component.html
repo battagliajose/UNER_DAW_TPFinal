@@ -12,13 +12,22 @@
       *ngFor="let pregunta of encuesta?.preguntas; let i = index"
       [formGroupName]="i"
     >
+      <div class="pregunta-encabezado">
+        <span class="pregunta-texto">{{ pregunta.texto }}</span>
+        <p-button
+          (onClick)="leerPregunta(pregunta.texto, pregunta.opciones || [])"
+          icon="pi pi-volume-up"
+          styleClass="p-button-rounded p-button-text p-button-sm"
+          ariaLabel="Leer en voz alta"
+        ></p-button>
+      </div>
+
       <!-- ABIERTA -->
       <div
         class="pregunta-container"
         *ngIf="pregunta.tipo === 'ABIERTA'"
         [attr.id]="'pregunta_' + i"
       >
-        <p class="pregunta-texto">{{ pregunta.texto }}</p>
         <textarea
           rows="5"
           cols="30"
@@ -45,7 +54,6 @@
         *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_SIMPLE'"
         [attr.id]="'pregunta_' + i"
       >
-        <p class="pregunta-texto">{{ pregunta.texto }}</p>
         <div class="pregunta-opciones">
           <div class="pregunta-opcion" *ngFor="let opcion of pregunta.opciones">
             <p-radioButton
@@ -75,8 +83,6 @@
         *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_MULTIPLE'"
         [attr.id]="'pregunta_' + i"
       >
-        <p>{{ pregunta.texto }}</p>
-
         <!-- Entrás al FormArray con nombre dinámico -->
         <div class="pregunta-opciones" [formArrayName]="'respuesta_' + i">
           <div

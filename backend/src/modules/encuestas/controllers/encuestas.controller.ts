@@ -44,14 +44,9 @@ export class EncuestasController {
   }
 
   @Get('/obtener-todas')
-  async obtenerTodasLasEncuestas(
-    @Query() dto: ObtenerTodasEncuestasDto,
-  ): Promise<[Encuesta[], number]> {
+  async obtenerTodasLasEncuestas(): Promise<Encuesta[]> {
     try {
-      return await this.encuestasService.obtenerTodasLasEncuestas(
-        dto.skip,
-        dto.take,
-      );
+      return await this.encuestasService.obtenerTodasLasEncuestas();       
     } catch (exception) {
       throw new HttpException(
         'Error al obtener las encuestas',

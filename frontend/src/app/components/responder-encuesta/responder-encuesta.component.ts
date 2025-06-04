@@ -269,4 +269,21 @@ export class ResponderEncuestaComponent implements OnInit {
     const grupo = this.formularioRespuestas.get(['respuestas', i]) as FormGroup;
     return grupo.get('respuesta_' + i) as FormArray;
   }
+
+  leerPregunta(pregunta: string, opciones?: { texto: string }[]) {
+    window.speechSynthesis.cancel();
+
+    const opcionesTexto = opciones?.map((o) => o.texto).join(', ');
+    const textoCompleto = opcionesTexto
+      ? `${pregunta}. Las opciones son: ${opcionesTexto}.`
+      : pregunta;
+
+    const mensaje = new SpeechSynthesisUtterance(textoCompleto);
+    mensaje.lang = 'es-AR';
+    mensaje.rate = 1;
+    mensaje.volume = 1;
+    mensaje.pitch = 1;
+
+    window.speechSynthesis.speak(mensaje);
+  }
 }
