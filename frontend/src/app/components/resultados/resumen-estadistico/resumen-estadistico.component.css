@@ -1,8 +1,5 @@
 :host {
   display: block;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
 .contenedor-resumen {
@@ -15,11 +12,38 @@
   box-sizing: border-box;
 }
 
+.header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .titulo {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: bold;
-  text-align: center;
-  margin-bottom: 1.2rem;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding-left: 2rem;
+}
+
+.nombre-encuesta {
+  font-weight: 400;
+  color: #1976d2;
+  margin-left: 0.5rem;
+}
+
+.botonera-descarga {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.botonera-descarga .p-button {
+  min-width: 44px;
+  font-size: 1.1rem;
+  padding: 0.4rem 0.8rem;
 }
 
 .bloque-estadisticas {
@@ -27,118 +51,71 @@
   background-color: #f0f0f0;
   border-radius: 8px;
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-x: auto;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-li {
-  padding: 8px;
-  background-color: #e3e3e3;
-  border-radius: 6px;
-  margin: 5px 0;
-  word-break: break-word;
-  white-space: normal;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.p-card {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 1.5rem;
-  overflow-x: auto;
-}
-
-/* Wrapper para gráfico y leyenda en línea */
-.opciones-grafico-wrapper {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Estilos específicos para el gráfico de torta con clase personalizada */
-:host ::ng-deep .grafico-torta {
-  display: block;
-  margin: 0 auto 1rem auto;
-  width: 234px !important; /* 30% más grande que 180px */
-  height: 234px !important;
-  max-width: 280px;
-  min-width: 140px;
-}
-
-:host ::ng-deep .grafico-torta canvas {
-  width: 100% !important;
-  height: 100% !important;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-/* Mejora la visualización en mobile */
-@media (max-width: 600px) {
-  .contenedor-resumen,
-  .bloque-estadisticas,
-  .p-card {
-    padding: 0.5rem !important;
-    width: 100% !important;
-    max-width: 100vw !important;
-    box-sizing: border-box;
-    overflow-x: auto;
-  }
-  ul,
-  li {
-    word-break: break-word;
-    white-space: normal;
-  }
-  .opciones-grafico-wrapper {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  :host ::ng-deep .grafico-torta,
-  :host ::ng-deep .grafico-torta canvas {
-    max-width: 100vw;
-    min-width: 80px;
-    max-height: 150px;
-    height: 150px !important;
-  }
-}
-
-.bloque-estadisticas {
-  padding: 0.3rem;
-  background-color: #e7eff6;
-  border-radius: 8px;
-  margin-bottom: 0.3rem;
-  font-size: 0.4rem;
+  margin-bottom: 1.2rem;
 }
 
 .totales {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem; /* Ajusta el valor para más o menos separación */
+  gap: 0.4rem;
   justify-content: center;
   font-size: 0.9rem;
   color: #333;
 }
 
-/*botoenra ubicación*/
+.botonera-navegacion {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
 
 .botonera-navegacion > span {
   font-size: 0.9rem;
   font-weight: 500;
+}
+
+.bloque-pregunta {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.opciones-grafico-wrapper {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.grafico-torta {
+  min-width: 200px;
+  max-width: 240px;
+  margin-bottom: 1rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+.total-abiertas {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #1976d2;
+}
+
+.cargando {
+  color: #d32f2f;
+  font-weight: 500;
+  text-align: center;
+  margin: 2rem 0;
 }

@@ -19,6 +19,8 @@ import { ToastModule } from 'primeng/toast';
 export class ResultadosEncuestaComponent implements OnInit {
   @Input() id!: number;
   @Input() codigo!: string;
+  @Input() tipo!: string;
+
   respuestas: any[] = [];
   nombreEncuesta = '';
   currentIndex = signal(0);
@@ -27,24 +29,34 @@ export class ResultadosEncuestaComponent implements OnInit {
   private descargaService = inject(DescargaService);
   private messageService = inject(MessageService);
 
+  errorCarga = false;
+
   ngOnInit() {
     this.obtenerResultados();
   }
 
   obtenerResultados() {
-    this.resultadosService.getResultados(this.id, this.codigo).subscribe({
-      next: (data: any) => {
-        this.nombreEncuesta = data.nombre ?? '';
-        this.respuestas = Array.isArray(data.respuestas) ? data.respuestas : [];
-        this.currentIndex.set(0);
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error al obtener resultados',
-        });
-      },
-    });
+    this.errorCarga = false;
+    this.resultadosService
+      .getResultados(this.id, this.codigo, this.tipo)
+      .subscribe({
+        next: (data: any) => {
+          this.nombreEncuesta = data.nombre ?? '';
+          this.respuestas = Array.isArray(data.respuestas)
+            ? data.respuestas
+            : [];
+          this.currentIndex.set(0);
+          this.errorCarga = false;
+        },
+        error: () => {
+          this.respuestas = [];
+          this.errorCarga = true;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error al obtener resultados',
+          });
+        },
+      });
   }
 
   descargarCSV() {

@@ -2,12 +2,36 @@
 <div class="contenedor-resumen">
   <p-card>
     <ng-template pTemplate="header">
-      <h3 class="titulo">
-        Estadísticas de la encuesta:
-        <span *ngIf="resumen['nombreEncuesta']" class="nombre-encuesta">
-          {{ resumen['nombreEncuesta'] }}
+      <div class="header-flex">
+        <span class="titulo">
+          Estadísticas de la encuesta:
+          <span *ngIf="resumen['nombreEncuesta']" class="nombre-encuesta">
+            {{ resumen['nombreEncuesta'] }}
+          </span>
         </span>
-      </h3>
+        <div class="botonera-descarga">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-file-excel"
+            class="p-button-rounded p-button-success p-button-icon-only"
+            (click)="descargarCSV()"
+            title="Descargar estadísticas en CSV"
+          >
+            <i class="pi pi-download"></i>
+          </button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-file-pdf"
+            class="p-button-rounded p-button-danger p-button-icon-only"
+            (click)="descargarPDF()"
+            title="Descargar estadísticas en PDF"
+          >
+            <i class="pi pi-download"></i>
+          </button>
+        </div>
+      </div>
     </ng-template>
 
     <!-- Sección general totales -->

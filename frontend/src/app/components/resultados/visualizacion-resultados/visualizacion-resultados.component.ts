@@ -25,7 +25,7 @@ export class VisualizacionResultadosComponent implements OnInit {
   mostrarVista: 'respuestas' | 'estadisticas' = 'respuestas';
   id!: number;
   codigo!: string;
-
+  tipo!: string;
   private route = inject(ActivatedRoute);
 
   ngOnInit() {
@@ -35,6 +35,7 @@ export class VisualizacionResultadosComponent implements OnInit {
   obtenerParametros() {
     this.id = Number(this.route.snapshot.paramMap.get('id')) || 0;
     this.codigo = this.route.snapshot.queryParamMap.get('codigo') ?? '';
+    this.tipo = this.route.snapshot.queryParamMap.get('tipo') ?? '';
   }
 
   mostrarRespuestas() {

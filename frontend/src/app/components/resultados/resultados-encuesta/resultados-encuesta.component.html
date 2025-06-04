@@ -13,7 +13,7 @@
           <button
             pButton
             icon="pi pi-file-excel"
-            class="icono-descarga-rect csv"
+            class="p-button-rounded p-button-success p-button-icon-only"
             (click)="descargarCSV()"
             title="Descargar CSV"
             type="button"
@@ -23,7 +23,7 @@
           <button
             pButton
             icon="pi pi-file-pdf"
-            class="icono-descarga-rect pdf"
+            class="p-button-rounded p-button-danger p-button-icon-only"
             (click)="descargarPDF()"
             title="Descargar PDF"
             type="button"
@@ -34,7 +34,12 @@
       </div>
     </ng-template>
 
-    <p *ngIf="!respuestas.length" class="cargando">Cargando datos...</p>
+    <p *ngIf="!respuestas.length && !errorCarga" class="cargando">
+      Cargando datos...
+    </p>
+    <p *ngIf="errorCarga" class="cargando" style="color: #d32f2f">
+      No existen encuestas con el enlace de acceso cargado.
+    </p>
 
     <div *ngIf="respuestas.length > 0" class="bloque-estadisticas">
       <div class="botonera">

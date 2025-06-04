@@ -12,9 +12,10 @@ export class ResultadosService {
   getResultados(
     idEncuesta: number,
     codigo: string,
+    tipo: string,
   ): Observable<RespuestaEncuestaDTO[]> {
     return this._requestService.get<RespuestaEncuestaDTO[]>(
-      `/encuestas/${idEncuesta}?codigo=${codigo}&tipo=RESULTADOS`,
+      `/encuestas/${idEncuesta}?codigo=${codigo}&tipo=${tipo}`,
     );
   }
 }

@@ -12,9 +12,10 @@ export class ResumenEstadisticoService {
   obtenerResumen(
     idEncuesta: number,
     codigo: string,
+    tipo: string,
   ): Observable<ResumenEstadisticoDTO> {
     return this._requestService.get<ResumenEstadisticoDTO>(
-      `/reportes/${idEncuesta}/${codigo}`,
+      `/reportes/${idEncuesta}/${codigo}?tipo=${tipo}`,
     );
   }
 }
