@@ -41,13 +41,25 @@ hr {
   background-color: #b6d2f9;
 }
 
+.pregunta-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .pregunta-texto {
+  font-weight: 600;
+  font-size: 1.1rem;
+  flex: 1;
   margin: 10px 0;
 }
 
 .pregunta-opciones {
   display: flex;
   flex-direction: column;
+  margin: 10px 10px;
 }
 
 .pregunta-opcion {
