@@ -3,63 +3,75 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: clamp(250px, 90vw, 800px);
+  width: clamp(250px, 90vw, 600px);
   overflow: auto;
   margin: 0 auto;
-  gap: 24px;
+  gap: 16px;
   color: black;
 }
 
+.contenedor-visualizacion {
+  width: clamp(250px, 95vw, 600px);
+  padding: 1rem;
+  background-color: var(--color-background-light, #f4f8fb);
+  border-radius: 10px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+}
+
 .encuesta-titulo {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 1.1rem;
+  font-weight: 600;
   text-align: center;
-  margin: 20px 0 10px 0;
+  margin: 10px 0 8px 0;
+  color: #1976d2;
+  letter-spacing: 0.01em;
 }
 
 .botonera {
   display: flex;
-  justify-content: space-around;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: 0.7rem;
 }
 
-.contenedor-visualizacion {
-  width: clamp(300px, 80vw, 800px);
-  padding: 2rem;
-  background-color: var(--color-background-light, #f4f8fb);
-  border-radius: 12px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+.p-button {
+  border-radius: 8px !important;
+  font-size: 0.95rem !important;
+  padding: 0.3rem 1rem !important;
+  min-width: 0;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 
-p-button,
-button[pButton] {
-  transition: transform 0.2s ease-in-out;
+.blue-100 {
+  background-color: #dfebfb !important;
+  color: #1e40af !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-p-button:hover,
-button[pButton]:hover {
-  transform: scale(1.05);
+.blue-700 {
+  background-color: #1d4ed8 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.12);
+  transform: scale(1.04);
 }
 
-hr {
-  width: 100%;
-  height: 1px;
-  background-color: #ccc;
-  margin: 20px 0;
+.blue-100:hover,
+.blue-700:hover {
+  filter: brightness(0.97);
+  box-shadow: 0 2px 12px rgba(29, 78, 216, 0.18);
+  transform: scale(1.06);
 }
 
 @media (max-width: 600px) {
+  .contenedor-visualizacion {
+    padding: 0.5rem;
+  }
   .botonera {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
-  .contenedor-visualizacion {
-    padding: 1rem;
-  }
-}
-
-.contenedor-visualizacion > * {
-  max-width: 100%;
-  box-sizing: border-box;
 }

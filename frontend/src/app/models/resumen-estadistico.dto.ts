@@ -1,4 +1,5 @@
 export interface ResumenEstadisticoDTO {
+  nombreEncuesta?: string; // <-- AGREGADO
   cantidadEncuestasProcesadas: number;
   totalPreguntas: number;
   totalRespuestasAnalizadas: number;
@@ -10,6 +11,7 @@ export interface ResumenEstadisticoDTO {
       cantidadVecesSeleccionada: number;
       porcentajeSeleccion: string;
     }[];
+    totalRespuestas?: number; // <-- AGREGADO para preguntas abiertas
     respuestas?: string[];
   }[];
 }

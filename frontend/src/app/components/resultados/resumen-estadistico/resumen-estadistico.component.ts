@@ -27,7 +27,9 @@ import { ChartModule } from 'primeng/chart';
 export class ResumenEstadisticoComponent implements OnInit {
   @Input() id!: number;
   @Input() codigo!: string;
-  resumen: ResumenEstadisticoDTO = {
+
+  resumen: any = {
+    nombreEncuesta: '',
     cantidadEncuestasProcesadas: 0,
     totalPreguntas: 0,
     totalRespuestasAnalizadas: 0,
@@ -46,12 +48,24 @@ export class ResumenEstadisticoComponent implements OnInit {
   obtenerResumen() {
     this.resumenService.obtenerResumen(this.id, this.codigo).subscribe({
       next: (data: any) => {
-        this.resumen = data.resumenEstadistico ?? {
-          cantidadEncuestasProcesadas: 0,
-          totalPreguntas: 0,
-          totalRespuestasAnalizadas: 0,
-          resultadosProcesados: [],
-        };
+        // data puede traer nombreEncuesta a nivel raíz o dentro de resumenEstadistico
+        if (data.resumenEstadistico) {
+          this.resumen = {
+            ...data.resumenEstadistico,
+            nombreEncuesta:
+              data.nombreEncuesta ??
+              data.resumenEstadistico.nombreEncuesta ??
+              '',
+          };
+        } else {
+          this.resumen = {
+            nombreEncuesta: data.nombreEncuesta ?? '',
+            cantidadEncuestasProcesadas: 0,
+            totalPreguntas: 0,
+            totalRespuestasAnalizadas: 0,
+            resultadosProcesados: [],
+          };
+        }
         this.currentIndex.set(0);
       },
       error: () => {
@@ -66,12 +80,14 @@ export class ResumenEstadisticoComponent implements OnInit {
   anterior() {
     if (this.currentIndex() > 0) this.currentIndex.set(this.currentIndex() - 1);
   }
+
   siguiente() {
     if (
       this.currentIndex() <
       (this.resumen.resultadosProcesados?.length ?? 1) - 1
-    )
+    ) {
       this.currentIndex.set(this.currentIndex() + 1);
+    }
   }
 
   getPieChartData(resultado: any) {

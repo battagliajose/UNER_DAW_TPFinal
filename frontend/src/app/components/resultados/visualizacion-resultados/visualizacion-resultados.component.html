@@ -1,17 +1,18 @@
 <p-toast></p-toast>
 
 <div class="contenedor-visualizacion">
-  <h1 class="encuesta-titulo">Resultados de la Encuesta</h1>
+  <h2 class="encuesta-titulo">Resultados de la Encuesta</h2>
 
   <div class="botonera">
     <button
       pButton
       label="Ver Respuestas"
       icon="pi pi-list"
-      [style]="{ width: '12rem', height: '3rem' }"
       (click)="mostrarRespuestas()"
-      [class.p-button-outlined]="mostrarVista !== 'respuestas'"
-      [class.p-button-info]="mostrarVista === 'respuestas'"
+      [ngClass]="{
+        'blue-700': mostrarVista === 'respuestas',
+        'blue-100': mostrarVista !== 'respuestas',
+      }"
       title="Ver Respuestas"
     ></button>
 
@@ -19,10 +20,11 @@
       pButton
       label="Ver Estadísticas"
       icon="pi pi-chart-bar"
-      [style]="{ width: '12rem', height: '3rem' }"
       (click)="mostrarEstadisticas()"
-      [class.p-button-outlined]="mostrarVista !== 'estadisticas'"
-      [class.p-button-success]="mostrarVista === 'estadisticas'"
+      [ngClass]="{
+        'blue-700': mostrarVista === 'estadisticas',
+        'blue-100': mostrarVista !== 'estadisticas',
+      }"
       title="Ver Estadísticas"
     ></button>
   </div>
