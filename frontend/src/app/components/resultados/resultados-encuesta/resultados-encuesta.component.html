@@ -17,6 +17,7 @@
             (click)="descargarCSV()"
             title="Descargar CSV"
             type="button"
+            [disabled]="!respuestas.length"
           >
             <i class="pi pi-download"></i>
           </button>
@@ -27,6 +28,7 @@
             (click)="descargarPDF()"
             title="Descargar PDF"
             type="button"
+            [disabled]="!respuestas.length"
           >
             <i class="pi pi-download"></i>
           </button>
@@ -42,7 +44,7 @@
     </p>
 
     <div *ngIf="respuestas.length > 0" class="bloque-estadisticas">
-      <div class="botonera">
+      <div class="botonera-flex">
         <button
           pButton
           icon="pi pi-angle-left"
@@ -71,14 +73,9 @@
       *ngIf="respuestas.length > 0 && respuestas[currentIndex()] as encuestado"
     >
       <div class="bloque-respuestas compacto">
-        <div class="info-encuestado">
-          <span class="etiqueta">Encuestado:</span>
-          <span class="valor-encuestado" pTag>{{ encuestado.encuestado }}</span>
-        </div>
-
         <div
-          *ngIf="encuestado.respuestasOpciones?.length > 0"
           class="grupo-respuesta"
+          *ngIf="encuestado.respuestasOpciones?.length > 0"
         >
           <div class="subtitulo">Respuestas con opción:</div>
           <ul>

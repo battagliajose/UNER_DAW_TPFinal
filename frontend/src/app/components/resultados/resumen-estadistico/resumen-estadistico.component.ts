@@ -72,6 +72,15 @@ export class ResumenEstadisticoComponent implements OnInit {
           this.currentIndex.set(0);
         },
         error: () => {
+          // Limpiar datos si hay error
+          this.resumen = {
+            nombreEncuesta: '',
+            cantidadEncuestasProcesadas: 0,
+            totalPreguntas: 0,
+            totalRespuestasAnalizadas: 0,
+            resultadosProcesados: [],
+          };
+          this.currentIndex.set(0);
           this.messageService.add({
             severity: 'error',
             summary: 'Error al obtener el resumen estadístico',

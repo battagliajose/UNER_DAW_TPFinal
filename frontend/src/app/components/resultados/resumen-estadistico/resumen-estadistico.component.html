@@ -17,6 +17,7 @@
             class="p-button-rounded p-button-success p-button-icon-only"
             (click)="descargarCSV()"
             title="Descargar estadísticas en CSV"
+            [disabled]="!resumen.resultadosProcesados?.length"
           >
             <i class="pi pi-download"></i>
           </button>
@@ -27,6 +28,7 @@
             class="p-button-rounded p-button-danger p-button-icon-only"
             (click)="descargarPDF()"
             title="Descargar estadísticas en PDF"
+            [disabled]="!resumen.resultadosProcesados?.length"
           >
             <i class="pi pi-download"></i>
           </button>
