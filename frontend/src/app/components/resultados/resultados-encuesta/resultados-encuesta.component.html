@@ -37,8 +37,14 @@
     </ng-template>
 
     <p *ngIf="!respuestas.length && !errorCarga" class="cargando">
+      Esta encuesta no tiene respuestas aún, o es aburrida y no generó interés,
+      o te olvidaste de enviarla.
+    </p>
+
+    <p *ngIf="!respuestas.length && !errorCarga" class="cargando">
       Cargando datos...
     </p>
+
     <p *ngIf="errorCarga" class="cargando" style="color: #d32f2f">
       No existen encuestas con el enlace de acceso cargado.
     </p>

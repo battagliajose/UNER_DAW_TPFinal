@@ -38,6 +38,7 @@ export class ResumenEstadisticoComponent implements OnInit {
   };
 
   currentIndex = signal(0);
+  errorCarga = false;
 
   private resumenService = inject(ResumenEstadisticoService);
   private messageService = inject(MessageService);
@@ -70,6 +71,14 @@ export class ResumenEstadisticoComponent implements OnInit {
             };
           }
           this.currentIndex.set(0);
+          if (!this.resumen.resultadosProcesados?.length) {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Encuesta sin respuestas',
+              detail:
+                'Esta encuesta no tiene respuestas aún! Una de dos: es aburrida y no generó interés o te olvidasete de enviarla!',
+            });
+          }
         },
         error: () => {
           // realizar limpieza para evitar datos inconsistentes

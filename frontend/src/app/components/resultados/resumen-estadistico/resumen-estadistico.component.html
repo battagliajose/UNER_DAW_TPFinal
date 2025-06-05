@@ -36,6 +36,15 @@
       </div>
     </ng-template>
 
+    <!-- Mensaje si no hay respuestas -->
+    <p
+      *ngIf="!resumen.resultadosProcesados?.length && !errorCarga"
+      class="cargando"
+    >
+      Esta encuesta no tiene respuestas aún, o es aburrida y no generó interés,
+      o te olvidaste de enviarla.
+    </p>
+
     <!-- Sección general totales -->
     <div
       *ngIf="resumen.cantidadEncuestasProcesadas"

@@ -47,6 +47,14 @@ export class ResultadosEncuestaComponent implements OnInit {
             : [];
           this.currentIndex.set(0);
           this.errorCarga = false;
+          if (!this.respuestas.length) {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Encuesta sin respuestas',
+              detail:
+                'Esta encuesta no tiene respuestas aún! O no generó interés, o te olvidaste de enviarla!',
+            });
+          }
         },
         error: () => {
           this.respuestas = [];
