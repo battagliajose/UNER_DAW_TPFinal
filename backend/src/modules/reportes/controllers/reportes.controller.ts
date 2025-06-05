@@ -1,4 +1,11 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Res,
+  Query,
+  BadRequestException,
+} from '@nestjs/common';
 import { ReportesService } from '../services/reportes.service';
 import { PdfService } from '../services/pdf.service';
 import { CsvReportesService } from '../services/csv-reportes.service';
@@ -17,7 +24,11 @@ export class ReportesController {
     @Param('id') id: number,
     @Param('codigo') codigo: string,
     @Res() res: Response,
+    @Query('tipo') tipo: string,
   ) {
+    if (tipo !== 'RESULTADOS') {
+      throw new BadRequestException('El parámetro "tipo" debe ser RESULTADOS');
+    }
     const datosReporte = await this.reportesService.generarReporteResultados(
       id,
       codigo,
@@ -30,7 +41,12 @@ export class ReportesController {
     @Param('id') id: number,
     @Param('codigo') codigo: string,
     @Res() res: Response,
+    @Query('tipo') tipo: string, // <-- AGREGADO
   ) {
+    if (tipo !== 'RESULTADOS') {
+      // <-- AGREGADO
+      throw new BadRequestException('El parámetro "tipo" debe ser RESULTADOS');
+    }
     const datosReporte = await this.reportesService.generarReporteResultados(
       id,
       codigo,
@@ -42,7 +58,11 @@ export class ReportesController {
   async generarReporteResultados(
     @Param('id') id: number,
     @Param('codigo') codigo: string,
+    @Query('tipo') tipo: string,
   ) {
+    if (tipo !== 'RESULTADOS') {
+      throw new BadRequestException('El parámetro "tipo" debe ser RESULTADOS');
+    }
     return this.reportesService.generarReporteResultados(id, codigo);
   }
 }

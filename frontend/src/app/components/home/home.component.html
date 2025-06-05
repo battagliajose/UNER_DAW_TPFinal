@@ -1,26 +1,87 @@
-
+<p-toast></p-toast>
 <div class="container">
-    <div class="bienvenido">      
-      <div class="texto">
-        <div> 
-          <h1>Opina.Ar</h1>
+  <div class="bienvenido">
+    <div class="texto">
+      <div>
+        <h1>Opina.Ar</h1>
+      </div>
+      <p>
+        Cree su encuesta para saber la opinion de la sociedad en estos
+        turbulentos tiempos que corren.
+      </p>
+      <p>Confia en nosotros.....</p>
+      <div class="botones">
+        <div>
+          <p-button
+            label="Crear"
+            [style]="{
+              backgroundColor: 'var(--color-background)',
+              width: '10rem',
+              height: '2.4rem',
+            }"
+            routerLink="/crear"
+          ></p-button>
         </div>
-        <p>Cree su encuesta para saber la opinion de la sociedad en estos
-          turbulentos tiempos que corren.</p>
-        <p>Confia en nosotros.....</p>
-        <div class="botones">
-          <div>
-            <p-button label="Crear" [style]="{backgroundColor: 'var(--color-background)', width: '10rem', height: '2.4rem'}" routerLink="/crear"></p-button>
-          </div>
-          <div>
-            <p-button label="Dashboard" [style]="{backgroundColor: 'var(--color-background)', width: '10rem', height: '2.4rem'}" routerLink="/dashboard"></p-button>
-          </div>
+        <div>
+          <p-button
+            label="Dashboard"
+            [style]="{
+              backgroundColor: 'var(--color-background)',
+              width: '10rem',
+              height: '2.4rem',
+            }"
+            routerLink="/dashboard"
+          ></p-button>
+        </div>
+        <div>
+          <p-button
+            label="Resultados"
+            [style]="{
+              backgroundColor: 'var(--color-background)',
+              width: '10rem',
+              height: '2.4rem',
+            }"
+            (onClick)="abrirDialog()"
+          ></p-button>
         </div>
       </div>
     </div>
-    <div class="contenedor-imagen"> 
-      <div class="imagen">     
-        <img src="/assets/encuestas.png" alt="Imagen de encuestas">      
-      </div>     
+  </div>
+  <div class="contenedor-imagen">
+    <div class="imagen">
+      <img src="/assets/encuestas.png" alt="Imagen de encuestas" />
     </div>
+  </div>
 </div>
+
+<p-dialog
+  header="Ir a visualización de resultados"
+  [(visible)]="mostrarDialog"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '25rem' }"
+>
+  <div style="display: flex; flex-direction: column; gap: 1rem">
+    <span
+      >Ingresá la URL de visualización de resultados de la encuesta a
+      consultar:</span
+    >
+    <input
+      pInputText
+      [(ngModel)]="urlResultados"
+      placeholder="http://localhost:4200/visualizacion-resultados/id?codigo=...&tipo=..."
+    />
+    <button
+      pButton
+      label="Ir"
+      icon="pi pi-arrow-right"
+      (click)="irAResultados()"
+      [disabled]="!urlResultados"
+      [style]="{
+        backgroundColor: '#2e4859',
+        color: '#fff',
+      }"
+      aria-label="Ir a resultados"
+    ></button>
+  </div>
+</p-dialog>

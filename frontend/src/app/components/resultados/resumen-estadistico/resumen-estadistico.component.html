@@ -1,0 +1,196 @@
+<p-toast></p-toast>
+<div class="contenedor-resumen">
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="header-flex">
+        <span class="titulo">
+          Estadísticas de la encuesta:
+          <span *ngIf="resumen['nombreEncuesta']" class="nombre-encuesta">
+            {{ resumen['nombreEncuesta'] }}
+          </span>
+        </span>
+        <div class="botonera-descarga">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-file-excel"
+            class="p-button-rounded p-button-success p-button-icon-only"
+            (click)="descargarCSV()"
+            title="Descargar estadísticas en CSV"
+            [disabled]="!resumen.resultadosProcesados?.length"
+          >
+            <i class="pi pi-download"></i>
+          </button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-file-pdf"
+            class="p-button-rounded p-button-danger p-button-icon-only"
+            (click)="descargarPDF()"
+            title="Descargar estadísticas en PDF"
+            [disabled]="!resumen.resultadosProcesados?.length"
+          >
+            <i class="pi pi-download"></i>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- Sección general totales -->
+    <div
+      *ngIf="resumen.cantidadEncuestasProcesadas"
+      class="bloque-estadisticas"
+    >
+      <div class="totales">
+        <span>
+          <b>Encuestas procesadas:</b>
+          {{ resumen.cantidadEncuestasProcesadas }}
+        </span>
+        <span><b>Total de preguntas:</b> {{ resumen.totalPreguntas }}</span>
+        <span>
+          <b>Total de respuestas:</b>
+          {{ resumen.totalRespuestasAnalizadas }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Navegación entre preguntas -->
+    <div
+      *ngIf="resumen.resultadosProcesados?.length > 0"
+      class="bloque-estadisticas"
+      style="margin-top: 1.5rem"
+    >
+      <div class="botonera-navegacion">
+        <button
+          pButton
+          icon="pi pi-angle-left"
+          label="Anterior"
+          title="Anterior"
+          (click)="anterior()"
+          [disabled]="currentIndex() === 0"
+          class="p-button-rounded p-button-secondary"
+        ></button>
+        <span>
+          Pregunta {{ currentIndex() + 1 }} de
+          {{ resumen.resultadosProcesados.length }}
+        </span>
+        <button
+          pButton
+          icon="pi pi-angle-right"
+          label="Siguiente"
+          title="Siguiente"
+          (click)="siguiente()"
+          [disabled]="
+            currentIndex() === resumen.resultadosProcesados.length - 1
+          "
+          class="p-button-rounded p-button-secondary"
+        ></button>
+      </div>
+    </div>
+
+    <!-- Detalle de la pregunta actual -->
+    <ng-container *ngIf="resumen.resultadosProcesados?.length > 0">
+      <div class="bloque-pregunta">
+        <h4>
+          {{ resumen.resultadosProcesados[currentIndex()]?.textoPregunta }}
+        </h4>
+        <ng-container
+          [ngSwitch]="
+            resumen.resultadosProcesados[currentIndex()]?.tipoPregunta
+          "
+        >
+          <!-- Opción múltiple simple o múltiple -->
+          <div *ngSwitchCase="'OPCION_MULTIPLE_SELECCION_SIMPLE'">
+            <div class="opciones-grafico-wrapper">
+              <div class="grafico-torta">
+                <p-chart
+                  type="pie"
+                  [data]="
+                    getPieChartData(
+                      resumen.resultadosProcesados[currentIndex()]
+                    )
+                  "
+                  [responsive]="true"
+                  [style]="{
+                    width: '100%',
+                    maxWidth: '234px',
+                    margin: '0 auto',
+                  }"
+                ></p-chart>
+              </div>
+              <ul>
+                <li
+                  *ngFor="
+                    let opcion of resumen.resultadosProcesados[currentIndex()]
+                      ?.opciones
+                  "
+                >
+                  <span pTag severity="info">{{ opcion.textoOpcion }}</span>
+                  <span style="margin-left: 1rem">
+                    {{ opcion.cantidadVecesSeleccionada }} respuestas ({{
+                      opcion.porcentajeSeleccion
+                    }})
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div *ngSwitchCase="'OPCION_MULTIPLE_SELECCION_MULTIPLE'">
+            <div class="opciones-grafico-wrapper">
+              <div class="grafico-torta">
+                <p-chart
+                  type="pie"
+                  [data]="
+                    getPieChartData(
+                      resumen.resultadosProcesados[currentIndex()]
+                    )
+                  "
+                  [responsive]="true"
+                  [style]="{
+                    width: '100%',
+                    maxWidth: '234px',
+                    margin: '0 auto',
+                  }"
+                ></p-chart>
+              </div>
+              <ul>
+                <li
+                  *ngFor="
+                    let opcion of resumen.resultadosProcesados[currentIndex()]
+                      ?.opciones
+                  "
+                >
+                  <span pTag severity="info">{{ opcion.textoOpcion }}</span>
+                  <span style="margin-left: 1rem">
+                    {{ opcion.cantidadVecesSeleccionada }} respuestas ({{
+                      opcion.porcentajeSeleccion
+                    }})
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Abierta -->
+          <div *ngSwitchCase="'ABIERTA'">
+            <div class="total-abiertas">
+              <b>Total de respuestas:</b>
+              {{
+                resumen.resultadosProcesados[currentIndex()]?.totalRespuestas
+              }}
+            </div>
+            <ul>
+              <li
+                *ngFor="
+                  let respuesta of resumen.resultadosProcesados[currentIndex()]
+                    ?.respuestas
+                "
+              >
+                <span pTag severity="success">{{ respuesta }}</span>
+              </li>
+            </ul>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </p-card>
+</div>

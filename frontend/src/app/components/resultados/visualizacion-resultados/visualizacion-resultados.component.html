@@ -1,0 +1,47 @@
+<p-toast></p-toast>
+
+<div class="contenedor-visualizacion">
+  <h2 class="encuesta-titulo">Resultados de la Encuesta</h2>
+
+  <div class="botonera">
+    <button
+      pButton
+      label="Ver Respuestas"
+      icon="pi pi-list"
+      (click)="mostrarRespuestas()"
+      [ngClass]="{
+        'blue-700': mostrarVista === 'respuestas',
+        'blue-100': mostrarVista !== 'respuestas',
+      }"
+      title="Ver Respuestas"
+    ></button>
+
+    <button
+      pButton
+      label="Ver Estadísticas"
+      icon="pi pi-chart-bar"
+      (click)="mostrarEstadisticas()"
+      [ngClass]="{
+        'blue-700': mostrarVista === 'estadisticas',
+        'blue-100': mostrarVista !== 'estadisticas',
+      }"
+      title="Ver Estadísticas"
+    ></button>
+  </div>
+
+  <div *ngIf="mostrarVista === 'respuestas'">
+    <app-resultados-encuesta
+      [codigo]="codigo"
+      [id]="id"
+      [tipo]="tipo"
+    ></app-resultados-encuesta>
+  </div>
+
+  <div *ngIf="mostrarVista === 'estadisticas'">
+    <app-resumen-estadistico
+      [codigo]="codigo"
+      [id]="id"
+      [tipo]="tipo"
+    ></app-resumen-estadistico>
+  </div>
+</div>
