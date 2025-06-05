@@ -5,14 +5,16 @@ import { EncuestasModule } from './modules/encuestas/encuestas.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RespuestasModule } from './modules/respuestas/respuestas.module';
 import { ReportesModule } from './modules/reportes/reportes.module';
+import { AiModule } from './modules/ai/ai.module';
 
 @Module({
   imports: [
+    AiModule,
     EncuestasModule,
     RespuestasModule,
     ReportesModule,
     ConfigModule.forRoot({
-      load: [configuration], // Usa la función "configuration" para definir las variables
+      load: [configuration], // Carga la configuración desde el archivo de configuración
       isGlobal: true, // Hace que el módulo esté disponible sin necesidad de importarlo en cada módulo
       ignoreEnvFile: process.env.NODE_ENV === 'production', // Ignora el archivo .env si está en producción
     }),
