@@ -27,6 +27,8 @@ import { RespuestasService } from '../../services/respuestas.service';
 import { unaseleccion } from '../../validators/opcion-multiple-no-vacia.validator';
 import { Toast, ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CardModule } from 'primeng/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-responder-encuesta',
@@ -39,6 +41,8 @@ import { MessageService } from 'primeng/api';
     NgIf,
     NgForOf,
     ToastModule,
+    CardModule,
+    CommonModule,
   ],
   templateUrl: './responder-encuesta.component.html',
   styleUrls: ['./responder-encuesta.component.css'],
@@ -46,6 +50,8 @@ import { MessageService } from 'primeng/api';
 })
 export class ResponderEncuestaComponent implements OnInit {
   sugerenciasIA: { [key: string]: string } = {}; // clave: 'respuesta_0', valor: sugerencia
+  tipoRespuestaEnum = TipoRespuestaEnum;
+
   constructor(
     private route: ActivatedRoute,
     private encuestaService: EncuestaService,

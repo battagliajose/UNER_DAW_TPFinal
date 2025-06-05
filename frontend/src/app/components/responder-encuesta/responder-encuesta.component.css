@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 :host {
   height: 100%;
   display: flex;
@@ -22,6 +24,7 @@ hr {
   font-weight: bold;
   text-align: center;
   margin: 20px 0;
+  font-family: 'Mulish', sans-serif;
 }
 
 .form-encuesta {
@@ -35,10 +38,10 @@ hr {
 }
 
 .pregunta-container {
-  width: 30vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #b6d2f9;
+  background-color: transparent;
 }
 
 .pregunta-encabezado {
@@ -59,18 +62,21 @@ hr {
 .pregunta-opciones {
   display: flex;
   flex-direction: column;
-  margin: 10px 10px;
+  margin: 10px;
 }
 
 .pregunta-opcion {
-  margin: 5px 5px;
+  margin: 5px;
 }
 
-.pregunta-container Textarea {
-  background-color: gainsboro;
-  color: black;
+textarea {
   font-size: large;
+  width: 100%;
   margin: 10px 0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: vertical;
 }
 
 .pregunta-error {
@@ -78,4 +84,35 @@ hr {
   background-color: red;
   font-size: small;
   margin-top: 5px;
+}
+
+p-card {
+  width: 100%;
+  margin: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.card-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.barra-color {
+  height: 15px;
+  width: 100%;
+  margin-bottom: -25px;
+  border-radius: 8px 8px 0 0;
+}
+
+/* Colores dinámicos aplicados al contenedor */
+.bg-abierta .barra-color {
+  background-color: #007bff;
+}
+
+.bg-simple .barra-color {
+  background-color: #28a745;
+}
+
+.bg-multiple .barra-color {
+  background-color: #ffc107;
 }
