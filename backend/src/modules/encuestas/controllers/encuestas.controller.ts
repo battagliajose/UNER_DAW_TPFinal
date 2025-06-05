@@ -107,7 +107,8 @@ async eliminarEncuesta(
   @Param('id', new ParseIntPipe()) id: number,
 ): Promise<{ mensaje: string }> {
   try {
-    return await this.encuestasService.eliminarEncuesta(id);
+    await this.encuestasService.eliminarEncuesta(id);
+    return { mensaje: 'Encuesta eliminada correctamente' };
   } catch (error) {
     if (error instanceof NotFoundException) {
       throw new HttpException(

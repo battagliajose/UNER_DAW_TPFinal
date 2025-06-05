@@ -30,6 +30,6 @@ export class Pregunta {
   @Exclude()
   encuesta: Encuesta;
 
-  @OneToMany(() => Opcion, (opcion) => opcion.pregunta, { cascade: ['insert'] })
+  @OneToMany(() => Opcion, (opcion) => opcion.pregunta, { cascade: ['insert','remove'] })
   opciones: Opcion[];
 }

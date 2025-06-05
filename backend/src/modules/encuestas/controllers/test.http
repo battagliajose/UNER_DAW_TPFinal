@@ -50,5 +50,5 @@ Content-Type: application/json
 }
 
 ### 5. Eliminar una encuesta
-DELETE {{baseUrl}}/api/v1/encuestas/eliminar/4
+DELETE {{baseUrl}}/api/v1/encuestas/eliminar/6
 Content-Type: application/json
