@@ -72,7 +72,7 @@ export class ResumenEstadisticoComponent implements OnInit {
           this.currentIndex.set(0);
         },
         error: () => {
-          // Limpiar datos si hay error
+          // realizar limpieza para evitar datos inconsistentes
           this.resumen = {
             nombreEncuesta: '',
             cantidadEncuestasProcesadas: 0,
