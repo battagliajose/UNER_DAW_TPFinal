@@ -26,10 +26,10 @@
     <ng-template #title>
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="display: flex; align-items: center; gap: 1rem;">
-                <i class="pi pi-receipt" style="font-size: 2.5rem;color: var(--color-primary)"></i>
-                <h4>{{ encuesta.nombre }}</h4>                
+                <i class="pi pi-receipt" style="font-size: 2rem;color: var(--color-primary)"></i>
+                <h5>{{ encuesta.nombre }}</h5>                
             </span>
-            <span style="font-size: 12px; color: var(--color-primary);"> 
+            <span style="font-size: 1rem; color: var(--color-primary);"> 
                 <i class="pi pi-pencil" 
                     style="font-size: 1.4rem; margin-right: 1rem;"
                     pTooltip="Editar encuesta" 
@@ -52,7 +52,7 @@
 </ng-container>
 
 <ng-template #noEncuestas>
-  <div class="p-message p-message-info" style="display: flex; justify-content: center; align-items: center; margin: 2rem;">
+  <div class="p-message p-message-info no-encuesta">
     <i class="pi pi-info-circle"></i>
     <span class="p-message-text">{{ error }}</span>
   </div>

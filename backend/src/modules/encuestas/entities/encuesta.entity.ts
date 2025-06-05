@@ -11,7 +11,9 @@ export class Encuesta {
   nombre: string;
 
   @OneToMany(() => Pregunta, (pregunta) => pregunta.encuesta, {
-    cascade: ['insert'],
+    cascade: ['insert', 'update', 'remove'],
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   preguntas: Pregunta[];
 

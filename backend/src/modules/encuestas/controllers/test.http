@@ -6,8 +6,6 @@ Content-Type: application/json
 
 ### 2. Obtener todas las encuestas (paginación opcional)
 # Parámetros opcionales:
-# - skip: Número de registros a saltar (por defecto: 0)
-# - take: Cantidad de registros a devolver (por defecto: 10, máximo: 100)
 GET {{baseUrl}}/api/v1/encuestas/obtener-todas
 Content-Type: application/json
 
@@ -50,3 +48,7 @@ Content-Type: application/json
     }
   ]
 }
+
+### 5. Eliminar una encuesta
+DELETE {{baseUrl}}/api/v1/encuestas/eliminar/4
+Content-Type: application/json

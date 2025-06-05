@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CodigoTipoEnum } from '../enums/codigo-tipo.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Encuesta } from '../entities/encuesta.entity';
@@ -150,6 +150,44 @@ export class EncuestasService {
       },   
     });
   }
+
+  async eliminarEncuesta(id: number): Promise<{ mensaje: string }> {
+    // Primero obtenemos la encuesta con sus relaciones
+    const encuesta = await this.encuestasRepository.findOne({
+      where: { id },
+      relations: ['preguntas', 'preguntas.opciones']
+    });
+  
+    if (!encuesta) {
+      throw new NotFoundException(`No se encontró la encuesta con ID: ${id}`);
+    }
+  
+    // Transacion para asegurar la integridad de los datos
+    await this.encuestasRepository.manager.transaction(async (transactionalEntityManager) => {
+      //Habiendo preguntas se eliminan sus opciones primero
+      if (encuesta.preguntas && encuesta.preguntas.length > 0) {
+        // Capturamos los id de lasopciones en un array
+        const opcionesIds = encuesta.preguntas.flatMap(pregunta => 
+          pregunta.opciones ? pregunta.opciones.map(opcion => opcion.id) : []
+        );
+  
+        // Eliminamos las opciones si existen
+        if (opcionesIds.length > 0) {
+          await transactionalEntityManager.delete('opciones', opcionesIds);
+        }
+  
+        // Eliminamos las preguntas
+        await transactionalEntityManager.delete('preguntas', 
+          encuesta.preguntas.map(pregunta => pregunta.id)
+        );
+      }
+  
+      // Finalmente eliminamos la encuesta
+      await transactionalEntityManager.delete('encuestas', id);
+    });
+    
+    return { mensaje: 'Encuesta eliminada correctamente' };
+}
 
 
   echo(): string {
