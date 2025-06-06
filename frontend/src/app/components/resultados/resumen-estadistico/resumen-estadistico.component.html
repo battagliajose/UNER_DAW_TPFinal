@@ -126,23 +126,41 @@
             resumen.resultadosProcesados[currentIndex()]?.tipoPregunta
           "
         >
-          <div
-            *ngSwitchCase="'OPCION_MULTIPLE_SELECCION_SIMPLE'"
-            class="opciones-grafico-wrapper"
-          >
-            <div class="grafico-torta">
-              <p-chart
-                type="pie"
-                [data]="
-                  getPieChartData(resumen.resultadosProcesados[currentIndex()])
-                "
-                [responsive]="true"
-                [style]="{
-                  width: '100%',
-                  maxWidth: '234px',
-                  margin: '0 auto',
-                }"
-              ></p-chart>
+
+          <!-- Opción múltiple simple o múltiple -->
+          <div *ngSwitchCase="'OPCION_MULTIPLE_SELECCION_SIMPLE'">
+            <div class="opciones-grafico-wrapper">
+              <div class="grafico-torta">
+                <p-chart
+                  type="pie"
+                  [data]="
+                    getPieChartData(
+                      resumen.resultadosProcesados[currentIndex()]
+                    )
+                  "
+                  [responsive]="true"
+                  [style]="{
+                    width: '100%',
+                    maxWidth: '400px',
+                    margin: '0 auto',
+                  }"
+                ></p-chart>
+              </div>
+              <ul>
+                <li
+                  *ngFor="
+                    let opcion of resumen.resultadosProcesados[currentIndex()]
+                      ?.opciones
+                  "
+                >
+                  <span pTag severity="info">{{ opcion.textoOpcion }}</span>
+                  <span style="margin-left: 1rem">
+                    {{ opcion.cantidadVecesSeleccionada }} respuestas ({{
+                      opcion.porcentajeSeleccion
+                    }})
+                  </span>
+                </li>
+              </ul>
             </div>
             <ul>
               <li
@@ -160,23 +178,40 @@
               </li>
             </ul>
           </div>
-          <div
-            *ngSwitchCase="'OPCION_MULTIPLE_SELECCION_MULTIPLE'"
-            class="opciones-grafico-wrapper"
-          >
-            <div class="grafico-torta">
-              <p-chart
-                type="pie"
-                [data]="
-                  getPieChartData(resumen.resultadosProcesados[currentIndex()])
-                "
-                [responsive]="true"
-                [style]="{
-                  width: '100%',
-                  maxWidth: '234px',
-                  margin: '0 auto',
-                }"
-              ></p-chart>
+
+          <div *ngSwitchCase="'OPCION_MULTIPLE_SELECCION_MULTIPLE'">
+            <div class="opciones-grafico-wrapper">
+              <div class="grafico-torta">
+                <p-chart
+                  type="pie"
+                  [data]="
+                    getPieChartData(
+                      resumen.resultadosProcesados[currentIndex()]
+                    )
+                  "
+                  [responsive]="true"
+                  [style]="{
+                    width: '100%',
+                    maxWidth: '400px',
+                    margin: '0 auto',
+                  }"
+                ></p-chart>
+              </div>
+              <ul>
+                <li
+                  *ngFor="
+                    let opcion of resumen.resultadosProcesados[currentIndex()]
+                      ?.opciones
+                  "
+                >
+                  <span pTag severity="info">{{ opcion.textoOpcion }}</span>
+                  <span style="margin-left: 1rem">
+                    {{ opcion.cantidadVecesSeleccionada }} respuestas ({{
+                      opcion.porcentajeSeleccion
+                    }})
+                  </span>
+                </li>
+              </ul>
             </div>
             <ul>
               <li
