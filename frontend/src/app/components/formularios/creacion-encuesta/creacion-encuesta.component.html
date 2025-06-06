@@ -20,66 +20,89 @@
       }
     </section>
     <p-divider />
-    <section class="section-preguntas">
+    <section class="section-preguntas-header">
       <h2>Preguntas</h2>
       <p-button
         [style]="{ backgroundColor: 'var(--color-light)' }"
-        label="Agregar Pregunta"
+        label="Agregar"
         (onClick)="abrirDialog()"
-        icon="pi pi-plus"
+        icon="pi pi-plus-circle"
         [disabled]="isLoading"
       />
     </section>
-    @for (pregunta of preguntas.value; track idx; let idx = $index) {
-      <section class="fila-pregunta">
-        <div class="contenedor-pregunta">
-          <div class="titulo-pregunta">
-            <p class="texto-pregunta">
-              {{ pregunta.texto }}
-            </p>
-            <span
-              class="opcion"
-              [ngClass]="getClase[getTipoPreguntaPresentacion(pregunta.tipo)]"
-            >
-              {{ getTipoPreguntaPresentacion(pregunta.tipo) }}
-            </span>
+    <section class="seccion-preguntas">
+      @for (pregunta of preguntasPaginadas; track idx; let idx = $index) {
+        <article class="fila-pregunta">
+          <h5 class="numero-pregunta">Pregunta {{ first + idx + 1 }}</h5>
+          <div class="contenedor-pregunta">
+            <div class="titulo-pregunta">
+              <h4 class="texto-pregunta">
+                {{ pregunta.value.texto }}
+              </h4>
+              <span
+                class="opcion"
+                [ngClass]="
+                  getClase[getTipoPreguntaPresentacion(pregunta.value.tipo)]
+                "
+              >
+                {{ getTipoPreguntaPresentacion(pregunta.value.tipo) }}
+              </span>
+            </div>
+            @if (pregunta.value.opciones?.length) {
+              <ul>
+                @for (
+                  opcion of pregunta.value.opciones;
+                  track i;
+                  let i = $index
+                ) {
+                  <li
+                    class="item-opcion"
+                    [ngClass]="
+                      getTipoPreguntaPresentacion(pregunta.value.tipo) ===
+                      'Selección simple'
+                        ? 'simple'
+                        : 'multiple'
+                    "
+                  >
+                    <p class="texto-opcion">{{ opcion.texto }}</p>
+                  </li>
+                }
+              </ul>
+            }
           </div>
-          @if (pregunta.opciones?.length) {
-            <ul>
-              @for (opcion of pregunta.opciones; track i; let i = $index) {
-                <li
-                  class="item-opcion"
-                  [ngClass]="
-                    getTipoPreguntaPresentacion(pregunta.tipo) ===
-                    'Selección simple'
-                      ? 'simple'
-                      : 'multiple'
-                  "
-                >
-                  <p class="texto-opcion">{{ opcion.texto }}</p>
-                </li>
-              }
-            </ul>
-          }
-        </div>
-        <div class="botonera-pregunta">
-          <p-button
-            (onClick)="confirmarEliminarPregunta(idx)"
-            id="boton-eliminar-pregunta"
-            icon="pi pi-times"
-            label="Eliminar"
-            severity="danger"
-            [disabled]="isLoading"
-          ></p-button>
-        </div>
-      </section>
-    } @empty {
-      <p>Aún no agregaste preguntas.</p>
-      @if (preguntas.invalid && preguntas.touched) {
-        <app-text-error>Debés agregar al menos una pregunta</app-text-error>
+          <div class="botonera-pregunta">
+            <p-button
+              (onClick)="confirmarEliminarPregunta(idx)"
+              id="boton-eliminar-pregunta"
+              icon="pi pi-trash"
+              severity="danger"
+              [disabled]="isLoading"
+              [rounded]="true"
+              [style]="{
+                scale: 0.9,
+              }"
+            ></p-button>
+          </div>
+        </article>
+      } @empty {
+        <p>Aún no agregaste preguntas.</p>
+        @if (preguntas.invalid && preguntas.touched) {
+          <app-text-error>Debés agregar al menos una pregunta</app-text-error>
+        }
       }
+    </section>
+    @if (preguntasPaginadas.length > 0) {
+      <p-paginator
+        (onPageChange)="onPageChange($event)"
+        [first]="first"
+        [rows]="rows"
+        [totalRecords]="preguntas.length"
+        [showCurrentPageReport]="true"
+        [showPageLinks]="false"
+        [showJumpToPageDropdown]="false"
+        currentPageReportTemplate=""
+      />
     }
-    <p-divider />
     <button
       id="boton-finalizar"
       pButton
