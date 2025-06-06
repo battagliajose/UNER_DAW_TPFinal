@@ -1,0 +1,88 @@
+<div class="flex-container">
+  @if (created) {
+    <h2>¡Felicidades, tu encuesta ha sido creada!</h2>
+  } @else {
+    <h2>Compartí tu enecuesta</h2>
+  }
+  <p>Escanear para participar</p>
+  <section class="qr-container">
+    <qrcode
+      [qrdata]="enlaceResponder"
+      [width]="256"
+      [errorCorrectionLevel]="'M'"
+      [elementType]="'img'"
+      (qrCodeURL)="onChangeUrl($event)"
+    ></qrcode>
+    <a
+      [href]="qrCodeDownloadLink"
+      download="qrcode"
+      pButton
+      icon="pi pi-download"
+      class="download-button"
+      [rounded]="true"
+      [severity]="'contrast'"
+      >Descargar QR</a
+    >
+  </section>
+  <section class="flex-container">
+    <article>
+      <p>Enlace de participación:</p>
+      <div class="enlace-container">
+        <p class="enlace">{{ enlaceResponder }}</p>
+        <button
+          pButton
+          icon="pi pi-clipboard"
+          (click)="copyToClipboard(enlaceResponder)"
+          [severity]="'secondary'"
+          aria-label="Copiar enlace de participación"
+          class="clipboard-button"
+        ></button>
+      </div>
+    </article>
+    <article>
+      <p>Enlace de resultados:</p>
+      <div class="enlace-container">
+        <p class="enlace">{{ enlaceRespuestas }}</p>
+        <button
+          pButton
+          icon="pi pi-clipboard"
+          (click)="copyToClipboard(enlaceRespuestas)"
+          [severity]="'secondary'"
+          aria-label="Copiar enlace de resultados"
+          class="clipboard-button"
+        ></button>
+      </div>
+    </article>
+  </section>
+  <div class="dialog-footer extended">
+    <button
+      type="button"
+      pButton
+      pRipple
+      label="Ir a inicio"
+      icon="pi pi-home"
+      class="p-button-secondary extended"
+      (click)="redirectTo('INICIO')"
+    ></button>
+    <button
+      type="button"
+      pButton
+      pRipple
+      label="Ir a detalles"
+      icon="pi pi-info-circle"
+      class="p-button-secondary extended"
+      [severity]="'info'"
+      (click)="redirectTo('DETALLES')"
+    ></button>
+    <button
+      type="button"
+      pButton
+      pRipple
+      label="Responder"
+      icon="pi pi-list"
+      class="p-button-secondary extended"
+      [severity]="'success'"
+      (click)="redirectTo('RESPONDER')"
+    ></button>
+  </div>
+</div>
