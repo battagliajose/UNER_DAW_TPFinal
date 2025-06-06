@@ -36,14 +36,27 @@
       </div>
     </ng-template>
 
-    <p *ngIf="!respuestas.length && !errorCarga" class="cargando">
-      Cargando datos...
+    <!-- Mensaje de carga -->
+    <p *ngIf="cargando" class="cargando">
+      Cargando datos... No te desesperes, no es la fila del banco!
     </p>
+
+    <!-- Mensaje si no hay respuestas y no está cargando ni hay error -->
+    <p
+      *ngIf="!cargando && !respuestas.length && !errorCarga"
+      class="cargando"
+      style="color: #d32f2f"
+    >
+      Esta encuesta está más vacía que la heladera a fin de mes. ¿La mandaste o
+      solo la pensaste?
+    </p>
+
+    <!-- Mensaje de error -->
     <p *ngIf="errorCarga" class="cargando" style="color: #d32f2f">
       No existen encuestas con el enlace de acceso cargado.
     </p>
 
-    <div *ngIf="respuestas.length > 0" class="bloque-estadisticas">
+    <div *ngIf="!cargando && respuestas.length > 0" class="bloque-estadisticas">
       <div class="botonera-flex">
         <button
           pButton
@@ -70,7 +83,11 @@
     </div>
 
     <ng-container
-      *ngIf="respuestas.length > 0 && respuestas[currentIndex()] as encuestado"
+      *ngIf="
+        !cargando &&
+        respuestas.length > 0 &&
+        respuestas[currentIndex()] as encuestado
+      "
     >
       <div class="bloque-respuestas compacto">
         <div

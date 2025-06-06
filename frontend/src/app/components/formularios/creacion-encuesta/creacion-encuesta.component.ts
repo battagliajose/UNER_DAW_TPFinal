@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
@@ -26,6 +26,13 @@ import { DialogPreguntaComponent } from '../dialog-pregunta/dialog-pregunta.comp
 import { NgClass } from '@angular/common';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { CreatePreguntaDTO } from '../../../models/create-pregunta.dto';
+import {
+  DialogService,
+  DynamicDialogModule,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
+import { DialogEnlacesComponent } from '../../dialog-enlaces/dialog-enlaces.component';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 @Component({
   selector: 'app-creacion-encuesta',
@@ -40,11 +47,14 @@ import { CreatePreguntaDTO } from '../../../models/create-pregunta.dto';
     DividerModule,
     DialogPreguntaComponent,
     NgClass,
+    DynamicDialogModule,
+    PaginatorModule,
   ],
+  providers: [DialogService],
   templateUrl: './creacion-encuesta.component.html',
   styleUrl: './creacion-encuesta.component.css',
 })
-export class CreacionEncuestaComponent implements OnInit {
+export class CreacionEncuestaComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   private messageService: MessageService = inject(MessageService);
@@ -60,6 +70,23 @@ export class CreacionEncuestaComponent implements OnInit {
   isLoading: boolean = false;
   encuestaPrevia: CreateEncuestaDTO | null = null;
 
+  ref: DynamicDialogRef | undefined;
+  dialogService = inject(DialogService);
+
+  first: number = 0;
+  rows: number = 5;
+  currentPage: number = 1;
+
+  onPageChange(event: PaginatorState) {
+    this.first = event.first ?? 0;
+    this.rows = event.rows ?? 5;
+    this.currentPage = Math.floor(this.first / this.rows) + 1;
+  }
+
+  get preguntasPaginadas(): FormControl<PreguntaDTO>[] {
+    return this.preguntas.controls.slice(this.first, this.first + this.rows);
+  }
+
   constructor() {
     this.form = new FormGroup({
       nombre: new FormControl<string>('', [Validators.required]),
@@ -68,6 +95,11 @@ export class CreacionEncuestaComponent implements OnInit {
         [Validators.required, Validators.minLength(1)],
       ),
     });
+  }
+  ngOnDestroy(): void {
+    if (this.ref) {
+      this.ref.close();
+    }
   }
 
   ngOnInit(): void {
@@ -90,7 +122,8 @@ export class CreacionEncuestaComponent implements OnInit {
   }
 
   agregarPregunta(pregunta: PreguntaDTO) {
-    this.preguntas.push(
+    this.preguntas.insert(
+      0,
       new FormControl<PreguntaDTO>(pregunta) as FormControl<PreguntaDTO>,
     );
     this.localStorageService.updateEncuestaData(this.form.value);
@@ -122,7 +155,7 @@ export class CreacionEncuestaComponent implements OnInit {
       },
       acceptButtonProps: {
         label: 'Confirmar',
-        severity: 'contrast',
+        severity: 'success',
       },
       accept: () => {
         this.crearEncuesta();
@@ -144,7 +177,7 @@ export class CreacionEncuestaComponent implements OnInit {
       },
       acceptButtonProps: {
         label: 'Confirmar',
-        severity: 'contrast',
+        severity: 'danger',
       },
       accept: () => {
         this.eliminarPregunta(index);
@@ -185,14 +218,14 @@ export class CreacionEncuestaComponent implements OnInit {
         this.isLoading = false;
         this.form.enable();
         this.localStorageService.removeEncuestaData();
-        this.router.navigateByUrl(
-          '/presentacion-enlaces?id-encuesta=' +
-            res.id +
-            '&codigo-respuesta=' +
-            res.codigoRespuesta +
-            '&codigo-resultados=' +
-            res.codigoResultados,
-        );
+        this.ref = this.dialogService.open(DialogEnlacesComponent, {
+          data: {
+            id: res.id,
+            codigoRespuesta: res.codigoRespuesta,
+            codigoResultados: res.codigoResultados,
+            created: true,
+          },
+        });
       },
       error: (err) => {
         this.isLoading = false;
@@ -213,13 +246,13 @@ export class CreacionEncuestaComponent implements OnInit {
       closeOnEscape: true,
       icon: 'pi pi-exclamation-triangle',
       rejectButtonProps: {
-        label: 'No (Eliminar)',
-        severity: 'secondary',
+        label: 'No, eliminar',
+        severity: 'danger',
         outlined: true,
       },
       acceptButtonProps: {
-        label: 'Si',
-        severity: 'contrast',
+        label: 'Si, restaurar',
+        severity: 'info',
       },
       accept: () => {
         this.restaurarSesionPrevia();

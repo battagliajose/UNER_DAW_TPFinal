@@ -101,7 +101,7 @@
                 opcion.get('texto')?.touched &&
                 opcion.get('texto')?.hasError('required')
               ) {
-                <app-text-error> Campo requerido. </app-text-error>
+                <app-text-error>Campo requerido.</app-text-error>
               }
             }
           </div>
@@ -131,7 +131,7 @@
           pButton
           pRipple
           type="submit"
-          severity="contrast"
+          severity="success"
           icon="pi pi-check"
           class="extended"
           [disabled]="form.invalid"

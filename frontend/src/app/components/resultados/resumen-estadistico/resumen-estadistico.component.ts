@@ -29,6 +29,7 @@ export class ResumenEstadisticoComponent implements OnInit {
   @Input() codigo!: string;
   @Input() tipo!: string;
 
+  // Inicialización más robusta para evitar undefined
   resumen: any = {
     nombreEncuesta: '',
     cantidadEncuestasProcesadas: 0,
@@ -38,6 +39,8 @@ export class ResumenEstadisticoComponent implements OnInit {
   };
 
   currentIndex = signal(0);
+  errorCarga = false;
+  cargando = true; // El estado inicial debe ser cargando
 
   private resumenService = inject(ResumenEstadisticoService);
   private messageService = inject(MessageService);
@@ -48,11 +51,14 @@ export class ResumenEstadisticoComponent implements OnInit {
   }
 
   obtenerResumen() {
+    this.cargando = true; // Siempre inicia cargando al pedir datos
+    this.errorCarga = false; // Resetea el estado de error
     this.resumenService
       .obtenerResumen(this.id, this.codigo, this.tipo)
       .subscribe({
         next: (data: any) => {
-          if (data.resumenEstadistico) {
+          // Si hay resumenEstadistico, úsalo, sino inicializa limpio
+          if (data && data.resumenEstadistico) {
             this.resumen = {
               ...data.resumenEstadistico,
               nombreEncuesta:
@@ -61,18 +67,29 @@ export class ResumenEstadisticoComponent implements OnInit {
                 '',
             };
           } else {
+            // Si no hay resumenEstadistico, inicializa con valores por defecto
             this.resumen = {
-              nombreEncuesta: data.nombreEncuesta ?? '',
+              nombreEncuesta: data?.nombreEncuesta ?? '', // Asegura que el nombre de la encuesta se propague si existe
               cantidadEncuestasProcesadas: 0,
               totalPreguntas: 0,
               totalRespuestasAnalizadas: 0,
               resultadosProcesados: [],
             };
           }
-          this.currentIndex.set(0);
+          this.currentIndex.set(0); // Reinicia el índice al cargar nuevos datos
+          this.cargando = false; // Finaliza la carga
+
+          // Mensaje de advertencia si no hay encuestas procesadas
+          if (this.resumen.cantidadEncuestasProcesadas === 0) {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Encuesta sin respuestas',
+              detail: 'Esta encuesta no tiene respuestas aún!',
+            });
+          }
         },
         error: () => {
-          // realizar limpieza para evitar datos inconsistentes
+          // En caso de error, resetea el resumen y marca el error
           this.resumen = {
             nombreEncuesta: '',
             cantidadEncuestasProcesadas: 0,
@@ -81,14 +98,18 @@ export class ResumenEstadisticoComponent implements OnInit {
             resultadosProcesados: [],
           };
           this.currentIndex.set(0);
+          this.cargando = false;
+          this.errorCarga = true;
           this.messageService.add({
             severity: 'error',
             summary: 'Error al obtener el resumen estadístico',
+            detail: 'No se pudieron cargar las estadísticas de la encuesta.',
           });
         },
       });
   }
 
+  // Métodos de descarga (sin cambios en la lógica interna, solo la deshabilitación)
   descargarPDF() {
     const url = `/api/v1/reportes/pdf/${this.id}/${this.codigo}?tipo=${this.tipo}`;
     this.http.get(url, { responseType: 'blob' }).subscribe({
@@ -103,6 +124,7 @@ export class ResumenEstadisticoComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error al descargar PDF',
+          detail: 'No se pudo generar el archivo PDF.',
         });
       },
     });
@@ -122,6 +144,7 @@ export class ResumenEstadisticoComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error al descargar CSV',
+          detail: 'No se pudo generar el archivo CSV.',
         });
       },
     });
@@ -134,14 +157,15 @@ export class ResumenEstadisticoComponent implements OnInit {
   siguiente() {
     if (
       this.currentIndex() <
-      (this.resumen.resultadosProcesados?.length ?? 1) - 1
+      (this.resumen.resultadosProcesados?.length ?? 0) - 1 // Usar 0 en lugar de 1 si es null/undefined
     ) {
       this.currentIndex.set(this.currentIndex() + 1);
     }
   }
 
   getPieChartData(resultado: any) {
-    if (!resultado.opciones) return null;
+    if (!resultado || !resultado.opciones || resultado.opciones.length === 0)
+      return null;
     return {
       labels: resultado.opciones.map((op: any) => op.textoOpcion),
       datasets: [
