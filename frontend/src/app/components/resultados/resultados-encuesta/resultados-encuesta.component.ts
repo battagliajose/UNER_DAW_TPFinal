@@ -54,8 +54,7 @@ export class ResultadosEncuestaComponent implements OnInit {
             this.messageService.add({
               severity: 'warn',
               summary: 'Encuesta sin respuestas',
-              detail:
-                'Esta encuesta no tiene respuestas aún! O no generó interés, o te olvidaste de enviarla!',
+              detail: 'Esta encuesta no tiene respuestas aún!',
             });
           }
         },
