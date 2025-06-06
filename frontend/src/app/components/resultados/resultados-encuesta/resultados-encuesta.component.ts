@@ -30,12 +30,14 @@ export class ResultadosEncuestaComponent implements OnInit {
   private messageService = inject(MessageService);
 
   errorCarga = false;
+  cargando = true; // <-- agregada
 
   ngOnInit() {
     this.obtenerResultados();
   }
 
   obtenerResultados() {
+    this.cargando = true; // <-- agregada
     this.errorCarga = false;
     this.resultadosService
       .getResultados(this.id, this.codigo, this.tipo)
@@ -47,10 +49,19 @@ export class ResultadosEncuestaComponent implements OnInit {
             : [];
           this.currentIndex.set(0);
           this.errorCarga = false;
+          this.cargando = false; // <-- agregada
+          if (!this.respuestas.length) {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Encuesta sin respuestas',
+              detail: 'Esta encuesta no tiene respuestas aún!',
+            });
+          }
         },
         error: () => {
           this.respuestas = [];
           this.errorCarga = true;
+          this.cargando = false; // <-- agregada
           this.messageService.add({
             severity: 'error',
             summary: 'Error al obtener resultados',
@@ -60,7 +71,6 @@ export class ResultadosEncuestaComponent implements OnInit {
   }
 
   descargarCSV() {
-    console.log('Descargar CSV llamado');
     const url = `/api/v1/encuestas/csv/${this.id}/${this.codigo}`;
     this.descargaService.descargarArchivo(url).subscribe((blob) => {
       this.descargarBlob(blob, 'resultados-encuesta.csv');
@@ -68,7 +78,6 @@ export class ResultadosEncuestaComponent implements OnInit {
   }
 
   descargarPDF() {
-    console.log('Descargar PDF llamado');
     const url = `/api/v1/encuestas/pdf/${this.id}/${this.codigo}`;
     this.descargaService.descargarArchivo(url).subscribe((blob) => {
       this.descargarBlob(blob, 'resultados-encuesta.pdf');
