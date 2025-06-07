@@ -102,28 +102,20 @@ export class EncuestasController {
     );
   }
 
- @Delete('/eliminar/:id')
-async eliminarEncuesta(
-  @Param('id', new ParseIntPipe()) id: number,
-): Promise<{ mensaje: string }> {
-  try {
-    await this.encuestasService.eliminarEncuesta(id);
-    return { mensaje: 'Encuesta eliminada correctamente' };
-  } catch (error) {
-    if (error instanceof NotFoundException) {
+
+  @Delete('/eliminar/:id')
+  async eliminarEncuesta(@Param('id') id: number): Promise<{message: string}> {
+    try {
+      const message = await this.encuestasService.eliminarEncuesta(id);
+      return {message};
+    } catch (exception) {
       throw new HttpException(
-        error.message,
-        HttpStatus.NOT_FOUND,
-        { cause: error }
+        'Error al eliminar la encuesta',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: exception },
       );
     }
-    throw new HttpException(
-      'Error al eliminar la encuesta',
-      HttpStatus.INTERNAL_SERVER_ERROR,
-      { cause: error }
-    );
   }
-}
 
   @Get('/echo')
   async echo(): Promise<string> {

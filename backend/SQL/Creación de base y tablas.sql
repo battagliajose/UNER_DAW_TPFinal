@@ -18,14 +18,14 @@ CREATE TABLE preguntas (
   numero INT NOT NULL,
   texto VARCHAR NOT NULL,
   tipo tipos_respuesta NOT NULL,
-  id_encuesta INT NOT NULL REFERENCES encuestas(id)
+  id_encuesta INT NOT NULL REFERENCES encuestas(id) ON DELETE CASCADE 
 );
 
 CREATE TABLE opciones (
   id SERIAL PRIMARY KEY,
   texto VARCHAR NOT NULL,
   numero INT NOT NULL,
-  id_pregunta INT NOT NULL REFERENCES preguntas(id)
+  id_pregunta INT NOT NULL REFERENCES preguntas(id) ON DELETE CASCADE 
 );
 
 CREATE TABLE respuestas (
