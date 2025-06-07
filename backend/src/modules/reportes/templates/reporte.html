@@ -6,64 +6,193 @@
     <title>Reporte de Encuesta</title>
     <style>
       body {
-        font-family: Arial, sans-serif;
-        padding: 15px;
-        background-color: #f0f0f0;
-        color: #333;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f3f6fc;
+        color: #222;
+        margin: 0;
+        padding: 0 0 32px 0;
       }
-      h1,
-      h2 {
-        text-align: center;
-        padding: 8px;
-        color: white;
+      .container {
+        max-width: 900px;
+        margin: 32px auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+        padding: 32px 28px 28px 28px;
+      }
+      .header-logo {
+        display: block;
+        margin: 0 auto 18px auto;
+        width: 120px;
+        height: auto;
       }
       h1 {
-        background-color: #394d5a;
-      } /* Lucario pokemonpalette */
+        font-size: 2.1rem;
+        font-weight: 600;
+        color: #2564cf;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        letter-spacing: -1px;
+      }
+      .stats-bar {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin: 18px 0 28px 0;
+        flex-wrap: wrap;
+      }
+      .stat {
+        background: #e8f0fe;
+        color: #2564cf;
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-size: 1.05rem;
+        font-weight: 500;
+        box-shadow: 0 1px 3px rgba(37,100,207,0.06);
+      }
       h2 {
-        background-color: #56a0ea;
-      } /* Lucario pokemonpalette */
-      h3 {
-        background-color: #cccc80;
-        padding: 4px;
-        color: black;
-      } /* Lucario pokemonpalette */
+        font-size: 1.25rem;
+        color: #444;
+        margin: 32px 0 12px 0;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+      }
+      .seccion-preguntas, .seccion-abiertas {
+        margin-bottom: 32px;
+      }
       .pregunta {
-        margin-bottom: 12px;
-        padding: 8px;
-        border-radius: 5px;
-        background-color: white;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        background: #f7fafd;
+        border-radius: 8px;
+        margin-bottom: 18px;
+        padding: 18px 18px 12px 18px;
+        box-shadow: 0 1px 4px 0 rgba(37,100,207,0.04);
+        page-break-inside: avoid;
+      }
+      .pregunta h3 {
+        font-size: 1.1rem;
+        color: #2564cf;
+        margin: 0 0 10px 0;
+        font-weight: 500;
+      }
+      .grafico-pregunta {
+        display: flex;
+        justify-content: center;
+        margin: 10px 0 18px 0;
+      }
+      .grafico-pregunta canvas {
+        max-width: 90%; /* pruebo más  ancho para evitar recortes */
+        max-height: 240px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(37, 100, 207, 0.07);
+
+      }
+      .pregunta ul {
+        margin: 0 0 0 10px;
+        padding: 0;
+        list-style: none;
+      }
+      .pregunta li {
+        margin-bottom: 4px;
+        font-size: 0.98rem;
+        color: #333;
       }
       .respuesta {
-        margin-left: 12px;
+        margin-left: 0;
+        color: #2564cf;
+        font-weight: 500;
       }
-      .seccion-preguntas {
-        background-color: #f4f6ea;
-        padding: 8px;
-        border-radius: 5px;
-      } /* avalugg pokemonpallete */
-      .seccion-abiertas {
-        background-color: #f4f6ea;
-        padding: 8px;
-        border-radius: 5px;
-      } /* avalugg pokemonpallete */
+      @media (max-width: 600px) {
+        .container { padding: 12px 2vw; }
+        .stats-bar { flex-direction: column; gap: 10px; }
+        .grafico-pregunta canvas { max-width: 98vw; }
+      }
     </style>
   </head>
   <body>
-    <h1>Resultados de la Encuesta: {{ nombreEncuesta }}</h1>
-    <h2>Cantidad de encuestas procesadas: {{ cantidadEncuestasProcesadas }}</h2>
-    <h2>Total de preguntas: {{ totalPreguntas }}</h2>
-    <h2>Total de respuestas analizadas: {{ totalRespuestasAnalizadas }}</h2>
+    <div class="container">
+      <!-- Si tienes un logo, descomenta la línea siguiente y pon la ruta correcta -->
+      <!-- <img src="file://{{ imagePath }}/encuesta-header.png" class="header-logo" alt="Logo encuesta" /> -->
+      <h1>Resultados de la Encuesta: {{ nombreEncuesta }}</h1>
+      <div class="stats-bar">
+        <div class="stat">Encuestas procesadas: {{ cantidadEncuestasProcesadas }}</div>
+        <div class="stat">Total de preguntas: {{ totalPreguntas }}</div>
+        <div class="stat">Total de respuestas: {{ totalRespuestasAnalizadas }}</div>
+      </div>
 
-    <div class="seccion-preguntas">
-      <h2>Recuento de resultados por preguntas opción múltiple:</h2>
-      {{ preguntasMultiples }}
+      {{#if preguntasMultiples}}
+        <div class="seccion-preguntas">
+          <h2>Resultados por pregunta de opción múltiple</h2>
+          {{{ preguntasMultiples }}}
+        </div>
+      {{/if}}
+
+      {{#if preguntasAbiertas}}
+        <div class="seccion-abiertas">
+          <h2>Respuestas abiertas de los encuestados</h2>
+          {{{ preguntasAbiertas }}}
+        </div>
+      {{/if}}
     </div>
 
-    <div class="seccion-abiertas">
-      <h2>Respuestas abiertas ingresadas por los encuestados:</h2>
-      {{ preguntasAbiertas }}
-    </div>
+    <script>
+      // Datos de gráficos inyectados directamente por Handlebars
+      const graficos = JSON.parse(`{{{ graficosJSON }}}`);
+      window.graficosRenderizados = false;
+
+      function renderCharts() {
+  let renderedChartsCount = 0;
+  if (graficos.length === 0) {
+    window.graficosRenderizados = true;
+    return;
+  }
+  
+  graficos.forEach((grafico, idx) => {
+    const ctx = document.getElementById('grafico-' + idx)?.getContext('2d');
+    if (ctx) {
+      new window.Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: grafico.labels,
+          datasets: [{
+            data: grafico.data,
+            backgroundColor: [
+              '#2564cf', '#66BB6A', '#FFA726', '#AB47BC',
+              '#FF7043', '#26A69A', '#D4E157', '#EC407A'
+            ],
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                font: {
+                  size: 14
+                },
+                boxWidth: 20,
+                padding: 10, 
+                wordWrap: true,
+                maxWidth: 250               
+              }
+            }
+          },
+          maintainAspectRatio: false, 
+          responsive: true, 
+        }
+      });
+
+    } else {
+      renderedChartsCount++;
+      if (renderedChartsCount === graficos.length) {
+        window.graficosRenderizados = true;
+      }
+    }
+  });
+}
+
+      window.addEventListener('DOMContentLoaded', renderCharts);
+    </script>
   </body>
 </html>

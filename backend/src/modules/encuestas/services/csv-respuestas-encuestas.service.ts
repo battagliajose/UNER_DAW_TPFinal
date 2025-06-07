@@ -53,7 +53,7 @@ export class CsvEncuestasService {
       fs.mkdirSync(dir, { recursive: true });
     }
 
-    const filePath = path.join(dir, `csv-respuestas-encuesta_${id}.csv`);
+    const filePath = path.join(dir, `csv-respuestas-encuesta.csv`);
 
     fs.writeFileSync(filePath, contenidoCSV);
 
