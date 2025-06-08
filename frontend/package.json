@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "compodoc": "npx compodoc -p tsconfig.json -d documentation -s -w",
-    "start": "ng serve",
+    "start": "ng serve --configuration development",
     "deploy": "ng build --configuration production && npm run nginx:limpiar && npm run nginx:llenar",
     "nginx:limpiar": "del /F /Q C:\\nginx-1.28.0\\html\\* && for /d %x in (C:\\nginx-1.28.0\\html\\*) do rmdir /S /Q \"%x\"",
     "nginx:llenar": "xcopy /E /I  dist\\frontend\\browser\\* C:\\nginx-1.28.0\\html\\",
