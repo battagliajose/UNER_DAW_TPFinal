@@ -20,6 +20,11 @@ async function bootstrap() {
 
   app.setGlobalPrefix(globalPrefix); // Establece el prefijo global para las rutas
 
+  app.enableCors({
+    origin: 'https://localhost',
+    credentials: true,
+  });
+
   app.enableVersioning({
     // Habilita versionado de rutas
     type: VersioningType.URI, // Usa la versión en la URI (/v1/)
