@@ -28,6 +28,7 @@ export class ReportesService {
       where: { encuesta: { id: idEncuesta } },
       relations: [
         'respuestasAbiertas',
+        'respuestasAbiertas.pregunta',
         'respuestasOpciones',
         'respuestasOpciones.opcion',
         'respuestasOpciones.opcion.pregunta',
@@ -53,23 +54,24 @@ export class ReportesService {
         conteoOpcionesPorPregunta[preguntaId][textoOpcion] =
           (conteoOpcionesPorPregunta[preguntaId][textoOpcion] || 0) + 1;
 
-        totalRespuestasAnalizadas += 1; //Sumamos cada respuesta seleccionada
+        totalRespuestasAnalizadas += 1;
       });
-
-      totalRespuestasAnalizadas += respuestaEncuesta.respuestasAbiertas.length; //Sumamos todas las respuestas abiertas
     });
 
     const resultadosProcesados = encuesta.preguntas.map((pregunta) => {
       if (pregunta.tipo === 'ABIERTA') {
+        const respuestasFiltradasParaEstaPregunta = respuestasEncuesta.flatMap(
+          (r) =>
+            r.respuestasAbiertas
+              .filter((ra) => ra.pregunta && ra.pregunta.id === pregunta.id)
+              .map((ra) => ra.texto),
+        );
+
         return {
           textoPregunta: pregunta.texto,
           tipoPregunta: pregunta.tipo,
-          totalRespuestas: respuestasEncuesta.flatMap(
-            (r) => r.respuestasAbiertas,
-          ).length,
-          respuestas: respuestasEncuesta.flatMap((r) =>
-            r.respuestasAbiertas.map((ra) => ra.texto),
-          ),
+          totalRespuestas: respuestasFiltradasParaEstaPregunta.length,
+          respuestas: respuestasFiltradasParaEstaPregunta,
         };
       } else if (
         pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_SIMPLE' ||
@@ -78,7 +80,7 @@ export class ReportesService {
         const conteoParaEstaPregunta =
           conteoOpcionesPorPregunta[pregunta.id] || {};
         const totalRespuestas = Object.values(conteoParaEstaPregunta).reduce(
-          (sum, count) => sum + count,
+          (sum: number, count: number) => sum + count,
           0,
         );
 
@@ -86,7 +88,7 @@ export class ReportesService {
           textoPregunta: pregunta.texto,
           tipoPregunta: pregunta.tipo,
           opciones: Object.entries(conteoParaEstaPregunta).map(
-            ([opcion, cantidad]) => ({
+            ([opcion, cantidad]: [string, number]) => ({
               textoOpcion: opcion,
               cantidadVecesSeleccionada: cantidad,
               porcentajeSeleccion:
