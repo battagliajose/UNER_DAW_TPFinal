@@ -36,4 +36,8 @@ export class EncuestaService {
       codigoResultados: string;
     }>(`/encuestas`, encuestaDto);
   }
+
+  delete(id: number): Observable<void> {
+    return this._requestService.delete<void>(`/encuestas/eliminar/${id}`);
+  }
 }

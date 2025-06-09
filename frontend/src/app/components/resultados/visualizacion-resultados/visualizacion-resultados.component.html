@@ -27,6 +27,21 @@
       }"
       title="Ver Estadísticas"
     ></button>
+
+    <button
+      pButton
+      label="Informe IA"
+      (click)="mostrarInformeAI()"
+      class="aibutton"
+      title="Ver Respuestas"
+    >
+      <img
+        src="../../../../assets/icono-ai.png"
+        alt="IA"
+        width="20"
+        height="20"
+      />
+    </button>
   </div>
 
   <div *ngIf="mostrarVista === 'respuestas'">

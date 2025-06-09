@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CodigoTipoEnum } from '../enums/codigo-tipo.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Encuesta } from '../entities/encuesta.entity';
@@ -149,6 +149,19 @@ export class EncuestasService {
         }
       },   
     });
+  }
+  async eliminarEncuesta(id: number): Promise<string> {
+    const encuesta = await this.encuestasRepository.findOne({
+      where: { id },
+      relations: ['preguntas'], 
+    });
+
+    if (!encuesta) {
+      return 'Encuesta no encontrada';
+    }
+    
+    await this.encuestasRepository.remove(encuesta); 
+    return 'Encuesta eliminada correctamente';
   }
 
 
