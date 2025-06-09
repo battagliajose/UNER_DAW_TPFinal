@@ -3,7 +3,7 @@
     <h2>Lista de encuestas
         <span style="float:right;">
             <p-chip label="Activas" [style]="{'background-color': 'var(--color-light)', 'color': 'white', 'font-size':'1rem'}"/>
-            <p-chip label="Enviadas" [style]="{'background-color': 'var(--p-gray-200)', 'color': 'var(--color-light)', 'font-size':'1rem'}"/>
+            <p-chip label="No Activas" [style]="{'background-color': 'var(--p-gray-200)', 'color': 'var(--color-light)', 'font-size':'1rem'}"/>
         </span>
     </h2>
     <div class="dashboard-list">
@@ -22,10 +22,13 @@
             </span>
             <span style="font-size: 1rem; color: var(--color-primary);"> 
                 <i class="pi pi-send" 
-                    style="font-size: 1.4rem; margin-right: 1rem;"
+                    [style]="encuesta.esEnviada ? 
+                    'font-size: 1.4rem; margin-right: 1rem;color: gray;' : 
+                    'font-size: 1.4rem; margin-right: 1rem;color: var(--color-primary);'"                                    
                     pTooltip="Editar encuesta" 
                     tooltipPosition="top" 
-                    (click)="enviarEncuesta(encuesta)"
+                    (click)="abrirDialogoEnvio(encuesta)"
+                    [ngStyle]="{'pointer-events': encuesta.esEnviada ? 'none' : 'auto'}"
                     placeholder="Right">
                     </i>
                 <i class="pi pi-trash" 
@@ -48,6 +51,8 @@
     <span class="p-message-text">{{ error }}</span>
   </div>
 </ng-template>
+
+<!-- Dialogo de confirmacion de eliminacion -->
 <p-dialog 
     header="Confirmar eliminación" 
     [(visible)]="mostrarConfirmacion" 
@@ -82,6 +87,60 @@
                class="p-button-danger">Eliminar</button>
     </ng-template>
 </p-dialog>
+
+<!-- Dialogo para enviar encuestas-->
+<p-dialog 
+    header="Enviar enlaces de participación" 
+    [(visible)]="mostrarDialogoTelefonos" 
+    [modal]="true" 
+    [style]="{width: '450px'}" 
+    [draggable]="false" 
+    [resizable]="false">
+    
+    <div class="field">
+        <label for="telefonos">Ingrese los números de teléfono (uno por línea)</label>
+        <textarea 
+            id="telefonos" 
+            pInputTextarea 
+            [(ngModel)]="telefonos" 
+            rows="5" 
+            style="width: 100%"
+            placeholder="Ejemplo:&#10;+541112345678&#10;+541198765432"></textarea>
+    </div>
+    
+    <ng-template pTemplate="footer">
+        <button 
+            pButton 
+            pRipple 
+            icon="pi pi-times" 
+            label="Cancelar" 
+            class="p-button-text" 
+            (click)="mostrarDialogoTelefonos = false"
+            [style]="{ border: '1px solid var(--color-primary)', color: 'var(--color-primary)',
+                  padding:'0.5rem 1rem',
+                  borderRadius:'4px',
+                  fontSize:'1rem',
+                  fontWeight:'bold'
+                 }">Cancelar
+        </button>
+        <button 
+            pButton 
+            pRipple 
+            icon="pi pi-send" 
+            label="Enviar enlaces" 
+            [style]="{ backgroundColor: 'var(--color-primary)', color: 'white',
+              border: '1px solid var(--color-primary)',
+              padding:'0.5rem 1rem',
+              borderRadius:'4px',
+              fontSize:'1rem',
+              fontWeight:'bold'
+              }"
+            (click)="enviarEncuesta(encuestaSeleccionada)"
+            [disabled]="!telefonos">Enviar Encuestas
+        </button>
+    </ng-template>
+</p-dialog>
+
 <!-- Toast para mostrar despues de que borre-->
 <p-toast position="top-right"></p-toast> 
 

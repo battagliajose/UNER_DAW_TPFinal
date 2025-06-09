@@ -20,7 +20,7 @@ POST {{baseUrl}}/api/v1/encuestas
 Content-Type: application/json
 
 {
-  "nombre": "Encuestas es Preceptores",
+  "nombre": "Encuestas es Profesores",
   "preguntas": [
     {
       "numero": 1,

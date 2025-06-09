@@ -11,6 +11,7 @@ import { EncuestaService } from '../../../services/encuesta.service';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';  // Añade esta línea
 import { MessageService } from 'primeng/api';
+import { FormsModule } from '@angular/forms';
 
 interface NuevaEncuestaDTO extends EncuestaDTO {
   esActivo: boolean;
@@ -19,7 +20,7 @@ interface NuevaEncuestaDTO extends EncuestaDTO {
 
 @Component({
   selector: 'app-dashboard-list',
-  imports: [CommonModule, CardModule, TooltipModule, MessageModule, ChipModule, DialogModule,ToastModule],
+  imports: [CommonModule, CardModule, TooltipModule, MessageModule, ChipModule, DialogModule,ToastModule, FormsModule],
   templateUrl: './dashboard-list.component.html',
   styleUrl: './dashboard-list.component.css',
   standalone: true
@@ -43,8 +44,13 @@ export class DashboardListComponent {
   error: string = "";
   loading: boolean = true;
   mostrarConfirmacion = false;
-
   encuestaAEliminar: EncuestaDTO | null = null; // objeto encuesta a eliminar
+  
+  //Variables para enviar encuesta
+  encuestaSelecionada: EncuestaDTO | null = null; // objeto encuesta seleccionada
+  telefonos: string = '';
+  mostrarDialogoTelefonos = false;
+  encuestaSeleccionada: any = null;
 
   ngOnInit() {    
    this.cargarEncuestas();      
@@ -53,7 +59,8 @@ export class DashboardListComponent {
   cargarEncuestas(){
     this.encuestaModService.loadEncuestas().subscribe({
       next: (data) => {
-        this.encuestas = data;                
+        this.encuestas = data;  
+        console.log(this.encuestas);              
         this.loading = false;
         this.error = "";
         },
@@ -62,10 +69,6 @@ export class DashboardListComponent {
         this.error = 'No se pudieron cargar las encuestas. Intente nuevamente o avise al administrador.'+error;
       }
     });
-  }
-
-  enviarEncuesta(encuesta: any) {
-    console.log('Editar encuesta:', encuesta);
   }
 
   // eliminar encuesta
@@ -105,5 +108,35 @@ export class DashboardListComponent {
   cancelarEliminar() {
     this.mostrarConfirmacion = false;
     this.encuestaAEliminar = null;
+  }
+
+  abrirDialogoEnvio(encuesta: any) {
+    if (!encuesta.esActivo) {
+      return; // No hacer nada si no está activa
+    }
+    this.encuestaSeleccionada = encuesta;
+    this.telefonos = '';
+    this.mostrarDialogoTelefonos = true;
+  }
+  enviarEncuesta(encuesta: any) {
+    if (!this.telefonos || !this.encuestaSeleccionada) {
+      return;
+    }
+  
+    const telefonosArray = this.telefonos.split('\n')
+      .map(tel => tel.trim())
+      //toast de envio
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Envio de Encuesta ',
+        detail: 'La encuesta se ha enviado a los contactos correctamente.',
+      });
+    // Aquí iría la lógica para enviar los enlaces
+    console.log('Enviando enlaces para la encuesta:', this.encuestaSeleccionada.id);
+    console.log('Teléfonos:', telefonosArray);
+    
+    // Cerrar el diálogo después de enviar
+    this.mostrarDialogoTelefonos = false;
+    this.encuestaSeleccionada = null;
   }
 }
