@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 import { AutocompletarDto } from '../dto/autocompletado.dto';
+import { AiCsvService } from './ai-csv.service';
 
 @Injectable()
 export class AiService {
   private openai: OpenAI;
 
-  constructor() {
+  constructor(private readonly aiCsvService: AiCsvService) {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
@@ -31,5 +32,10 @@ export class AiService {
     }
 
     return mensaje.trim();
+  }
+
+  async generarInformeEncuesta(id: number, codigo: string): Promise<string> {
+    const buffer = await this.aiCsvService.generarCSVBuffer(id, codigo);
+    return buffer.toString('utf-8');
   }
 }
