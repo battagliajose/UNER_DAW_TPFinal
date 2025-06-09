@@ -27,6 +27,24 @@
       }"
       title="Ver Estadísticas"
     ></button>
+
+    <button
+      pButton
+      label="Informe IA"
+      (click)="mostrarRespuestas()"
+      [ngClass]="{
+        'blue-400': mostrarVista === 'respuestas',
+        'blue-100': mostrarVista !== 'respuestas',
+      }"
+      title="Ver Respuestas"
+    >
+      <img
+        src="../../../../assets/icono-ai.png"
+        alt="IA"
+        width="20"
+        height="20"
+      />
+    </button>
   </div>
 
   <div *ngIf="mostrarVista === 'respuestas'">

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 import { AutocompletarDto } from '../dto/autocompletado.dto';
-import { AiCsvService } from './ai-csv.service';
+import { ReportesService } from '../../reportes/services/reportes.service'; // ajustar path
 
 @Injectable()
 export class AiService {
   private openai: OpenAI;
 
-  constructor(private readonly aiCsvService: AiCsvService) {
+  constructor(private readonly reportesService: ReportesService) {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
@@ -35,7 +35,44 @@ export class AiService {
   }
 
   async generarInformeEncuesta(id: number, codigo: string): Promise<string> {
-    const buffer = await this.aiCsvService.generarCSVBuffer(id, codigo);
-    return buffer.toString('utf-8');
+    const resultados = await this.reportesService.generarReporteResultados(
+      id,
+      codigo,
+    );
+
+    const resultadosString = JSON.stringify(resultados, null, 2);
+
+    const prompt = `Sos un asistente experto en análisis de encuestas. A continuación vas a recibir una encuesta y las respuestas de los encuestados. 
+          El contenido incluye preguntas (abiertas, de opción simple y de opción múltiple), respuestas seleccionadas por los encuestados y respuetas abiertas.
+
+          Tu tarea es redactar un informe interpretativo, en lenguaje natural y claro, que resuma lo siguiente:
+
+          1. Las tendencias generales observadas en las respuestas.
+          2. Qué aspectos son más valorados o problemáticos según los porcentajes.
+          3. Si hay preguntas abiertas, mencioná los temas más frecuentes o comentarios destacados (evitá repetirlos todos).
+          4. Un listado de las preguntas con un resumen breve de las respuestad de cada una.
+
+          No muestres el JSON ni repitas todos los porcentajes como lista. En cambio, redactá un análisis tipo informe profesional, como si lo 
+          presentaras ante directivos.
+
+          Comenzá el informe con una frase introductoria breve como: “A continuación se detallan los resultados de la encuesta realizada...`;
+
+    const response = await this.openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
+        {
+          role: 'system',
+          content: 'Sos un asistente que analiza encuestas.',
+        },
+        {
+          role: 'user',
+          content: `${prompt}\n\nResumen estadístico:\n${resultadosString}`,
+        },
+      ],
+      temperature: 0.5,
+      max_tokens: 1800,
+    });
+
+    return response.choices[0].message?.content?.trim() || 'Sin respuesta';
   }
 }
