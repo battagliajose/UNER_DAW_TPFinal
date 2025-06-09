@@ -126,7 +126,6 @@
             resumen.resultadosProcesados[currentIndex()]?.tipoPregunta
           "
         >
-
           <!-- Opción múltiple simple o múltiple -->
           <div *ngSwitchCase="'OPCION_MULTIPLE_SELECCION_SIMPLE'">
             <div class="opciones-grafico-wrapper">
@@ -162,21 +161,6 @@
                 </li>
               </ul>
             </div>
-            <ul>
-              <li
-                *ngFor="
-                  let opcion of resumen.resultadosProcesados[currentIndex()]
-                    ?.opciones
-                "
-              >
-                <span pTag severity="info">{{ opcion.textoOpcion }}</span>
-                <span style="margin-left: 1rem">
-                  {{ opcion.cantidadVecesSeleccionada }} respuestas ({{
-                    opcion.porcentajeSeleccion
-                  }})
-                </span>
-              </li>
-            </ul>
           </div>
 
           <div *ngSwitchCase="'OPCION_MULTIPLE_SELECCION_MULTIPLE'">
@@ -213,21 +197,6 @@
                 </li>
               </ul>
             </div>
-            <ul>
-              <li
-                *ngFor="
-                  let opcion of resumen.resultadosProcesados[currentIndex()]
-                    ?.opciones
-                "
-              >
-                <span pTag severity="info">{{ opcion.textoOpcion }}</span>
-                <span style="margin-left: 1rem">
-                  {{ opcion.cantidadVecesSeleccionada }} respuestas ({{
-                    opcion.porcentajeSeleccion
-                  }})
-                </span>
-              </li>
-            </ul>
           </div>
           <div *ngSwitchCase="'ABIERTA'">
             <div class="total-abiertas">
