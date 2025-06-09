@@ -31,11 +31,8 @@
     <button
       pButton
       label="Informe IA"
-      (click)="mostrarRespuestas()"
-      [ngClass]="{
-        'blue-400': mostrarVista === 'respuestas',
-        'blue-100': mostrarVista !== 'respuestas',
-      }"
+      (click)="mostrarInformeAI()"
+      class="aibutton"
       title="Ver Respuestas"
     >
       <img

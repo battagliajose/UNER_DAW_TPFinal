@@ -44,9 +44,8 @@ export class AiService {
 
     const prompt = `Sos un asistente experto en análisis de encuestas. A continuación vas a recibir una encuesta y las respuestas de los encuestados. 
           El contenido incluye preguntas (abiertas, de opción simple y de opción múltiple), respuestas seleccionadas por los encuestados y respuetas abiertas.
-
-          Tu tarea es redactar un informe interpretativo, en lenguaje natural y claro, que resuma lo siguiente:
-
+          
+          Tu tarea es generar un informe interpretativo en **formato HTML**, sin encabezados ni etiquetas <html> o <body>. Solo usá etiquetas como <div>, <h2>, <p>, <ul>, <li>, en lenguaje natural y claro, que resuma lo siguiente:
           1. Las tendencias generales observadas en las respuestas.
           2. Qué aspectos son más valorados o problemáticos según los porcentajes.
           3. Si hay preguntas abiertas, mencioná los temas más frecuentes o comentarios destacados (evitá repetirlos todos).

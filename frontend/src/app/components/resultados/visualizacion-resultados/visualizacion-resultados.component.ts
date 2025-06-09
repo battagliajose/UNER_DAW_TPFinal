@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -28,6 +28,8 @@ export class VisualizacionResultadosComponent implements OnInit {
   tipo!: string;
   private route = inject(ActivatedRoute);
 
+  constructor(private router: Router) {}
+
   ngOnInit() {
     this.obtenerParametros();
   }
@@ -44,5 +46,9 @@ export class VisualizacionResultadosComponent implements OnInit {
 
   mostrarEstadisticas() {
     this.mostrarVista = 'estadisticas';
+  }
+
+  mostrarInformeAI() {
+    this.router.navigate(['informeia', this.id, this.codigo]);
   }
 }
