@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { RequestService } from './request.service';
 import { Observable } from 'rxjs';
-import { EncuestaDTO } from '../models/encuesta.dto';
+import { EncuestaDTO, EncuestaResponse } from '../models/encuesta.dto';
 import { CreateEncuestaDTO } from '../models/create-encuesta.dto';
 import { CodigoTipoEnum } from '../enums/codigo-tipo.enum';
 
@@ -11,8 +11,8 @@ import { CodigoTipoEnum } from '../enums/codigo-tipo.enum';
 export class EncuestaService {
   private readonly _requestService = inject(RequestService);
 
-  getAll(): Observable<EncuestaDTO[]> {
-    return this._requestService.get<EncuestaDTO[]>('/encuestas/obtener-todas');
+  getAll(): Observable<EncuestaResponse> {
+    return this._requestService.get<EncuestaResponse>('/encuestas/obtener-todas');
   }
 
   getOne(

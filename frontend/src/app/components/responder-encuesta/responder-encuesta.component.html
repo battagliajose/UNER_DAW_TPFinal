@@ -12,92 +12,131 @@
       *ngFor="let pregunta of encuesta?.preguntas; let i = index"
       [formGroupName]="i"
     >
-      <!-- ABIERTA -->
       <div
-        class="pregunta-container"
-        *ngIf="pregunta.tipo === 'ABIERTA'"
-        [attr.id]="'pregunta_' + i"
+        class="card-wrapper"
+        [ngClass]="{
+          'bg-abierta': pregunta.tipo === tipoRespuestaEnum.ABIERTA,
+          'bg-simple':
+            pregunta.tipo ===
+            tipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_SIMPLE,
+          'bg-multiple':
+            pregunta.tipo ===
+            tipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_MULTIPLE,
+        }"
       >
-        <p class="pregunta-texto">{{ pregunta.texto }}</p>
-        <textarea
-          rows="5"
-          cols="30"
-          pTextarea
-          [formControlName]="'respuesta_' + i"
-        ></textarea>
-        <small
-          class="pregunta-error"
-          *ngIf="
-            getRespuestaControl(i)?.invalid && getRespuestaControl(i)?.touched
-          "
-        >
-          Debe responder esta pregunta.
-        </small>
-      </div>
-
-      <!-- SELECCIÓN SIMPLE -->
-      <div
-        class="pregunta-container"
-        *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_SIMPLE'"
-        [attr.id]="'pregunta_' + i"
-      >
-        <p class="pregunta-texto">{{ pregunta.texto }}</p>
-        <div class="pregunta-opciones">
-          <div class="pregunta-opcion" *ngFor="let opcion of pregunta.opciones">
-            <p-radioButton
-              [inputId]="'opcion_' + i + '_' + opcion.id"
-              [value]="opcion.id"
-              [formControlName]="'respuesta_' + i"
-              [name]="'respuesta_' + i"
+        <div class="barra-color"></div>
+        <p-card class="mb-3">
+          <ng-template pTemplate="title"> Pregunta {{ i + 1 }} </ng-template>
+          <ng-template pTemplate="content">
+            <div
+              class="pregunta-encabezado flex align-items-center justify-content-between mb-2"
             >
-            </p-radioButton>
-            <label [for]="'opcion_' + i + '_' + opcion.id">
-              {{ opcion.texto }}
-            </label>
-          </div>
-          <small
-            class="pregunta-error"
-            *ngIf="
-              getRespuestaControl(i)?.invalid && getRespuestaControl(i)?.touched
-            "
-          >
-            Seleccione una opción.
-          </small>
-        </div>
+              <span class="pregunta-texto font-semibold">{{
+                pregunta.texto
+              }}</span>
+              <p-button
+                (onClick)="
+                  leerPregunta(pregunta.texto, pregunta.opciones || [])
+                "
+                icon="pi pi-volume-up"
+                styleClass="p-button-rounded p-button-text p-button-sm"
+                ariaLabel="Leer en voz alta"
+              ></p-button>
+            </div>
+
+            <!-- ABIERTA -->
+            <div
+              *ngIf="pregunta.tipo === 'ABIERTA'"
+              [attr.id]="'pregunta_' + i"
+            >
+              <textarea
+                rows="5"
+                cols="30"
+                pTextarea
+                [formControlName]="'respuesta_' + i"
+                class="w-full"
+              ></textarea>
+              <div
+                *ngIf="sugerenciasIA['respuesta_' + i]"
+                class="sugerencia mt-2"
+              >
+                💡 <i>Sugerencia:</i> "{{ sugerenciasIA['respuesta_' + i] }}"
+              </div>
+              <small
+                class="pregunta-error"
+                *ngIf="
+                  getRespuestaControl(i)?.invalid &&
+                  getRespuestaControl(i)?.touched
+                "
+              >
+                Debe responder esta pregunta.
+              </small>
+            </div>
+
+            <!-- SELECCIÓN SIMPLE -->
+            <div
+              *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_SIMPLE'"
+              [attr.id]="'pregunta_' + i"
+            >
+              <div class="pregunta-opciones">
+                <div
+                  class="pregunta-opcion"
+                  *ngFor="let opcion of pregunta.opciones"
+                >
+                  <p-radioButton
+                    [inputId]="'opcion_' + i + '_' + opcion.id"
+                    [value]="opcion.id"
+                    [formControlName]="'respuesta_' + i"
+                    [name]="'respuesta_' + i"
+                  ></p-radioButton>
+                  <label [for]="'opcion_' + i + '_' + opcion.id">
+                    {{ opcion.texto }}
+                  </label>
+                </div>
+                <small
+                  class="pregunta-error"
+                  *ngIf="
+                    getRespuestaControl(i)?.invalid &&
+                    getRespuestaControl(i)?.touched
+                  "
+                >
+                  Seleccione una opción.
+                </small>
+              </div>
+            </div>
+
+            <!-- SELECCIÓN MÚLTIPLE -->
+            <div
+              *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_MULTIPLE'"
+              [attr.id]="'pregunta_' + i"
+            >
+              <div class="pregunta-opciones" [formArrayName]="'respuesta_' + i">
+                <div
+                  class="pregunta-opcion"
+                  *ngFor="let opcion of pregunta.opciones; let j = index"
+                >
+                  <p-checkbox
+                    [formControlName]="j"
+                    [inputId]="'opcion_' + i + '_' + opcion.id"
+                    [binary]="true"
+                  ></p-checkbox>
+                  <label [for]="'opcion_' + i + '_' + opcion.id">
+                    {{ opcion.texto }}
+                  </label>
+                </div>
+                <small
+                  class="pregunta-error"
+                  *ngIf="
+                    getCheckboxArray(i)?.invalid && getCheckboxArray(i)?.touched
+                  "
+                >
+                  Seleccioná al menos una opción.
+                </small>
+              </div>
+            </div>
+          </ng-template>
+        </p-card>
       </div>
-
-      <!-- SELECCIÓN MÚLTIPLE -->
-      <div
-        *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_MULTIPLE'"
-        [attr.id]="'pregunta_' + i"
-      >
-        <p>{{ pregunta.texto }}</p>
-
-        <!-- Entrás al FormArray con nombre dinámico -->
-        <div class="pregunta-opciones" [formArrayName]="'respuesta_' + i">
-          <div
-            class="pregunta-opcion"
-            *ngFor="let opcion of pregunta.opciones; let j = index"
-          >
-            <p-checkbox
-              [formControlName]="j"
-              [inputId]="'opcion_' + i + '_' + opcion.id"
-              [binary]="true"
-            ></p-checkbox>
-            <label [for]="'opcion_' + i + '_' + opcion.id">
-              {{ opcion.texto }}
-            </label>
-          </div>
-          <small
-            class="pregunta-error"
-            *ngIf="getCheckboxArray(i)?.invalid && getCheckboxArray(i)?.touched"
-          >
-            Seleccioná al menos una opción.
-          </small>
-        </div>
-      </div>
-
-      <hr />
     </div>
   </div>
 

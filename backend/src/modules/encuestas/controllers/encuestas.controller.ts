@@ -16,12 +16,14 @@ import { ObtenerEncuestaDto } from '../dtos/obtener-encuesta.dto';
 import { ObtenerTodasEncuestasDto } from '../dtos/obtener-todas-encuestas.dto';
 import { Encuesta } from '../entities/encuesta.entity';
 import { CsvEncuestasService } from '../services/csv-respuestas-encuestas.service';
+import { PdfRespuestasEncuestasService } from '../services/pdf-respuestas-encuestas.service';
 
 @Controller('/encuestas')
 export class EncuestasController {
   constructor(
     private readonly encuestasService: EncuestasService,
-    private readonly csvEncuestasService: CsvEncuestasService, // ✅ Inyectando el servicio
+    private readonly csvEncuestasService: CsvEncuestasService,
+    private readonly pdfRespuestasEncuestasService: PdfRespuestasEncuestasService,
   ) {}
 
   @Post('')
@@ -42,14 +44,9 @@ export class EncuestasController {
   }
 
   @Get('/obtener-todas')
-  async obtenerTodasLasEncuestas(
-    @Query() dto: ObtenerTodasEncuestasDto,
-  ): Promise<[Encuesta[], number]> {
+  async obtenerTodasLasEncuestas(): Promise<Encuesta[]> {
     try {
-      return await this.encuestasService.obtenerTodasLasEncuestas(
-        dto.skip,
-        dto.take,
-      );
+      return await this.encuestasService.obtenerTodasLasEncuestas();       
     } catch (exception) {
       throw new HttpException(
         'Error al obtener las encuestas',
@@ -84,7 +81,7 @@ export class EncuestasController {
     return this.encuestasService.echo();
   }
 
-  // ✅ Método dentro de la clase
+  // Endpoint para exportar respuestas de encuesta a CSV
   @Get('/csv/:id/:codigo')
   async exportarCsvRespuestas(
     @Param('id') id: number,
@@ -92,5 +89,18 @@ export class EncuestasController {
     @Res() res: Response,
   ) {
     await this.csvEncuestasService.exportCsvRespuestasEncuesta(id, codigo, res);
+  }
+
+  @Get('/pdf/:id/:codigo')
+  async exportarPdfRespuestas(
+    @Param('id') id: number,
+    @Param('codigo') codigo: string,
+    @Res() res: Response,
+  ) {
+    await this.pdfRespuestasEncuestasService.generarPdfRespuestasEncuesta(
+      id,
+      codigo,
+      res,
+    );
   }
 }

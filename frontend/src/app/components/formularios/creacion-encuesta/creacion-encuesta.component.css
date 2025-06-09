@@ -3,10 +3,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: clamp(250px, 90vw, 800px);
+  width: clamp(250px, 100%, 800px);
   overflow: auto;
   margin: 0 auto;
   gap: 24px;
+  padding: 21px;
 }
 
 :host h1 {
@@ -19,10 +20,30 @@
   gap: 12px;
 }
 
-.section-preguntas {
+.contenedor-pregunta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-preguntas-header {
   display: flex;
   justify-content: space-between;
   gap: 20px;
+}
+
+.seccion-preguntas {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin-top: 18px;
+}
+
+.titulo-pregunta {
+  display: flex;
+  column-gap: 8px;
+  flex-wrap: wrap;
+  align-content: center;
 }
 
 .fila-pregunta {
@@ -30,9 +51,74 @@
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  padding: 26px 12px 12px 20px;
+  border: 1px solid var(--p-content-border-color);
+  border-radius: 4px 12px 12px 4px;
+  border-left: 6px solid var(--color-light);
+  transition: all 100ms ease-in-out;
+  position: relative;
+  box-shadow: 4px 4px 8px var(--p-content-border-color);
 }
 
-.errores-toast{
+.fila-pregunta:hover {
+  background-color: var(--p-gray-100);
+}
+
+.numero-pregunta {
+  position: absolute;
+  top: -14px;
+  left: 12px;
+  background-color: var(--color-light);
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  padding: 3px 22px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.botonera-pregunta {
+  position: absolute;
+  right: 20px;
+  top: -21px;
+}
+
+.item-opcion {
+  margin-left: 24px;
+  color: var(--color-light);
+}
+
+.texto-opcion {
+  color: var(--color-background);
+}
+
+.simple {
+  list-style: disc;
+}
+
+.multiple {
+  list-style: square;
+}
+
+.errores-toast {
   font-size: 5rem;
   color: var(--color-strong);
+}
+
+.opcion {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 22px;
+  color: #3b3b3b;
+}
+
+.opcion-simple {
+  background: var(--p-emerald-200);
+}
+
+.opcion-multiple {
+  background: var(--p-purple-200);
+}
+
+.opcion-libre {
+  background: var(--p-yellow-200);
 }

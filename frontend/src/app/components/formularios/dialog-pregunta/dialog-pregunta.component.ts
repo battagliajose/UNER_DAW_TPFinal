@@ -219,7 +219,7 @@ export class DialogPreguntaComponent implements OnDestroy {
       },
       acceptButtonProps: {
         label: 'Confirmar',
-        severity: 'contrast',
+        severity: 'danger',
       },
       accept: () => {
         this.eliminarOpcion(index);

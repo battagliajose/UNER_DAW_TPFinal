@@ -2,16 +2,13 @@
   <app-sidebar (menuClick)="onMenuClick($event)"></app-sidebar>
   
   <div class="content">
-    <app-dashboard-content *ngIf="activeView === 'inicio'"
-      (datosCargados)="onDatosCargados($event)">      
+    <app-dashboard-content *ngIf="activeView === 'inicio'">
     </app-dashboard-content>
 
-    <app-dashboard-list *ngIf="activeView === 'listado'"
-      [encuestas]="encuestasCompartidas">
+    <app-dashboard-list *ngIf="activeView === 'listado'">
     </app-dashboard-list>
 
-    <app-dashboard-enviadas *ngIf="activeView === 'enviadas'"
-      [encuestas]="encuestasCompartidas">
+    <app-dashboard-enviadas *ngIf="activeView === 'enviadas'">
     </app-dashboard-enviadas>
   </div>
 </div>

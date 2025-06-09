@@ -1,0 +1,52 @@
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.download-button {
+  text-decoration: none;
+}
+
+.clipboard-button {
+  min-width: 40px;
+}
+
+.enlace-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.enlace {
+  overflow: auto;
+  font-family: monospace;
+  white-space: nowrap;
+  overflow-x: auto;
+  padding: 8px;
+  background-color: var(--color-background);
+  border-radius: 4px;
+  margin: 0;
+  color: white;
+  font-size: 15px;
+  scrollbar-width: none;
+  max-width: 500px;
+}
+
+.dialog-footer {
+  display: flex;
+  gap: 8px;
+}
+
+@media (width < 550px) {
+  .dialog-footer {
+    flex-wrap: wrap;
+  }
+}
