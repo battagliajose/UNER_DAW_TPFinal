@@ -11,16 +11,7 @@
             <i class="pi pi-spin pi-cog" style="font-size: 2rem"></i>
             <p>Cargando datos del dashboard...</p>
           </div>
-          <div *ngIf="error" class="error-message">
-            <i class="pi pi-exclamation-triangle" style="font-size: 2rem"></i>
-            <p>{{ error }}</p>
-            <button pButton pRipple 
-                    icon="pi pi-refresh" 
-                    label="Reintentar" 
-                    (click)="cargarEncuestas()"
-                    [style]="{ backgroundColor: 'var(--color-light)' }">
-            </button>
-          </div>
+          
 <ng-container *ngIf="encuestas.length > 0; else noEncuestas">
   <p-card *ngFor="let encuesta of encuestas" class="dashboard-card" [ngStyle]="{'background-color': encuesta.esActivo ? 'var(--color-light)' : 'var(--p-gray-200)'}">
     <ng-template #title>
@@ -30,18 +21,18 @@
                 <h5>{{ encuesta.nombre }}</h5>                
             </span>
             <span style="font-size: 1rem; color: var(--color-primary);"> 
-                <i class="pi pi-pencil" 
+                <i class="pi pi-send" 
                     style="font-size: 1.4rem; margin-right: 1rem;"
                     pTooltip="Editar encuesta" 
                     tooltipPosition="top" 
-                    (click)="editarEncuesta(encuesta)"
+                    (click)="enviarEncuesta(encuesta)"
                     placeholder="Right">
                     </i>
                 <i class="pi pi-trash" 
                     style="font-size: 1.4rem;
                      margin-right: 1rem;"
                      pTooltip="Eliminar encuesta" 
-                     (click)="eliminarEncuesta(encuesta)"
+                     (click)="confirmarEliminar(encuesta)"
                      tooltipPosition="top" 
                      placeholder="Right">
                 </i>
@@ -52,10 +43,48 @@
 </ng-container>
 
 <ng-template #noEncuestas>
-  <div class="p-message p-message-info no-encuesta">
-    <i class="pi pi-info-circle"></i>
+  <div class="p-message p-message-error no-encuesta">
+    <i class="pi pi-exclamation-triangle"></i>
     <span class="p-message-text">{{ error }}</span>
   </div>
 </ng-template>
+<p-dialog 
+    header="Confirmar eliminación" 
+    [(visible)]="mostrarConfirmacion" 
+    [style]="{ width: '450px' }">
+    <p class="m-0">
+        ¿Está seguro que desea eliminar la encuesta ?        
+    </p>
+    <p>{{ encuestaAEliminar?.nombre }}</p>
+    <ng-template pTemplate="footer">
+        <button pButton 
+                icon="pi pi-times" 
+                [style]="{ border: '1px solid var(--color-primary)', color: 'var(--color-primary)',
+                  padding:'0.5rem 1rem',
+                  borderRadius:'4px',
+                  fontSize:'1rem',
+                  fontWeight:'bold'
+                 }"
+                (click)="cancelarEliminar()" 
+                label="Cancelar" 
+                class="p-button-text">Cancelar</button>
+       <button pButton 
+               icon="pi pi-check" 
+               [style]="{ backgroundColor: 'var(--color-primary)', color: 'white',
+                border: '1px solid var(--color-primary)',
+                padding:'0.5rem 1rem',
+                borderRadius:'4px',
+                fontSize:'1rem',
+                fontWeight:'bold'
+                }"
+               (click)="eliminarEncuesta()" 
+               label="Eliminar" 
+               class="p-button-danger">Eliminar</button>
+    </ng-template>
+</p-dialog>
+<!-- Toast para mostrar despues de que borre-->
+<p-toast position="top-right"></p-toast> 
+
 </div>
 
+  
