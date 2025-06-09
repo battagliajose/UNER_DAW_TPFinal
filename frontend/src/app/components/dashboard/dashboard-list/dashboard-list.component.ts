@@ -33,24 +33,23 @@ interface NuevaEncuestaDTO extends EncuestaDTO {
 
 export class DashboardListComponent {
 
-  encuestas: NuevaEncuestaDTO[] = [];
   constructor(
     private encuestaModService: EncuestaModService,
     private encuestaService: EncuestaService,
     private messageService: MessageService) {
-        
-  }
- 
+      
+    }
+    
+  encuestas: NuevaEncuestaDTO[] = [];
   error: string = "";
   loading: boolean = true;
   mostrarConfirmacion = false;
-  encuestaAEliminar: EncuestaDTO | null = null; // objeto encuesta a eliminar
+  encuestaAEliminar: NuevaEncuestaDTO | null = null; // objeto encuesta a eliminar
   
   //Variables para enviar encuesta
-  encuestaSelecionada: EncuestaDTO | null = null; // objeto encuesta seleccionada
+  encuestaSelecionada: NuevaEncuestaDTO | null = null; // objeto encuesta seleccionada
   telefonos: string = '';
   mostrarDialogoTelefonos = false;
-  encuestaSeleccionada: any = null;
 
   ngOnInit() {    
    this.cargarEncuestas();      
@@ -99,7 +98,7 @@ export class DashboardListComponent {
   }
 
   // confirmar eliminacion
-  confirmarEliminar(encuesta: EncuestaDTO) {
+  confirmarEliminar(encuesta: NuevaEncuestaDTO) {
     this.encuestaAEliminar = encuesta;
     this.mostrarConfirmacion = true;
   }
@@ -110,16 +109,20 @@ export class DashboardListComponent {
     this.encuestaAEliminar = null;
   }
 
-  abrirDialogoEnvio(encuesta: any) {
-    if (!encuesta.esActivo) {
-      return; // No hacer nada si no está activa
+  abrirDialogoEnvio(encuesta: NuevaEncuestaDTO) {
+    console.log("Esta es la encuesta", encuesta);
+    if (!encuesta.esEnviada) {
+      this.encuestaSelecionada = encuesta;
+      this.telefonos = '';
+      this.mostrarDialogoTelefonos = true;        
+    }else{
+      return;
     }
-    this.encuestaSeleccionada = encuesta;
-    this.telefonos = '';
-    this.mostrarDialogoTelefonos = true;
+
   }
-  enviarEncuesta(encuesta: any) {
-    if (!this.telefonos || !this.encuestaSeleccionada) {
+  enviarEncuesta() {
+    console.log("Esta es la encuesta que envio",this.encuestaSelecionada);
+    if (!this.telefonos || !this.encuestaSelecionada) {
       return;
     }
   
@@ -132,11 +135,12 @@ export class DashboardListComponent {
         detail: 'La encuesta se ha enviado a los contactos correctamente.',
       });
     // Aquí iría la lógica para enviar los enlaces
-    console.log('Enviando enlaces para la encuesta:', this.encuestaSeleccionada.id);
+    console.log('Enviando enlaces para la encuesta: http://localhost:4200/responder/encuesta/', this.encuestaSelecionada.codigoRespuesta);
     console.log('Teléfonos:', telefonosArray);
+    this.encuestaSelecionada.esEnviada = true;
     
     // Cerrar el diálogo después de enviar
     this.mostrarDialogoTelefonos = false;
-    this.encuestaSeleccionada = null;
+    this.encuestaSelecionada = null;
   }
 }

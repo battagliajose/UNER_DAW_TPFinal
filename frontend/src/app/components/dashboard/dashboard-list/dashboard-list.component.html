@@ -25,7 +25,7 @@
                     [style]="encuesta.esEnviada ? 
                     'font-size: 1.4rem; margin-right: 1rem;color: gray;' : 
                     'font-size: 1.4rem; margin-right: 1rem;color: var(--color-primary);'"                                    
-                    pTooltip="Editar encuesta" 
+                    pTooltip="Enviar encuesta" 
                     tooltipPosition="top" 
                     (click)="abrirDialogoEnvio(encuesta)"
                     [ngStyle]="{'pointer-events': encuesta.esEnviada ? 'none' : 'auto'}"
@@ -135,7 +135,7 @@
               fontSize:'1rem',
               fontWeight:'bold'
               }"
-            (click)="enviarEncuesta(encuestaSeleccionada)"
+            (click)="enviarEncuesta()"
             [disabled]="!telefonos">Enviar Encuestas
         </button>
     </ng-template>
