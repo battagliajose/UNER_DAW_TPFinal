@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RespuestasModule } from './modules/respuestas/respuestas.module';
 import { ReportesModule } from './modules/reportes/reportes.module';
 import { AiModule } from './modules/ai/ai.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AiModule } from './modules/ai/ai.module';
         logger: configService.get('database.logger'),
       }),
     }),
+    MailModule,
   ],
   controllers: [],
   providers: [],

@@ -33,7 +33,9 @@
     <section class="seccion-preguntas">
       @for (pregunta of preguntasPaginadas; track idx; let idx = $index) {
         <article class="fila-pregunta">
-          <h5 class="numero-pregunta">Pregunta {{ first + idx + 1 }}</h5>
+          <h5 class="numero-pregunta">
+            Pregunta {{ totalPreguntas - (first + idx) }}
+          </h5>
           <div class="contenedor-pregunta">
             <div class="titulo-pregunta">
               <h4 class="texto-pregunta">
