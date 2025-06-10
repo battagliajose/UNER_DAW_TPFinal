@@ -11,7 +11,7 @@ export interface AutocompletarRequest {
   providedIn: 'root',
 })
 export class AiService {
-  private readonly apiUrl = '/api/v1/ai/autocompletar';
+  private baseUrl = '/api/v1/ai';
 
   constructor(private http: HttpClient) {}
 
@@ -20,6 +20,14 @@ export class AiService {
     textoParcial: string,
   ): Observable<string> {
     const body: AutocompletarRequest = { pregunta, textoParcial };
-    return this.http.post(this.apiUrl, body, { responseType: 'text' });
+    return this.http.post(this.baseUrl + '/autocompletar', body, {
+      responseType: 'text',
+    });
+  }
+
+  obtenerInformeEncuesta(id: number, codigo: string) {
+    return this.http.get(this.baseUrl + `/informeencuesta/${id}/${codigo}`, {
+      responseType: 'text',
+    });
   }
 }

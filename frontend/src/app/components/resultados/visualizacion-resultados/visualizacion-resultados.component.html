@@ -27,6 +27,18 @@
       }"
       title="Ver Estadísticas"
     ></button>
+
+    <button
+      pButton
+      label="Ver informe IA"
+      icon="pi pi-microchip"
+      (click)="mostrarInformeIA()"
+      [ngClass]="{
+        'blue-700': mostrarVista === 'informe-ia',
+        'blue-100': mostrarVista !== 'informe-ia',
+      }"
+      title="Ver Informe Generado por IA"
+    ></button>
   </div>
 
   <div *ngIf="mostrarVista === 'respuestas'">
@@ -43,5 +55,9 @@
       [id]="id"
       [tipo]="tipo"
     ></app-resumen-estadistico>
+  </div>
+
+  <div *ngIf="mostrarVista === 'informe-ia'">
+    <app-informe-encuesta [codigo]="codigo" [id]="id"></app-informe-encuesta>
   </div>
 </div>

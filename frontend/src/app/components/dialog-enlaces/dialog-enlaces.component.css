@@ -37,7 +37,21 @@
   color: white;
   font-size: 15px;
   scrollbar-width: none;
-  max-width: 500px;
+  max-width: 550px;
+}
+
+.email-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background-color: var(--p-surface-100);
+  border-radius: 12px;
+  max-width: 600px;
+}
+
+.email-section p {
+  font-size: 14px;
 }
 
 .dialog-footer {

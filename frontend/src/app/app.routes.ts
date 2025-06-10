@@ -8,6 +8,7 @@ import { EnlaceInvalidoComponent } from './components/enlace-invalido/enlace-inv
 import { VisualizacionResultadosComponent } from './components/resultados/visualizacion-resultados/visualizacion-resultados.component';
 import { ResultadosEncuestaComponent } from './components/resultados/resultados-encuesta/resultados-encuesta.component';
 import { ResumenEstadisticoComponent } from './components/resultados/resumen-estadistico/resumen-estadistico.component';
+import { InformeIaComponent } from './components/informe-ia/informe-ia.component';
 
 export const routes: Routes = [
   {

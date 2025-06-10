@@ -11,7 +11,7 @@
 }
 
 .contenedor-visualizacion {
-  width: clamp(250px, 95vw, 600px);
+  width: clamp(500px, 95vw, 600px);
   padding: 1rem;
   background-color: var(--color-background-light, #f4f8fb);
   border-radius: 10px;
@@ -53,6 +53,14 @@
 
 .blue-700 {
   background-color: #1d4ed8 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.12);
+  transform: scale(1.04);
+}
+
+.aibutton {
+  background-color: rebeccapurple !important;
   color: #fff !important;
   border: none !important;
   box-shadow: 0 2px 8px rgba(29, 78, 216, 0.12);

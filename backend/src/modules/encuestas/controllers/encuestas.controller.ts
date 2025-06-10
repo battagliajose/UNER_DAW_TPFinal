@@ -8,12 +8,14 @@ import {
   Res,
   HttpException,
   HttpStatus,
+  Delete,
+  ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { EncuestasService } from '../services/encuestas.service';
 import { createEncuestaDto } from '../dtos/create-encuesta.dto';
 import { ObtenerEncuestaDto } from '../dtos/obtener-encuesta.dto';
-import { ObtenerTodasEncuestasDto } from '../dtos/obtener-todas-encuestas.dto';
 import { Encuesta } from '../entities/encuesta.entity';
 import { CsvEncuestasService } from '../services/csv-respuestas-encuestas.service';
 import { PdfRespuestasEncuestasService } from '../services/pdf-respuestas-encuestas.service';
@@ -76,11 +78,7 @@ export class EncuestasController {
     }
   }
 
-  @Get('/echo')
-  async echo(): Promise<string> {
-    return this.encuestasService.echo();
-  }
-
+  
   // Endpoint para exportar respuestas de encuesta a CSV
   @Get('/csv/:id/:codigo')
   async exportarCsvRespuestas(
@@ -90,7 +88,7 @@ export class EncuestasController {
   ) {
     await this.csvEncuestasService.exportCsvRespuestasEncuesta(id, codigo, res);
   }
-
+  
   @Get('/pdf/:id/:codigo')
   async exportarPdfRespuestas(
     @Param('id') id: number,
@@ -102,5 +100,25 @@ export class EncuestasController {
       codigo,
       res,
     );
+  }
+
+
+  @Delete('/eliminar/:id')
+  async eliminarEncuesta(@Param('id') id: number): Promise<{message: string}> {
+    try {
+      const message = await this.encuestasService.eliminarEncuesta(id);
+      return {message};
+    } catch (exception) {
+      throw new HttpException(
+        'Error al eliminar la encuesta',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: exception },
+      );
+    }
+  }
+
+  @Get('/echo')
+  async echo(): Promise<string> {
+    return this.encuestasService.echo();
   }
 }

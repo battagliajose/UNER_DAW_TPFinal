@@ -32,3 +32,9 @@ body {
   flex: 1;
   width: 100%;
 }
+
+.p-dialog-mask {
+  backdrop-filter: blur(3px) contrast(0.9);
+  -webkit-backdrop-filter: blur(3px) contrast(0.9); /* Soporte Safari */
+  background: rgba(216 216 216 0.2);
+}

@@ -4,8 +4,6 @@ import { RouterModule } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DashboardContentComponent } from './dashboard-content/dashboard-content.component';
 import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
-import { DashboardEnviadasComponent } from './dashboard-enviadas/dashboard-enviadas.component';
-
 
   @Component({
     selector: 'app-dashboard',
@@ -15,8 +13,7 @@ import { DashboardEnviadasComponent } from './dashboard-enviadas/dashboard-envia
     RouterModule,
     SidebarComponent,
     DashboardContentComponent,
-    DashboardListComponent,
-    DashboardEnviadasComponent
+    DashboardListComponent,    
   ],    
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
