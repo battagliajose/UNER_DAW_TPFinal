@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input } from '@angular/core'; // Added Input
+import { Component, OnInit, Input } from '@angular/core';
 import { AiService } from '../../services/ai.service';
 
 @Component({
@@ -9,19 +9,16 @@ import { AiService } from '../../services/ai.service';
   imports: [CommonModule],
 })
 export class InformeIaComponent implements OnInit {
-  @Input() id!: number; // Now receives ID as an input
-  @Input() codigo!: string; // Now receives CODE as an input
-  @Input() tipo!: string; // Receives TYPE as an input (even if not used directly here)
+  @Input() id!: number;
+  @Input() codigo!: string;
+  @Input() tipo!: string;
 
   informe = '';
   cargando = true;
 
-  constructor(private aiService: AiService) {
-    // ActivatedRoute is no longer needed in the constructor as parameters are inputs
-  }
+  constructor(private aiService: AiService) {}
 
   ngOnInit(): void {
-    // Use the @Input() properties directly
     this.aiService.obtenerInformeEncuesta(this.id, this.codigo).subscribe({
       next: (texto) => {
         this.informe = texto;
