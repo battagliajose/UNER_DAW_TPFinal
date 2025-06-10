@@ -1,0 +1,66 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Enlaces</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 750px;
+        margin: auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #dddddd;
+      }
+      .header {
+        text-align: left;
+        padding: 22px;
+        background-color: #1f2937;
+        color: #ffffff;
+      }
+      .main {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 22px;
+      }
+      .footer {
+        text-align: left;
+        padding: 22px;
+        background-color: #1f2937;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body class='container'>
+    <header class='header'>
+      <h1>Opina.Ar</h1>
+    </header>
+    <main class='main'>
+      <h2>¡Hola! Te dejamos los enlaces de la encuesta que creaste</h2>
+      <p>Accedé al enlace de participación escaneando el código QR:</p>
+      <img
+        src='{{qrCodeImage}}'
+        alt='QR Code'
+        style='width: clamp(200px, 100%, 300px); margin: 0 auto;'
+      />
+
+      <p>Enlace de participación:</p>
+      <a href='{{participationLink}}'>{{participationLink}}</a>
+      <p>Consultá el estado de tu encuesta acá:</p>
+      <a href='{{consultationLink}}'>{{consultationLink}}</a>
+      <br />
+    </main>
+    <footer class='footer'>
+      <p style='color: #fc8a48'>Recordá que no almacenamos datos de usuarios ni
+        de correos. ¡Es totalmente anónimo!</p>
+      <p>Gracias por utilizar nuestros servicios.
+        <strong>Equipo de Opina.Ar</strong></p>
+    </footer>
+  </body>
+</html>

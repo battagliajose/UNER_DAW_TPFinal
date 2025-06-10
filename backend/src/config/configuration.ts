@@ -11,4 +11,11 @@ export default () => ({
     logging: process.env.DB_LOGGING === 'true',
     logger: process.env.DB_LOGGER,
   },
+  emailConfig: {
+    host: process.env.SMTP_HOST || 'localhost',
+    port: parseInt(process.env.SMTP_PORT || '1025'),
+    user: process.env.SMTP_USER || undefined,
+    password: process.env.SMTP_PASSWORD || undefined,
+    secureSsl: process.env.SMTP_SECURESSL === 'true',
+  },
 });

@@ -58,7 +58,6 @@ export class CreacionEncuestaComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   private messageService: MessageService = inject(MessageService);
-  private router: Router = inject(Router);
   private confirmationService: ConfirmationService =
     inject(ConfirmationService);
   private encuestaService: EncuestaService = inject(EncuestaService);
@@ -117,6 +116,10 @@ export class CreacionEncuestaComponent implements OnInit, OnDestroy {
     return this.form.get('nombre') as FormControl<string>;
   }
 
+  get totalPreguntas(): number {
+    return this.preguntas.length;
+  }
+
   abrirDialog() {
     this.dialogGestionPreguntaVisible.set(true);
   }
@@ -130,8 +133,36 @@ export class CreacionEncuestaComponent implements OnInit, OnDestroy {
   }
 
   eliminarPregunta(index: number) {
-    this.preguntas.removeAt(index);
+    const globalIndex = this.first + index;
+
+    // Elimina la pregunta del FormArray
+    this.preguntas.removeAt(globalIndex);
+
+    // Guardar cambios
     this.localStorageService.updateEncuestaData(this.form.value);
+
+    // Actualizar la paginación si es necesario
+    this.actualizarPaginacionDespuesDeEliminar();
+  }
+
+  actualizarPaginacionDespuesDeEliminar() {
+    const totalPreguntas = this.preguntas.length;
+
+    // Si ya no hay preguntas, reiniciar paginación
+    if (totalPreguntas === 0) {
+      this.first = 0;
+      this.currentPage = 1;
+      return;
+    }
+
+    // Si estamos en una posición inválida por la eliminación
+    const maxValidFirst =
+      Math.floor((totalPreguntas - 1) / this.rows) * this.rows;
+
+    if (this.first > maxValidFirst) {
+      this.first = maxValidFirst;
+      this.currentPage = Math.floor(this.first / this.rows) + 1;
+    }
   }
 
   getTipoPreguntaPresentacion(tipo: TipoRespuestaEnum): string {
@@ -219,6 +250,8 @@ export class CreacionEncuestaComponent implements OnInit, OnDestroy {
         this.form.enable();
         this.localStorageService.removeEncuestaData();
         this.ref = this.dialogService.open(DialogEnlacesComponent, {
+          closeOnEscape: false,
+          closable: false,
           data: {
             id: res.id,
             codigoRespuesta: res.codigoRespuesta,

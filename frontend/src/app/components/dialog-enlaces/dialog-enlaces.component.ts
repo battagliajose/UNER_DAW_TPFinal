@@ -7,12 +7,35 @@ import { environment } from '../../../environments/environment';
 import { RippleModule } from 'primeng/ripple';
 import { SafeUrl } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
+import { MailService } from '../../services/mail.service';
+import { TextErrorComponent } from '../text-error/text-error.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { FloatLabel } from 'primeng/floatlabel';
+import { Message } from 'primeng/message';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-dialog-enlaces',
-  imports: [ButtonModule, QRCodeComponent, RippleModule],
+  imports: [
+    ButtonModule,
+    QRCodeComponent,
+    RippleModule,
+    InputTextModule,
+    FloatLabel,
+    Message,
+    FormsModule,
+    ReactiveFormsModule,
+    TextErrorComponent,
+  ],
   templateUrl: './dialog-enlaces.component.html',
   styleUrl: './dialog-enlaces.component.css',
+  providers: [MailService],
 })
 export class DialogEnlacesComponent implements OnInit, OnDestroy {
   visible: boolean = false;
@@ -24,6 +47,8 @@ export class DialogEnlacesComponent implements OnInit, OnDestroy {
   config = inject(DynamicDialogConfig);
   ref = inject(DynamicDialogRef);
   private readonly messageService = inject(MessageService);
+  private readonly mailService = inject(MailService);
+  private fb: FormBuilder = inject(FormBuilder);
 
   enlaceResponder: string = '';
   enlaceRespuestas: string = '';
@@ -31,11 +56,18 @@ export class DialogEnlacesComponent implements OnInit, OnDestroy {
   redireccionRespuestas: string = '';
   qrCodeDownloadLink: SafeUrl = '';
 
+  emailForm: FormGroup;
+
+  constructor() {
+    this.emailForm = this.fb.group({
+      email: ['', [Validators.email]],
+    });
+  }
+
   ngOnInit(): void {
     const incomingData = this.config.data || this.config.inputValues;
     if (incomingData) {
       const { id, codigoRespuesta, codigoResultados, created } = incomingData;
-      console.log(incomingData);
 
       this.id = id;
       this.codigoRespuesta = codigoRespuesta;
@@ -106,6 +138,38 @@ export class DialogEnlacesComponent implements OnInit, OnDestroy {
       default:
         this.router.navigateByUrl('');
         break;
+    }
+  }
+
+  sendEmail() {
+    if (this.emailForm.valid) {
+      const email = this.emailForm.get('email')?.value;
+      const params = {
+        email,
+        participationLink: this.enlaceResponder,
+        consultationLink: this.enlaceRespuestas,
+      };
+
+      this.mailService.sendEnlacesEmail(params).subscribe({
+        next: (res) => {
+          if (res) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: 'Email enviado',
+            });
+            this.emailForm.reset();
+          }
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo enviar el email',
+          });
+          console.log(err);
+        },
+      });
     }
   }
 }

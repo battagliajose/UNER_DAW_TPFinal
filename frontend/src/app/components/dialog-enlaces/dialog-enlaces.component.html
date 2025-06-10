@@ -54,6 +54,39 @@
       </div>
     </article>
   </section>
+  <section class="email-section">
+    <p>Opcionalmente, podés recibir estos datos en tu correo electrónico:</p>
+    <form [formGroup]="emailForm" class="enlace-container">
+      <div class="extended">
+        <p-floatlabel variant="on" id="float-label-email">
+          <input
+            type="email"
+            pInputText
+            id="email"
+            formControlName="email"
+            autocomplete="off"
+            class="extended"
+          />
+          <label for="email">Email</label>
+        </p-floatlabel>
+      </div>
+      <button
+        pButton
+        (click)="sendEmail()"
+        icon="pi pi-envelope"
+        class="extended"
+        [severity]="'info'"
+        [disabled]="emailForm.invalid || !emailForm.get('email')?.value"
+      ></button>
+    </form>
+    @if (emailForm.get('email')?.invalid && emailForm.get('email')?.touched) {
+      <app-text-error>Email no válido</app-text-error>
+    }
+    <p-message size="small" [closable]="false" icon="pi pi-exclamation-circle"
+      >Si el email ingresado es correcto, recibirás un mensaje con la info.
+      Recordá que no almacenamos datos de usuarios ni de correos</p-message
+    >
+  </section>
   <div class="dialog-footer extended">
     <button
       type="button"
