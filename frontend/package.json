@@ -26,6 +26,7 @@
     "angularx-qrcode": "^19.0.0",
     "chart.js": "^4.4.9",
     "json2csv": "^6.0.0-alpha.2",
+    "ngx-export-as": "^1.19.0",
     "primeicons": "^7.0.0",
     "primeng": "^19.1.2",
     "rxjs": "~7.8.0",
