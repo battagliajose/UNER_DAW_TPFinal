@@ -7,5 +7,11 @@
 </div>
 <div class="informe-container" *ngIf="!cargando">
   <h2>Informe generado con IA</h2>
-  <div class="informe" [innerHTML]="informe" class="html-informe"></div>
+  <button (click)="exportarPDF()">Descargar PDF</button>
+  <div
+    class="informe"
+    [innerHTML]="informe"
+    #contenidoPDF
+    class="html-informe"
+  ></div>
 </div>

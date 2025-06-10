@@ -81,10 +81,6 @@ div[ng-reflect-ng-if='true'] {
   color: #777;
   margin-top: 15px;
 }
-
-.spinner {
-}
-
 .container-msg-spinner {
   display: flex;
   flex-direction: column;
