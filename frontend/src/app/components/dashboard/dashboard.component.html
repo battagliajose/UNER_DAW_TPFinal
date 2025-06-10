@@ -4,11 +4,15 @@
   <div class="content">
     <app-dashboard-content *ngIf="activeView === 'inicio'">
     </app-dashboard-content>
+    
+    <app-dashboard-crear *ngIf="activeView === 'crear'">
+    </app-dashboard-crear>
 
     <app-dashboard-list *ngIf="activeView === 'listado'">
     </app-dashboard-list>
     
     <app-dashboard-resultados *ngIf="activeView === 'resultados'">
     </app-dashboard-resultados>
+
   </div>
 </div>
