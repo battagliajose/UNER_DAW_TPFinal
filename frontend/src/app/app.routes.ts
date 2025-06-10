@@ -36,10 +36,6 @@ export const routes: Routes = [
     component: ResponderEncuestaComponent,
   },
   {
-    path: 'informeia/:id/:codigo',
-    component: InformeIaComponent,
-  },
-  {
     path: 'responder/enlace-invalido',
     component: EnlaceInvalidoComponent,
   },

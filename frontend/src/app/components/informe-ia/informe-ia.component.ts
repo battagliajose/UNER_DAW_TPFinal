@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input } from '@angular/core';
 import { AiService } from '../../services/ai.service';
 
 @Component({
@@ -10,18 +9,17 @@ import { AiService } from '../../services/ai.service';
   imports: [CommonModule],
 })
 export class InformeIaComponent implements OnInit {
+  @Input() id!: number;
+  @Input() codigo!: string;
+  @Input() tipo!: string;
+
   informe = '';
   cargando = true;
 
-  constructor(
-    private aiService: AiService,
-    private route: ActivatedRoute,
-  ) {}
+  constructor(private aiService: AiService) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    const codigo = this.route.snapshot.paramMap.get('codigo')!;
-    this.aiService.obtenerInformeEncuesta(id, codigo).subscribe({
+    this.aiService.obtenerInformeEncuesta(this.id, this.codigo).subscribe({
       next: (texto) => {
         this.informe = texto;
         this.cargando = false;
