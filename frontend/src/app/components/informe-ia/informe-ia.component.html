@@ -6,12 +6,13 @@
   ></p-progressSpinner>
 </div>
 <div class="informe-container" *ngIf="!cargando">
-  <h2>Informe generado con IA</h2>
-  <button (click)="exportarPDF()">Descargar PDF</button>
-  <div
-    class="informe"
-    [innerHTML]="informe"
-    #contenidoPDF
-    class="html-informe"
-  ></div>
+  <button
+    pButton
+    type="button"
+    label="Descargar PDF"
+    icon="pi pi-file-pdf"
+    class="p-button-danger p-button-rounded p-button-sm"
+    (click)="exportarPDF()"
+  ></button>
+  <div class="informe html-informe" [innerHTML]="informe" #contenidoPDF></div>
 </div>
