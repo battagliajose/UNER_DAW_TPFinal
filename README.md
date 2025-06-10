@@ -44,7 +44,7 @@ module.exports = {
   apps: [
     {
       name: 'encuestas',
-      script: 'backend/dist/main.js',
+      script: 'dist/main.js',
       env: {
         NODE_ENV: 'production',
         PORT: 3000,
