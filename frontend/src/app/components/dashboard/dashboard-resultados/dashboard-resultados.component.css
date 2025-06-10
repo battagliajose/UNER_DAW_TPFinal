@@ -1,0 +1,26 @@
+:host{
+  padding:2rem;
+  background-color: var(--color-background-dashboard);  
+  width: 100%; 
+  box-sizing: border-box;
+  border-radius: 0 20px 20px 0;
+  }
+  
+  :host ::ng-deep .p-inputtext {
+    width: 100%;
+    max-width: 600px;
+  }
+
+.resultados-container {
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+h2 {
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+

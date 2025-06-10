@@ -10,7 +10,6 @@ export class PdfService {
   async generarPDF(datosReporte: any, res: Response) {
     const templatePath = path.join(
       process.cwd(),
-      'backend',
       'dist',
       'modules',
       'reportes',
