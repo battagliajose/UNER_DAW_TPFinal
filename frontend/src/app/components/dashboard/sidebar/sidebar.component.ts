@@ -17,7 +17,8 @@ export class SidebarComponent {
   @Output() menuClick = new EventEmitter<string>();
   items = [
     { label: 'Inicio', icon: 'pi pi-home', id: 'inicio' },
-    { label: 'Ver listado', icon: 'pi pi-list', id: 'listado' },   
+    { label: 'Ver listado', icon: 'pi pi-list', id: 'listado' }, 
+    { label: 'Resultados', icon: 'pi pi-chart-bar', id: 'resultados' },  
   ];
    title: string = 'Menú';
 

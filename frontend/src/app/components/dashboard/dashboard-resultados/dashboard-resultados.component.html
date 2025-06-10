@@ -1,0 +1,30 @@
+<div class="resultados-container">
+  <h2>Resultados de Encuestas</h2>
+  <p>Ingrese la URL de visualizacion de resultados de la encuesta a consultar:</p>
+      <input
+      pInputText
+      [(ngModel)]="urlResultados"
+      [style]="{
+        marginTop: '0.4rem',
+      }"  
+      placeholder="http://localhost/visualizacion-resultados/id?codigo=...&tipo=..."
+    />
+    <button
+      pButton
+      label="Ir"
+      icon="pi pi-arrow-right"
+      (click)="irAResultados()"
+      [disabled]="!urlResultados"
+      [style]="{
+        backgroundColor: '#2e4859',
+        color: '#fff',
+        width: '10rem',
+        height: '2.4rem',
+        borderRadius: '4px',
+        fontSize: '1rem',
+        fontWeight: 'bold',
+        marginLeft: '1rem'
+      }"
+      aria-label="Ir a resultados"
+    ></button>
+</div>
