@@ -58,16 +58,25 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "2.5mb",
                   "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
+                  "maximumWarning": "6kB",
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "allowedCommonJsDependencies": [
+                "canvg",
+                "core-js",
+                "html2canvas",
+                "html2pdf.js",
+                "qrcode",
+                "raf",
+                "rgbcolor"
+              ]
             },
             "development": {
               "optimization": false,
