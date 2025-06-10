@@ -6,6 +6,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ResultadosEncuestaComponent } from '../resultados-encuesta/resultados-encuesta.component';
 import { ResumenEstadisticoComponent } from '../resumen-estadistico/resumen-estadistico.component';
+import { InformeIaComponent } from '../../informe-ia/informe-ia.component';
 
 @Component({
   selector: 'app-visualizacion-resultados',
@@ -16,13 +17,14 @@ import { ResumenEstadisticoComponent } from '../resumen-estadistico/resumen-esta
     ToastModule,
     ResultadosEncuestaComponent,
     ResumenEstadisticoComponent,
+    InformeIaComponent,
   ],
   templateUrl: './visualizacion-resultados.component.html',
   styleUrl: './visualizacion-resultados.component.css',
   providers: [MessageService],
 })
 export class VisualizacionResultadosComponent implements OnInit {
-  mostrarVista: 'respuestas' | 'estadisticas' = 'respuestas';
+  mostrarVista: 'respuestas' | 'estadisticas' | 'informe-ia' = 'respuestas';
   id!: number;
   codigo!: string;
   tipo!: string;
@@ -48,7 +50,7 @@ export class VisualizacionResultadosComponent implements OnInit {
     this.mostrarVista = 'estadisticas';
   }
 
-  mostrarInformeAI() {
-    this.router.navigate(['informeia', this.id, this.codigo]);
+  mostrarInformeIA() {
+    this.mostrarVista = 'informe-ia';
   }
 }
