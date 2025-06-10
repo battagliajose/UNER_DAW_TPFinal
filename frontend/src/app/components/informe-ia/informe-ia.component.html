@@ -1,4 +1,10 @@
-<div *ngIf="cargando">Generando informe con IA...</div>
+<div class="container-msg-spinner" *ngIf="cargando">
+  <div class="msg-generando">Generando informe con IA...</div>
+  <p-progressSpinner
+    class="spinner"
+    styleClass="custom-spinner"
+  ></p-progressSpinner>
+</div>
 <div class="informe-container" *ngIf="!cargando">
   <h2>Informe generado con IA</h2>
   <div class="informe" [innerHTML]="informe" class="html-informe"></div>

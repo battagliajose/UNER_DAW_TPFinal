@@ -75,3 +75,21 @@ div[ng-reflect-ng-if='true'] {
   color: #777;
   margin-top: 15px;
 }
+
+.msg-generando {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 15px;
+}
+
+.spinner {
+}
+
+.container-msg-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

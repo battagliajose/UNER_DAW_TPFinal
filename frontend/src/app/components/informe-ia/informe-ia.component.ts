@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { AiService } from '../../services/ai.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-informe-encuesta',
   templateUrl: './informe-ia.component.html',
   styleUrls: ['./informe-ia.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, ProgressSpinnerModule],
 })
 export class InformeIaComponent implements OnInit {
   @Input() id!: number;
