@@ -35,6 +35,12 @@ SWAGGER_HABILITADO=true
 
 OPENAI_API_KEY= # Completar Key de la API OpenAI
 OPENAI_API_ENDPOINT=https://api.openai.com/v1
+
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=test@test.com
+SMTP_PASSWORD=pass123
+SMTP_SECURESSL=false
 ```
 
 ### Agregar archivo ecosystem.config.js para PM2
@@ -60,6 +66,11 @@ module.exports = {
         SWAGGER_HABILITADO: false,
         OPENAI_API_KEY: # Completar Key de la API OpenAI
         OPENAI_API_ENDPOINT: 'https://api.openai.com/v1',
+        SMTP_HOST=
+        SMTP_PORT=
+        SMTP_USER=test@test.com
+        SMTP_PASSWORD=pass123
+        SMTP_SECURESSL=false
       },
     },
   ],
@@ -94,3 +105,11 @@ Solo en desarrollo
 ```bash
 http://localhost:3000/api/
 ```
+
+## Compodoc
+
+```bash
+npm run compodoc
+```
+
+http://127.0.0.1:8080
