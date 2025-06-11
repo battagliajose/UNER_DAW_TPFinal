@@ -69,6 +69,7 @@ export class ResponderEncuestaComponent implements OnInit {
   codigo: string = '';
   encuesta?: EncuestaDTO;
   enviando: boolean = false;
+  enviada: boolean = false;
 
   formularioRespuestas = new FormGroup({
     respuestas: new FormArray([]),
@@ -239,8 +240,6 @@ export class ResponderEncuestaComponent implements OnInit {
       }
     });
 
-    console.log('DTO a enviar:', dto);
-
     this.respuestasService.postRespuestas(dto).subscribe({
       next: () => {
         this.messageService.add({
@@ -249,10 +248,8 @@ export class ResponderEncuestaComponent implements OnInit {
           detail: 'Tu respuesta fue registrada con éxito.',
           life: 3000,
         });
-
-        setTimeout(() => {
-          this.router.navigate(['/']);
-        }, 3200);
+        this.enviada = true;
+        this.formularioRespuestas.disable();
       },
       error: (err) => {
         this.enviando = false;

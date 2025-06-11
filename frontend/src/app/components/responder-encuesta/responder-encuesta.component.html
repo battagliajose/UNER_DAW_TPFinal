@@ -166,7 +166,7 @@
 
   <p-button
     [style]="{ backgroundColor: 'var(--color-light)' }"
-    label="Enviar"
+    label="{{ enviada ? 'Enviado' : 'Enviar' }}"
     (onClick)="enviarFormulario()"
     icon="pi pi-check"
     [disabled]="enviando"
