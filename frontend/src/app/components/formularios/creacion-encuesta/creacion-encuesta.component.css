@@ -5,9 +5,18 @@
   align-items: center;
   width: clamp(250px, 100%, 800px);
   overflow: auto;
-  margin: 0 auto;
+  margin: 22px auto;
   gap: 24px;
-  padding: 21px;
+  padding: 12px;
+}
+
+@media (width > 600px) {
+  :host {
+    padding: 21px;
+    border: 1px solid var(--p-content-border-color);
+    border-radius: 12px;
+    box-shadow: 4px 4px 8px var(--p-content-border-color);
+  }
 }
 
 :host h1 {
@@ -17,7 +26,7 @@
 .contenedor-encuesta {
   display: flex;
   flex-direction: column;
-  gap: 12px;  
+  gap: 12px;
 }
 
 .contenedor-pregunta {
