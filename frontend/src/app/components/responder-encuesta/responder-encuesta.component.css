@@ -100,11 +100,10 @@ p-card {
 .barra-color {
   height: 15px;
   width: 100%;
-  margin-bottom: -25px;
+  margin-bottom: -32px;
   border-radius: 8px 8px 0 0;
 }
 
-/* Colores dinámicos aplicados al contenedor */
 .bg-abierta .barra-color {
   background-color: #007bff;
 }
@@ -115,4 +114,10 @@ p-card {
 
 .bg-multiple .barra-color {
   background-color: #ffc107;
+}
+
+.spinnerAI {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
 }
