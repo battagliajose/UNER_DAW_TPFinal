@@ -45,11 +45,7 @@ export class HomeComponent {
 
     let url = new URL(this.urlResultados.trim());
 
-    // Validar que la URL pertenece al dominio correcto
-    if (
-      !url.hostname.includes('localhost') &&
-      !url.hostname.includes('tu-dominio.com')
-    ) {
+    if (!url.hostname.includes('localhost')) {
       this.messageService.add({
         severity: 'error',
         summary: 'URL inválida',
@@ -58,7 +54,7 @@ export class HomeComponent {
       return;
     }
 
-    const idEncuesta = url.pathname.split('/')[2]; // Extraer el ID de la encuesta
+    const idEncuesta = url.pathname.split('/')[2];
     const codigo = url.searchParams.get('codigo');
     const tipo = url.searchParams.get('tipo');
 
