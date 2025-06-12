@@ -7,8 +7,7 @@
   align-items: center;
   width: clamp(250px, 90vw, 800px);
   overflow: auto;
-  margin: 0 auto;
-  gap: 24px;
+  margin: 2rem auto;
   color: black;
 }
 
@@ -28,13 +27,13 @@ hr {
 }
 
 .form-encuesta {
-  width: 60vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20px 0;
   background-color: #b6d2f9;
   padding: 20px;
+  border-radius: 20px;
 }
 
 .pregunta-container {
@@ -120,4 +119,16 @@ p-card {
   width: 20px;
   height: 20px;
   margin-left: 8px;
+}
+@media (width < 720px) {
+  :host {
+    width: 100%;
+    margin: 0;
+  }
+
+  .form-encuesta {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
 }
