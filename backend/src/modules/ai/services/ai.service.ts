@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 import { AutocompletarDto } from '../dto/autocompletado.dto';
-import { ReportesService } from '../../reportes/services/reportes.service'; // ajustar path
+import { ReportesService } from '../../reportes/services/reportes.service';
 
 @Injectable()
 export class AiService {
@@ -22,10 +22,9 @@ export class AiService {
                     no uses comillas, no uses punto final y devolvé solo el texto que complete
                     la frase, listo para agregarse directamente.`;
     const response = await this.openai.chat.completions.create({
-      //model: 'gpt-3.5-turbo',
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
-      max_tokens: 10, // máximo 2 o 3 palabras
+      max_tokens: 10,
       temperature: 0.7,
     });
 
