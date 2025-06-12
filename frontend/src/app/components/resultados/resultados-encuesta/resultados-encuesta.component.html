@@ -36,12 +36,10 @@
       </div>
     </ng-template>
 
-    <!-- Mensaje de carga -->
     <p *ngIf="cargando" class="cargando">
       Cargando datos... No te desesperes, no es la fila del banco!
     </p>
 
-    <!-- Mensaje si no hay respuestas y no está cargando ni hay error -->
     <p
       *ngIf="!cargando && !respuestas.length && !errorCarga"
       class="cargando"
@@ -51,7 +49,6 @@
       solo la pensaste?
     </p>
 
-    <!-- Mensaje de error -->
     <p *ngIf="errorCarga" class="cargando" style="color: #d32f2f">
       No existen encuestas con el enlace de acceso cargado.
     </p>

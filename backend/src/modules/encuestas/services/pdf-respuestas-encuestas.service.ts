@@ -34,7 +34,6 @@ export class PdfRespuestasEncuestasService {
     // Leer la plantilla HTML
     const templatePath = path.join(
       process.cwd(),
-      'backend',
       'dist',
       'modules',
       'encuestas',

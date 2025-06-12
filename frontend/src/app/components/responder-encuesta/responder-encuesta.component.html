@@ -7,7 +7,6 @@
 >
   <h2 class="encuesta-titulo">{{ encuesta?.nombre }}</h2>
   <div formArrayName="respuestas">
-    <!-- Entrás al grupo de la pregunta (índice i) -->
     <div
       *ngFor="let pregunta of encuesta?.preguntas; let i = index"
       [formGroupName]="i"
@@ -44,7 +43,6 @@
               ></p-button>
             </div>
 
-            <!-- ABIERTA -->
             <div
               *ngIf="pregunta.tipo === 'ABIERTA'"
               [attr.id]="'pregunta_' + i"
@@ -57,11 +55,39 @@
                 class="w-full"
               ></textarea>
               <div
-                *ngIf="sugerenciasIA['respuesta_' + i]"
-                class="sugerencia mt-2"
+                *ngIf="
+                  sugerenciasIA['respuesta_' + i] ||
+                  cargandoIA['respuesta_' + i]
+                "
+                class="sugerencia mt-2 flex align-items-center gap-2"
               >
-                💡 <i>Sugerencia:</i> "{{ sugerenciasIA['respuesta_' + i] }}"
+                <ng-container *ngIf="!cargandoIA['respuesta_' + i]">
+                  <span
+                    >🤖 <i>Sugerencia:</i> "{{
+                      sugerenciasIA['respuesta_' + i]
+                    }}"</span
+                  >
+                  <p-button
+                    icon="pi pi-angle-double-up"
+                    styleClass="p-button-outlined p-button-sm"
+                    [style]="{
+                      width: '1rem',
+                      height: '1rem',
+                      marginLeft: '0.5rem',
+                    }"
+                    (onClick)="insertarSugerencia(i)"
+                    ariaLabel="Usar"
+                  ></p-button>
+                </ng-container>
+
+                <p-progressSpinner
+                  *ngIf="cargandoIA['respuesta_' + i]"
+                  [style]="{ width: '20px', height: '20px' }"
+                  strokeWidth="4"
+                  animationDuration=".5s"
+                ></p-progressSpinner>
               </div>
+
               <small
                 class="pregunta-error"
                 *ngIf="
@@ -73,7 +99,6 @@
               </small>
             </div>
 
-            <!-- SELECCIÓN SIMPLE -->
             <div
               *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_SIMPLE'"
               [attr.id]="'pregunta_' + i"
@@ -105,7 +130,6 @@
               </div>
             </div>
 
-            <!-- SELECCIÓN MÚLTIPLE -->
             <div
               *ngIf="pregunta.tipo === 'OPCION_MULTIPLE_SELECCION_MULTIPLE'"
               [attr.id]="'pregunta_' + i"
@@ -142,7 +166,7 @@
 
   <p-button
     [style]="{ backgroundColor: 'var(--color-light)' }"
-    label="Enviar"
+    label="{{ enviada ? 'Enviado' : 'Enviar' }}"
     (onClick)="enviarFormulario()"
     icon="pi pi-check"
     [disabled]="enviando"

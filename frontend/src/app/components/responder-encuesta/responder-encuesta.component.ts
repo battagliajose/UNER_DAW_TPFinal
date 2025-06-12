@@ -11,6 +11,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
+  finalize,
   switchMap,
 } from 'rxjs/operators';
 import { AiService } from '../../services/ai.service';
@@ -29,6 +30,7 @@ import { Toast, ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
+import { ProgressSpinner } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-responder-encuesta',
@@ -43,14 +45,16 @@ import { CommonModule } from '@angular/common';
     ToastModule,
     CardModule,
     CommonModule,
+    ProgressSpinner,
   ],
   templateUrl: './responder-encuesta.component.html',
   styleUrls: ['./responder-encuesta.component.css'],
   providers: [MessageService],
 })
 export class ResponderEncuestaComponent implements OnInit {
-  sugerenciasIA: { [key: string]: string } = {}; // clave: 'respuesta_0', valor: sugerencia
+  sugerenciasIA: { [key: string]: string } = {};
   tipoRespuestaEnum = TipoRespuestaEnum;
+  cargandoIA: { [key: string]: boolean } = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -65,6 +69,7 @@ export class ResponderEncuestaComponent implements OnInit {
   codigo: string = '';
   encuesta?: EncuestaDTO;
   enviando: boolean = false;
+  enviada: boolean = false;
 
   formularioRespuestas = new FormGroup({
     respuestas: new FormArray([]),
@@ -108,7 +113,6 @@ export class ResponderEncuestaComponent implements OnInit {
 
                   respuestasFormArray.push(grupo);
 
-                  // Solo activar autocompletado IA si es pregunta ABIERTA
                   if (pregunta.tipo === TipoRespuestaEnum.ABIERTA) {
                     control.valueChanges
                       .pipe(
@@ -119,12 +123,20 @@ export class ResponderEncuestaComponent implements OnInit {
                             textoParcial !== null &&
                             textoParcial.trim().length > 0,
                         ),
-                        switchMap((textoParcial) =>
-                          this.aiService.autocompletarRespuesta(
-                            pregunta.texto,
-                            textoParcial,
-                          ),
-                        ),
+                        switchMap((textoParcial) => {
+                          this.cargandoIA[controlKey] = true;
+                          return this.aiService
+                            .autocompletarRespuesta(
+                              this.encuesta!.nombre,
+                              pregunta.texto,
+                              textoParcial,
+                            )
+                            .pipe(
+                              finalize(
+                                () => (this.cargandoIA[controlKey] = false),
+                              ),
+                            );
+                        }),
                       )
                       .subscribe((sugerencia) => {
                         this.sugerenciasIA[controlKey] = sugerencia;
@@ -194,7 +206,6 @@ export class ResponderEncuestaComponent implements OnInit {
       const grupo = respuestasArray.at(i) as FormGroup;
       const controlKey = 'respuesta_' + i;
 
-      // Pregunta ABIERTA
       if (pregunta.tipo === TipoRespuestaEnum.ABIERTA) {
         const texto = grupo.get(controlKey)?.value?.trim();
         if (texto) {
@@ -203,10 +214,7 @@ export class ResponderEncuestaComponent implements OnInit {
             texto: texto,
           });
         }
-      }
-
-      // Selección SIMPLE (radio)
-      else if (
+      } else if (
         pregunta.tipo === TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_SIMPLE
       ) {
         const opcionId = grupo.get(controlKey)?.value;
@@ -216,10 +224,7 @@ export class ResponderEncuestaComponent implements OnInit {
             opcionId: opcionId,
           });
         }
-      }
-
-      // Selección MÚLTIPLE (checkboxes)
-      else if (
+      } else if (
         pregunta.tipo === TipoRespuestaEnum.OPCION_MULTIPLE_SELECCION_MULTIPLE
       ) {
         const array = grupo.get(controlKey) as FormArray;
@@ -235,9 +240,6 @@ export class ResponderEncuestaComponent implements OnInit {
       }
     });
 
-    console.log('DTO a enviar:', dto);
-
-    // Llamada al backend
     this.respuestasService.postRespuestas(dto).subscribe({
       next: () => {
         this.messageService.add({
@@ -246,11 +248,8 @@ export class ResponderEncuestaComponent implements OnInit {
           detail: 'Tu respuesta fue registrada con éxito.',
           life: 3000,
         });
-
-        // Redirigir después de un pequeño delay
-        setTimeout(() => {
-          this.router.navigate(['/']);
-        }, 3200);
+        this.enviada = true;
+        this.formularioRespuestas.disable();
       },
       error: (err) => {
         this.enviando = false;
@@ -291,5 +290,28 @@ export class ResponderEncuestaComponent implements OnInit {
     mensaje.pitch = 1;
 
     window.speechSynthesis.speak(mensaje);
+  }
+
+  insertarSugerencia(i: number) {
+    const controlKey = 'respuesta_' + i;
+    const control = this.getRespuestaControl(i);
+    const sugerencia = this.sugerenciasIA[controlKey];
+
+    if (control && sugerencia) {
+      const current = control.value || '';
+      const nuevoTexto =
+        current + (current && !current.endsWith(' ') ? ' ' : '') + sugerencia;
+      control.setValue(nuevoTexto);
+
+      setTimeout(() => {
+        const textarea = document.querySelector(
+          `textarea[formcontrolname='${controlKey}']`,
+        ) as HTMLTextAreaElement;
+        if (textarea) {
+          textarea.focus();
+          textarea.setSelectionRange(nuevoTexto.length, nuevoTexto.length);
+        }
+      });
+    }
   }
 }

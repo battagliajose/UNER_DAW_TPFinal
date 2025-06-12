@@ -29,7 +29,6 @@ export class ResumenEstadisticoComponent implements OnInit {
   @Input() codigo!: string;
   @Input() tipo!: string;
 
-  // Inicialización más robusta para evitar undefined
   resumen: any = {
     nombreEncuesta: '',
     cantidadEncuestasProcesadas: 0,
@@ -40,7 +39,7 @@ export class ResumenEstadisticoComponent implements OnInit {
 
   currentIndex = signal(0);
   errorCarga = false;
-  cargando = true; // El estado inicial debe ser cargando
+  cargando = true;
 
   private resumenService = inject(ResumenEstadisticoService);
   private messageService = inject(MessageService);
@@ -51,13 +50,12 @@ export class ResumenEstadisticoComponent implements OnInit {
   }
 
   obtenerResumen() {
-    this.cargando = true; // Siempre inicia cargando al pedir datos
-    this.errorCarga = false; // Resetea el estado de error
+    this.cargando = true;
+    this.errorCarga = false;
     this.resumenService
       .obtenerResumen(this.id, this.codigo, this.tipo)
       .subscribe({
         next: (data: any) => {
-          // Si hay resumenEstadistico, úsalo, sino inicializa limpio
           if (data && data.resumenEstadistico) {
             this.resumen = {
               ...data.resumenEstadistico,
@@ -67,19 +65,17 @@ export class ResumenEstadisticoComponent implements OnInit {
                 '',
             };
           } else {
-            // Si no hay resumenEstadistico, inicializa con valores por defecto
             this.resumen = {
-              nombreEncuesta: data?.nombreEncuesta ?? '', // Asegura que el nombre de la encuesta se propague si existe
+              nombreEncuesta: data?.nombreEncuesta ?? '',
               cantidadEncuestasProcesadas: 0,
               totalPreguntas: 0,
               totalRespuestasAnalizadas: 0,
               resultadosProcesados: [],
             };
           }
-          this.currentIndex.set(0); // Reinicia el índice al cargar nuevos datos
-          this.cargando = false; // Finaliza la carga
+          this.currentIndex.set(0);
+          this.cargando = false;
 
-          // Mensaje de advertencia si no hay encuestas procesadas
           if (this.resumen.cantidadEncuestasProcesadas === 0) {
             this.messageService.add({
               severity: 'warn',
@@ -89,7 +85,6 @@ export class ResumenEstadisticoComponent implements OnInit {
           }
         },
         error: () => {
-          // En caso de error, resetea el resumen y marca el error
           this.resumen = {
             nombreEncuesta: '',
             cantidadEncuestasProcesadas: 0,
@@ -109,8 +104,13 @@ export class ResumenEstadisticoComponent implements OnInit {
       });
   }
 
-  // Métodos de descarga (sin cambios en la lógica interna, solo la deshabilitación)
   descargarPDF() {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Descarga',
+      detail: 'Comenzó la descarga del PDF',
+    });
+
     const url = `/api/v1/reportes/pdf/${this.id}/${this.codigo}?tipo=${this.tipo}`;
     this.http.get(url, { responseType: 'blob' }).subscribe({
       next: (blob) => {
@@ -131,6 +131,12 @@ export class ResumenEstadisticoComponent implements OnInit {
   }
 
   descargarCSV() {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Descarga',
+      detail: 'Comenzó la descarga del CSV',
+    });
+
     const url = `/api/v1/reportes/csv/${this.id}/${this.codigo}?tipo=${this.tipo}`;
     this.http.get(url, { responseType: 'blob' }).subscribe({
       next: (blob) => {
@@ -157,7 +163,7 @@ export class ResumenEstadisticoComponent implements OnInit {
   siguiente() {
     if (
       this.currentIndex() <
-      (this.resumen.resultadosProcesados?.length ?? 0) - 1 // Usar 0 en lugar de 1 si es null/undefined
+      (this.resumen.resultadosProcesados?.length ?? 0) - 1
     ) {
       this.currentIndex.set(this.currentIndex() + 1);
     }

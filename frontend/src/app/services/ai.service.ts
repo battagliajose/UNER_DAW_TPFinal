@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface AutocompletarRequest {
+  tituloEncuesta: string;
   pregunta: string;
   textoParcial: string;
 }
@@ -16,10 +17,15 @@ export class AiService {
   constructor(private http: HttpClient) {}
 
   autocompletarRespuesta(
+    tituloEncuesta: string,
     pregunta: string,
     textoParcial: string,
   ): Observable<string> {
-    const body: AutocompletarRequest = { pregunta, textoParcial };
+    const body: AutocompletarRequest = {
+      tituloEncuesta,
+      pregunta,
+      textoParcial,
+    };
     return this.http.post(this.baseUrl + '/autocompletar', body, {
       responseType: 'text',
     });

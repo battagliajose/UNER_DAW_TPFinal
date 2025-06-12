@@ -14,10 +14,13 @@ export class AiService {
   }
 
   async autocompletarRespuesta(dto: AutocompletarDto): Promise<string> {
-    const { textoParcial } = dto;
+    const { tituloEncuesta, pregunta, textoParcial } = dto;
 
-    const prompt = `Completá solo con 2 o 3 palabras posibles que continúen esta frase:\n"${textoParcial}"`;
-
+    const prompt = `En la encuesta "${tituloEncuesta}", para la pregunta "${pregunta}",
+                    completá la siguiente respuesta con solo 2 o 3 palabras posibles que
+                    puedan continuar esta frase:\n"${textoParcial}"\n No des más de una opción,
+                    no uses comillas, no uses punto final y devolvé solo el texto que complete
+                    la frase, listo para agregarse directamente.`;
     const response = await this.openai.chat.completions.create({
       //model: 'gpt-3.5-turbo',
       model: 'gpt-4o',
