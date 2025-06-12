@@ -7,7 +7,6 @@
   font-weight: 800;
 }
 
-/* Estilos para el menú */
 .p-menubar {
   border-radius: 0;
   border: none;
@@ -16,7 +15,6 @@
   background-color: #082041;
 }
 
-/* Estilos para los enlaces del menú */
 .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
   color: white;
 }
@@ -25,10 +23,9 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Estilos para los iconos de redes sociales */
 .social-icons {
   display: flex;
-  gap: 1rem;
+  gap: 8px;
   align-items: center;
 }
 
@@ -44,12 +41,10 @@
 }
 
 .social-icons a:hover {
-  color: #4caf50; /* Color verde al hacer hover */
   background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
 }
 
-/* Asegurar que los iconos tengan el tamaño correcto */
 .social-icons i {
   font-size: 1.25rem;
 }
