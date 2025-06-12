@@ -9,7 +9,6 @@ export class CsvReportesService {
     const resultados =
       datosReporte.resumenEstadistico?.resultadosProcesados || [];
 
-    // Definir encabezados
     const encabezados = [
       'Tipo Pregunta',
       'Texto Pregunta',
@@ -36,7 +35,7 @@ export class CsvReportesService {
       'exports',
       'reporte-estadistica-encuesta.csv',
     );
-    //el csv se guardará en el archivo exports,csv dentro de exports/
+
     fs.writeFileSync(filePath, contenidoCSV);
 
     res.setHeader('Content-Type', 'text/csv');

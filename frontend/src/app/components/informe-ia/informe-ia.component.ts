@@ -60,12 +60,10 @@ export class InformeIaComponent implements OnInit {
           format: 'a4',
           orientation: 'portrait',
         },
-        margin: [20, 20, 20, 20], // top, left, bottom, right (en mm)
+        margin: [20, 20, 20, 20],
       },
     };
 
-    this.exportAsService.save(config, 'informe').subscribe(() => {
-      // archivo guardado
-    });
+    this.exportAsService.save(config, 'informe').subscribe(() => {});
   }
 }

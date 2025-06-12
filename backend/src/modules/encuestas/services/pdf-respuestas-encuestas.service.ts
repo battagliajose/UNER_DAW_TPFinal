@@ -43,7 +43,7 @@ export class PdfRespuestasEncuestasService {
     const templateHtml = fs.readFileSync(templatePath, 'utf-8');
     const template = handlebars.compile(templateHtml);
 
-    // 🔹 Datos para Handlebars
+    // Datos para Handlebars
     const fechaActual = new Date().toLocaleDateString();
     const htmlFinal = template({
       nombreEncuesta: encuesta.nombre,

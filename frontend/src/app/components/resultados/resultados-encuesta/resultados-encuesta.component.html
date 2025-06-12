@@ -18,6 +18,7 @@
             title="Descargar CSV"
             type="button"
             [disabled]="!respuestas.length"
+            aria-label="Descargar respuestas en formato CSV"
           >
             <i class="pi pi-download"></i>
           </button>
@@ -29,6 +30,7 @@
             title="Descargar PDF"
             type="button"
             [disabled]="!respuestas.length"
+            aria-label="Descargar respuestas en formato PDF"
           >
             <i class="pi pi-download"></i>
           </button>
@@ -63,6 +65,7 @@
           (click)="anterior()"
           [disabled]="currentIndex() === 0"
           class="p-button-rounded p-button-secondary"
+          aria-label="Mostrar resultados encuestado anerior"
         ></button>
         <span class="botonera-centrado">
           Encuestado {{ currentIndex() + 1 }} de {{ respuestas.length }}
@@ -75,6 +78,7 @@
           (click)="siguiente()"
           [disabled]="currentIndex() === respuestas.length - 1"
           class="p-button-rounded p-button-secondary"
+          aria-label="Mostrar resultados siguiente encuestado"
         ></button>
       </div>
     </div>
