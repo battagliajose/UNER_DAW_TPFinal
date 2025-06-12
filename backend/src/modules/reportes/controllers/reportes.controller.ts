@@ -41,10 +41,9 @@ export class ReportesController {
     @Param('id') id: number,
     @Param('codigo') codigo: string,
     @Res() res: Response,
-    @Query('tipo') tipo: string, // <-- AGREGADO
+    @Query('tipo') tipo: string,
   ) {
     if (tipo !== 'RESULTADOS') {
-      // <-- AGREGADO
       throw new BadRequestException('El parámetro "tipo" debe ser RESULTADOS');
     }
     const datosReporte = await this.reportesService.generarReporteResultados(

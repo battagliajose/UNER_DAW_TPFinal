@@ -97,23 +97,18 @@ export class PdfService {
 
     let browser;
     try {
-      // Iniciar Puppeteer
       browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
 
       await page.setViewport({ width: 800, height: 1000 });
 
-      // Cargar el HTML generado
-      await page.setContent(finalHtml, { waitUntil: 'domcontentloaded' }); // Cambiado a 'domcontentloaded' para ser más rápido
+      await page.setContent(finalHtml, { waitUntil: 'domcontentloaded' });
 
-      // Inyectar Chart.js después de que el DOM esté cargado
       await page.addScriptTag({
         url: 'https://cdn.jsdelivr.net/npm/chart.js',
       });
 
-      // Ejecutar el script para renderizar los gráficos
       await page.evaluate((graficosDataJson) => {
-        // La coerción a 'any' es para evitar errores de TypeScript en el contexto del navegador
         const Chart = (window as any).Chart;
         if (typeof Chart === 'undefined') {
           console.error('Chart.js no está cargado después de la inyección.');
@@ -123,11 +118,10 @@ export class PdfService {
         const graficos = JSON.parse(graficosDataJson);
         let renderedCharts = 0;
 
-        // Establece el flag global para Puppeteer
         (window as any).graficosRenderizados = false;
 
         if (graficos.length === 0) {
-          (window as any).graficosRenderizados = true; // No hay gráficos, marca como listo
+          (window as any).graficosRenderizados = true;
           return;
         }
 
@@ -181,8 +175,6 @@ export class PdfService {
         });
       }, dataForTemplate.graficosJSON);
 
-      // Espera para a que la bandera global `window.graficosRenderizados` sea true
-      // para asegurar que todos los gráficos se hayan renderizado
       await page.waitForFunction('window.graficosRenderizados === true', {
         timeout: 30000,
       });
