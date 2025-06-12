@@ -1,16 +1,18 @@
-/* En footer.component.css */
 :host {
   display: flex;
   justify-content: center;
-  margin-top: auto; /* Esto empuja el footer hacia abajo */
+  margin-top: auto;
+  margin-bottom: 2rem;
 }
 
 .footer {
-  width: 80%;  
+  width: 80%;
   background-color: var(--color-background);
   color: #ecf0f1;
-  padding: 2rem 0 0; 
+  padding: 2rem 0 0;
   border-radius: 20px;
+  align-content: center;
+  min-height: 300px;
 }
 
 .footer-content {
@@ -25,7 +27,6 @@
 .footer-section {
   flex: 1;
   min-width: 200px;
-  margin: 0 1rem 2rem;
 }
 
 .footer-section h3,
@@ -64,7 +65,7 @@
 }
 
 .social-links {
-  display: flex; 
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
@@ -92,19 +93,29 @@
   color: #95a5a6;
 }
 
-/* Responsive Design */
+@media (width < 900px) {
+  :host {
+    margin-bottom: 0;
+  }
+
+  .footer {
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
-  
+
   .footer-section {
     width: 100%;
     margin-bottom: 1.5rem;
   }
-  
+
   .social-links {
     justify-content: center;
   }

@@ -8,43 +8,38 @@
       <p>
         Cree su encuesta para saber la opinion de la sociedad en estos
         turbulentos tiempos que corren.
+        <br />
+        Confia en nosotros.....
       </p>
-      <p>Confia en nosotros.....</p>
       <div class="botones">
-        <div>
-          <p-button
-            label="Crear"
-            [style]="{
-              backgroundColor: 'var(--color-background)',
-              width: '10rem',
-              height: '2.4rem',
-            }"
-            routerLink="/crear"
-          ></p-button>
-        </div>
-        <div>
-          <p-button
-            label="Dashboard"
-            [style]="{
-              backgroundColor: 'var(--color-background)',
-              width: '10rem',
-              height: '2.4rem',
-            }"
-            routerLink="/dashboard"
-          ></p-button>
-        </div>
-        <div>
-          <p-button
-            label="Resultados"
-            [style]="{
-              backgroundColor: 'var(--color-background)',
-              width: '10rem',
-              height: '2.4rem',
-            }"
-            (onClick)="abrirDialog()"
-            aria-label="Abrir diálogo para carrgar enlace de resultados"
-          ></p-button>
-        </div>
+        <p-button
+          label="Crear"
+          class="button"
+          [style]="{
+            backgroundColor: 'var(--color-background)',
+            width: '100%',
+          }"
+          routerLink="/crear"
+        ></p-button>
+        <p-button
+          label="Dashboard"
+          class="button"
+          [style]="{
+            backgroundColor: 'var(--color-background)',
+            width: '100%',
+          }"
+          routerLink="/dashboard"
+        ></p-button>
+        <p-button
+          label="Resultados"
+          class="button"
+          [style]="{
+            backgroundColor: 'var(--color-background)',
+            width: '100%',
+          }"
+          (onClick)="abrirDialog()"
+          aria-label="Abrir diálogo para carrgar enlace de resultados"
+        ></p-button>
       </div>
     </div>
   </div>
